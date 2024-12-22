@@ -63,7 +63,7 @@ if uploaded_files:
         
         # Save uploaded files (optional)
         os.makedirs(save_dir, exist_ok=True)
-        file_path = os.path.join(save_dir, file)
+        file_path = os.path.join(save_dir, uploaded_file)
         with open(file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
 
