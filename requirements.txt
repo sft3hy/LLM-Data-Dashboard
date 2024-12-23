@@ -5,3 +5,4 @@ streamlit_folium==0.24.0
 pyshp==2.3.1
 matplotlib==3.10.0
 groq==0.13.1
+plotly==5.9.0
