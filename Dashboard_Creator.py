@@ -33,9 +33,10 @@ with top_container:
 
 file_paths = []
 all_file_snippets = {}
+selected_files = []
+
 if not is_directory_empty(save_dir):
     # Initialize variables for selected files and input
-    selected_files = []
     suggestion = "show me a map of Russian equipment losses filterable by type"
 
     # Create a form for both file selection and text input
@@ -53,10 +54,6 @@ if not is_directory_empty(save_dir):
         )
         if uploaded_files:
             for uploaded_file in uploaded_files:
-                file_details = {
-                    "filename": uploaded_file.name,
-                    "filetype": uploaded_file.type,
-                }
                 # Save uploaded files
                 os.makedirs(save_dir, exist_ok=True)
                 file_path = os.path.join(save_dir, uploaded_file.name)
@@ -77,7 +74,6 @@ if not is_directory_empty(save_dir):
                 is_selected = st.checkbox(f"📄 {file}", key=f"file_{count}")
                 if is_selected:
                     selected_files.append(file_path)
-
         # Add text input for dashboard creation
         st.subheader("Your dashboard request:")
         user_input = st.text_input(
@@ -106,13 +102,13 @@ if not is_directory_empty(save_dir):
 else:
     st.info("No files have been uploaded yet.")
 
+
 # Display the input
-commonly_missed_imports = "from streamlit_folium import folium_static\n"
-page_config = "import streamlit as st\nst.set_page_config( page_icon='🤖', layout='centered')"
 if submitted and user_input.strip() and selected_files and selected_model:
-    formatted = f"Snippet(s) of the user's files: {all_file_snippets}\nThis is their request: {user_input}\nThese are the file path(s): {file_paths}"
+    formatted = f"Snippet(s) of the user's files: {all_file_snippets}\nThis is their request: {user_input}\nThese are the file path(s): {selected_files}"
     with open('data/prompt_history.log', 'a') as f:
         f.write(formatted+'\n'+'Using model: '+selected_model+'\n')
+    # response = "st.write('ayo')"
     response = call_model(model_name=selected_model, gpt_request=formatted, system_prompt=streamlit_sys_prompt)
     format_response = extract_message(response)
 
@@ -137,12 +133,25 @@ if submitted and user_input.strip() and selected_files and selected_model:
     # Write the response to the file
     try:
         maybe_correct = correct_code(code_snippet=response, extra_context=formatted)
+        files = ', '.join([os.path.basename(f) for f in selected_files])
+        commonly_missed_imports = "from streamlit_folium import folium_static\n"
+        page_config_robot = f"""import streamlit as st\nst.set_page_config(page_icon="🤖", layout="centered")\n"""
+        user_requests = f"""
+
+st.markdown(\"\"\"Dashboard generated for your request: \\"{user_input}\\" \"\"\")
+st.markdown(\"\"\"On data: \\"{files}\\" \"\"\")
+"""
+        hidden_code_info = f"""
+        
+st.markdown(\"\"\"{selected_model} generated code:\"\"\")
+st.code(\"\"\"{maybe_correct}\"\"\", language="python")
+"""
         with open(file_path, "w") as f:
-            f.write(f"{commonly_missed_imports}{maybe_correct}")
+            f.write(f"{page_config_robot}{commonly_missed_imports}{maybe_correct}{user_requests}{hidden_code_info}")
     except Exception as e:
         st.error(f"Error saving file: {e}")
 
     # Display the raw generated code
-    st.subheader(f"Check the left menu for your dashboard. Below is {selected_model}'s code to create your dashboard:")
-    st.code(maybe_correct, language="python")
+    st.subheader(f"Check the left menu to view your dashboard and the code that created it.")
+    
 

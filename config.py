@@ -24,3 +24,4 @@ GROQ_MODELS = ["gemma2-9b-it",
                ]
 
 CODE_CORRECTION_TRIES = 5
+CODE_CORRECTOR_MODEL = "llama3-70b-8192"

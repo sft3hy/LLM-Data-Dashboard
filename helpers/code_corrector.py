@@ -1,5 +1,5 @@
 from helpers.model_caller import call_model
-from config import code_corrector_sys_prompt, CODE_CORRECTION_TRIES
+from config import code_corrector_sys_prompt, CODE_CORRECTION_TRIES, CODE_CORRECTOR_MODEL
 import streamlit as st
 from helpers.misc import extract_message
 import contextlib
@@ -26,11 +26,12 @@ def correct_code(code_snippet: str, extra_context: str):
         except Exception as e:
             # Log the error and the captured output
             detailed_error = traceback.format_exc()
+            print(e)
             formatted=f"This is the code: {corrected}\nThis is the error: {detailed_error}\nThis is the context: {extra_context}\nPlease output the corrected code"
             if current_try == 1:
                 st.info(first_try)
             st.info(f"Error correction {current_try}/{CODE_CORRECTION_TRIES} running...")
-            corrected = extract_message(call_model("llama3-70b-8192", formatted, code_corrector_sys_prompt))
+            corrected = extract_message(call_model(CODE_CORRECTOR_MODEL, formatted, code_corrector_sys_prompt))
         current_try += 1
     return corrected
 
