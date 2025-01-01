@@ -5,6 +5,9 @@ import json
 import plotly.express as px
 
 # Load the data
+st.set_page_config(page_title="Combined Data Dashboard", page_icon=":robot_face:", layout="centered")
+
+
 st.title("Combined Data Dashboard")
 
 st.sidebar.title("Navigation")

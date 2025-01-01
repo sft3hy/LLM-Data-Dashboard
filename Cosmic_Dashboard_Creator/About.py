@@ -22,7 +22,7 @@ This app is designed to make dashboard creation easier, faster, and more accessi
 ## Behind the Scenes 🤖
 
 This app was built using [**Streamlit**](https://streamlit.io/), a modern framework for creating data-driven web applications. It integrates powerful libraries like:  
-- **openai**: GPT-4o mini generates streamlit code based on your dashboard request
+- **openai** and **groq**: Your selected model generates streamlit code based on your dashboard request
 - **geopandas**: useful for analyzing geospatial and temporal data
 - **folium**: map displaying library 
 
@@ -31,7 +31,7 @@ This app was built using [**Streamlit**](https://streamlit.io/), a modern framew
 ## About the Developer 🛠️
 
 Hi, I'm Sam Townsend! 👋  
-I'm passionate about data visualization and web development and have created this app to help others explore their own data and automate dashboard creation.  
+I'm passionate about data visualization, web development, and generative AI and have created this app to help others explore their own data and automate dashboard creation.  
 
 Feel free to connect with me on:  
 - [**GitHub**](https://github.com/sft3hy)  

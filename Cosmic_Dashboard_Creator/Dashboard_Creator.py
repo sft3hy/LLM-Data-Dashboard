@@ -1,14 +1,14 @@
 import streamlit as st
 import os
+import time
 from helpers.model_caller import call_model
 from helpers.parse_file import extract_file_snippet
 from helpers.dependency_ensurer import ensure_library_installed
-from helpers.misc import is_directory_empty, generate_safe_filename, extract_message
-from helpers.code_corrector import correct_code
+from helpers.misc import is_directory_empty, generate_safe_filename, extract_message, get_new_filename
+from helpers.code_editor import correct_code
+from refiner_bar import output_refined_dashboard
 from config import GROQ_MODELS, streamlit_sys_prompt
-
-# Page configuration
-st.set_page_config(page_title="Dashboard Creator", page_icon="📊", layout="centered")
+from streamlit_extras.sandbox import sandbox
 
 
 # Title
@@ -113,7 +113,7 @@ if submitted and user_input.strip() and selected_files and selected_model:
     format_response = extract_message(response)
 
     # Create the "pages" directory if it doesn't exist
-    pages_dir = "pages"
+    pages_dir = "Your_Dashboards"
     os.makedirs(pages_dir, exist_ok=True)
 
     filename = f"{generate_safe_filename(user_input)}.py"
@@ -146,12 +146,17 @@ st.markdown(\"\"\"On data: \\"{files}\\" \"\"\")
 st.markdown(\"\"\"{selected_model} generated code:\"\"\")
 st.code(\"\"\"{maybe_correct}\"\"\", language="python")
 """
-        with open(file_path, "w") as f:
-            f.write(f"{page_config_robot}{commonly_missed_imports}{maybe_correct}{user_requests}{hidden_code_info}")
+        filename_info = get_new_filename(maybe_correct)
+        filename_to_write = filename_info['full_filename']
+        pretty_name = filename_info['pretty_name']
+        gimme_more = output_refined_dashboard(maybe_correct)
+        with open(filename_to_write, "w") as f:
+            f.write(f"{page_config_robot}{commonly_missed_imports}{maybe_correct}{gimme_more}{user_requests}{hidden_code_info}")
     except Exception as e:
         st.error(f"Error saving file: {e}")
 
     # Display the raw generated code
-    st.subheader(f"Check the left menu to view your dashboard and the code that created it.")
+    st.subheader(f"Your new dashboard will be named {pretty_name} in the left menu bar. Refresh this page to view it.")
+
     
 

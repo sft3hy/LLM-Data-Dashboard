@@ -1,5 +1,5 @@
 from helpers.model_caller import call_model
-from config import code_corrector_sys_prompt, CODE_CORRECTION_TRIES, CODE_CORRECTOR_MODEL
+from config import code_corrector_sys_prompt, CODE_CORRECTION_TRIES, CODE_CORRECTOR_MODEL, code_refiner_sys_prompt, CODE_REFINER_MODEL
 import streamlit as st
 from helpers.misc import extract_message
 import contextlib
@@ -35,3 +35,19 @@ def correct_code(code_snippet: str, extra_context: str):
         current_try += 1
     return corrected
 
+def code_refiner(code_snippet: str, extra_context: str):
+    """
+    Refines the code snippet using the GPT-3 model for code correction.
+    
+    Args:
+        code_snippet (str): The code snippet to refine.
+        extra_context (str): Additional context to provide to the model.
+    
+    Returns:
+        str: The refined code snippet.
+    """
+    whole_prompt = f"Original code: {code_snippet}\n' User request: {extra_context}"
+    refined_code = call_model(CODE_REFINER_MODEL, whole_prompt, code_refiner_sys_prompt)
+    with open('data/prompt_history.log', 'a') as f:
+        f.write(f"User request: {extra_context}\nUsing model: {CODE_REFINER_MODEL}\n")
+    return refined_code

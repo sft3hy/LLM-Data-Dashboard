@@ -31,6 +31,9 @@ def call_model(model_name: str, gpt_request: str, system_prompt: str):
         client = openai_client
     elif model_name in GROQ_MODELS:
         client = groq_client
+    else:
+        print("Invalid model name")
+        return None
     response = client.chat.completions.create(
         messages=[
             system_prompt,

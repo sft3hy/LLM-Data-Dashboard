@@ -4,6 +4,9 @@ import pandas as pd
 import json
 import pydeck as pdk
 
+st.set_page_config(page_title="Cope Cage Map", page_icon=":robot_face:", layout="centered")
+
+
 # Load data
 with open('user_uploaded_files/russia_losses.json') as f:
     data = json.load(f)
