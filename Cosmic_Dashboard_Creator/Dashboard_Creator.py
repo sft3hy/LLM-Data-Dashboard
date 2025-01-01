@@ -147,8 +147,12 @@ st.markdown(\"\"\"{selected_model} generated code:\"\"\")
 st.code(\"\"\"{maybe_correct}\"\"\", language="python")
 """
         filename_info = get_new_filename(maybe_correct)
-        filename_to_write = filename_info['full_filename']
-        pretty_name = filename_info['pretty_name']
+        if filename_info is None:
+            filename_to_write = file_path
+            pretty_name = filename
+        else:
+            filename_to_write = filename_info['full_filename']
+            pretty_name = filename_info['pretty_name']
         gimme_more = output_refined_dashboard(maybe_correct)
         with open(filename_to_write, "w") as f:
             f.write(f"{page_config_robot}{commonly_missed_imports}{maybe_correct}{gimme_more}{user_requests}{hidden_code_info}")
