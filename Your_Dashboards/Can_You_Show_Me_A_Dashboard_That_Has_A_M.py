@@ -81,9 +81,9 @@ def display_messages():
                 f"""
                 <div style="display: flex; justify-content: flex-end; align-items: center; margin: 10px 0;">
                     <div style="max-width: 70%; padding: 10px; border-radius: 10px;">
-                        {{msg["content"]}}
+                        {msg["content"]}
                     </div>
-                    {{bot_svg}}
+                    {bot_svg}
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -93,9 +93,9 @@ def display_messages():
             st.markdown(
                 f"""
                 <div style="display: flex; justify-content: flex-start; align-items: center; margin: 10px 0;">
-                    {{user_svg}}
+                    {user_svg}
                     <div style="max-width: 70%; padding: 10px; border-radius: 10px;">
-                        {{msg["content"]}}
+                        {msg["content"]}
                     </div>
                 </div>
                 """,
@@ -107,7 +107,7 @@ new_dash_message = 'Check the top of the page for your new dashboard.'
 def add_message():
     if st.session_state.input_message.strip():
         # Add user message
-        st.session_state.messages.append({{"content": st.session_state.input_message, "is_user": True}})
+        st.session_state.messages.append({"content": st.session_state.input_message, "is_user": True})
         # refine already existing code
         new_code = code_refiner("""import streamlit as st
 import pandas as pd
@@ -161,7 +161,7 @@ st.pydeck_chart(pdk.Deck(
 st.write("## Data Table")
 st.dataframe(df_grouped)""", st.session_state.input_message)
         exec(new_code, {})
-        st.session_state.messages.append({{"content": new_dash_message, "is_user": False}})
+        st.session_state.messages.append({"content": new_dash_message, "is_user": False})
         st.session_state.input_message = ""
 
 
@@ -169,7 +169,7 @@ st.dataframe(df_grouped)""", st.session_state.input_message)
 st.markdown(
     """
     <style>
-    div[data-testid="stHorizontalBlock"] {{
+    div[data-testid="stHorizontalBlock"] {
         position: fixed;
         bottom: 0;
         width: 100%;
@@ -177,7 +177,7 @@ st.markdown(
         background-color: #ffffff;
         padding: 10px 20px;
         box-shadow: 0px -2px 5px rgba(0,0,0,0.1);
-    }}
+    }
     </style>
     """,
     unsafe_allow_html=True,
