@@ -130,10 +130,13 @@ display_messages()
 
 # Create the input bar
 with st.container():
+    st.subheader("Dashboard Editor")
     st.text_input("Dashboard editor",
                 key="input_message",
                 on_change=add_message,
-                placeholder="I want a pie chart instead of a bar chart")
+                placeholder="I want a pie chart instead of a bar chart",
+                label_visibility="collapsed"
+                )
 
     
 
