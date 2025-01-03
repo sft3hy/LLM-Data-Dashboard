@@ -142,5 +142,7 @@ def clean_set_page_config(code):
     if selected_line:
         cleaned_lines.insert(1, selected_line)
 
+    print('ayo')
+
     return "\n".join(cleaned_lines)
 
