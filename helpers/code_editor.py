@@ -1,14 +1,16 @@
 from helpers.model_caller import call_model
 from config import code_corrector_sys_prompt, CODE_CORRECTION_TRIES, CODE_CORRECTOR_MODEL, code_refiner_sys_prompt, CODE_REFINER_MODEL
 import streamlit as st
-from helpers.misc import extract_message
+from helpers.misc import extract_message, clean_set_page_config
 import contextlib
 import io
 import traceback
+import time
+from datetime import datetime
 
 def correct_code(code_snippet: str, extra_context: str):
     current_try = 1
-    corrected = extract_message(code_snippet)
+    corrected = clean_set_page_config(extract_message(code_snippet))
     first_try = "The generated code was good but not perfect. Llama3 is now reviewing the code for any errors."
     while current_try <= CODE_CORRECTION_TRIES:
         try:
@@ -25,19 +27,20 @@ def correct_code(code_snippet: str, extra_context: str):
         
         except Exception as e:
             # Log the error and the captured output
-            detailed_error = traceback.format_exc()
-            print(e)
+            detailed_error = str(traceback.format_exc())[-10000:]
+            print(f"ERROR at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} in helpers.code_editor.22 - {e}")
             formatted=f"This is the code: {corrected}\nThis is the error: {detailed_error}\nThis is the context: {extra_context}\nPlease output the corrected code"
             if current_try == 1:
-                st.info(first_try)
-            st.info(f"Error correction {current_try}/{CODE_CORRECTION_TRIES} running...")
-            corrected = extract_message(call_model(CODE_CORRECTOR_MODEL, formatted, code_corrector_sys_prompt))
+                msg = st.toast(first_try)
+            msg.toast(f"Error correction {current_try}/{CODE_CORRECTION_TRIES} running...")
+            time.sleep(0.5)
+            corrected = clean_set_page_config(extract_message(call_model(CODE_CORRECTOR_MODEL, formatted, code_corrector_sys_prompt)))
         current_try += 1
     return corrected
 
 def code_refiner(code_snippet: str, extra_context: str):
     """
-    Refines the code snippet using the GPT-3 model for code correction.
+    Refines the code snippet using the llama-3 model for code correction.
     
     Args:
         code_snippet (str): The code snippet to refine.
@@ -48,6 +51,5 @@ def code_refiner(code_snippet: str, extra_context: str):
     """
     whole_prompt = f"Original code: {code_snippet}\n' User request: {extra_context}"
     refined_code = call_model(CODE_REFINER_MODEL, whole_prompt, code_refiner_sys_prompt)
-    with open('data/prompt_history.log', 'a') as f:
-        f.write(f"User request: {extra_context}\nUsing model: {CODE_REFINER_MODEL}\n")
+    
     return refined_code

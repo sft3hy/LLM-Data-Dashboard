@@ -3,7 +3,7 @@ import json
 import geopandas as gpd
 from xml.etree import ElementTree as ET
 import shapefile  # pyshp
-from io import StringIO
+import zipfile
 
 def extract_file_snippet(file_path, rows=5):
     """
@@ -62,3 +62,47 @@ def extract_file_snippet(file_path, rows=5):
     except Exception as e:
         return f"Error processing file: {e}"
 
+def preview_file(file_path):
+    """Extract a preview snippet of the file based on its type."""
+    file_type = file_path.split('.')[-1]
+    try:
+        if file_type == "csv":
+            df = pd.read_csv(file_path)
+            return {"columns": list(df.columns), "num_rows": len(df)}
+
+        elif file_type == "json":
+            with open(file_path, "r") as f:
+                data = json.load(f)
+                
+            if isinstance(data, list):  # Array of objects (tabular)
+                df = pd.DataFrame(data)
+                columns = list(df.columns)
+                num_rows = len(df)
+                return {"columns": columns, "num_rows": num_rows}
+            
+            elif isinstance(data, dict):  # Nested JSON (non-tabular)
+                # Extract top-level keys for nested JSON
+                top_level_keys = list(data.keys())
+                num_rows = len(data)  # Number of top-level keys
+                return {"columns": top_level_keys, "num_rows": num_rows}
+            
+            else:
+                return {"error": "Unsupported JSON format"}
+        elif file_type == 'geojson':
+            gdf = gpd.read_file(file_path)
+            return {"columns": list(gdf.columns), "num_rows": len(gdf)}
+
+        elif file_type == 'kml':
+            gdf = gpd.read_file(file_path, driver="KML")
+            return {"columns": list(gdf.columns), "num_rows": len(gdf)}
+
+        elif file_type == 'zip':
+            with zipfile.ZipFile(file_path, 'r') as z:
+                file_list = z.namelist()
+                return {"columns": None, "num_rows": None, "content": file_list}
+
+        else:
+            return {"error": "Unsupported file format"}
+
+    except Exception as e:
+        return {"error": str(e)}

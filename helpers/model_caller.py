@@ -49,7 +49,6 @@ def call_model(model_name: str, gpt_request: str, system_prompt: str):
     )
     gpt_response = response.choices[0].message.content
 
-    decrement(model_name)
+    with open('data/prompt_history.log', 'a') as f:
+        f.write(f"User request: {gpt_request}\nUsing model: {model_name}\n")
     return gpt_response
-
-

@@ -15,7 +15,7 @@ def ensure_library_installed(library_name):
         # Try to import the library
         __import__(library_name)
     except ImportError:
-        st.warning(f"Installing missing library: {library_name}")
+        msg = st.toast(f"Adding new python library for dashboard: {library_name}")
         # Install the library using pip
         subprocess.check_call([sys.executable, "-m", "pip", "install", library_name])
 

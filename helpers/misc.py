@@ -32,12 +32,20 @@ def generate_safe_filename(input_text, max_length=40):
     # Truncate to the maximum length
     return safe_name[:max_length]
 
+
 def extract_message(text):
+    """
+    Extracts the code block inside triple backticks and removes any line that contains only the word 'python'.
+    If no code block is found, returns the original text.
+    """
     # Use regex to find text inside triple backticks
     match = re.search(r'```(.*?)```', text, re.DOTALL)
     if match:
-        return match.group(1)  # Return the text inside the backticks
-    return text  # Return None if no match is found
+        code_block = match.group(1)
+        # Remove lines that contain only the word 'python'
+        filtered_code = "\n".join(line for line in code_block.splitlines() if line.strip().lower() != "python")
+        return filtered_code
+    return text  # Return text if no match is found
 
 def get_new_filename(file_contents):
     """
@@ -90,4 +98,49 @@ import plotly.express as px
 # Load the data
 st.title("Combined Data Dashboard")
 """
-# print(get_new_filename(file_content))
+
+def replace_triple_quotes(code_snippet):
+    """
+    Replaces all instances of triple quotes (\"\"\") in a given code snippet with escaped triple quotes (\\"\\").
+
+    Parameters:
+        code_snippet (str): The code snippet as a string.
+
+    Returns:
+        str: The modified code snippet with triple quotes replaced.
+    """
+    return code_snippet.replace('"""', r'\"\"\"')
+
+def clean_set_page_config(code):
+    """
+    Ensures only one `st.set_page_config` line exists in the provided code, 
+    and keeps the one with the 🤖 emoji.
+
+    Args:
+        code (str): The input Python code as a string.
+
+    Returns:
+        str: The cleaned Python code with only one `st.set_page_config` line.
+    """
+    lines = code.splitlines()
+    set_page_config_lines = [
+        line for line in lines if "st.set_page_config" in line
+    ]
+
+    # Find the line with the 🤖 emoji, default to the first one if not found
+    selected_line = next(
+        (line for line in set_page_config_lines if "🤖" in line), 
+        set_page_config_lines[0] if set_page_config_lines else None
+    )
+
+    # Remove all `st.set_page_config` lines from the original lines
+    cleaned_lines = [
+        line for line in lines if "st.set_page_config" not in line
+    ]
+
+    # Add the selected `st.set_page_config` line back, if found
+    if selected_line:
+        cleaned_lines.insert(1, selected_line)
+
+    return "\n".join(cleaned_lines)
+
