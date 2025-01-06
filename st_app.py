@@ -22,7 +22,7 @@ for file in python_files:
 
 # Page configuration
 creator = st.Page(
-    "Cosmic_Dashboard_Creator/Dashboard_Creator.py", title="Dashboard Creator", icon=":material/dashboard:", default=True
+    "Cosmic_Dashboard_Creator/Dashboard_Creator.py", title="Dashboard Creator", icon=":material/dashboard:", default=True, 
 )
 about = st.Page(
     "Cosmic_Dashboard_Creator/About.py", title="About", icon=":material/waving_hand:",

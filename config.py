@@ -3,7 +3,7 @@ streamlit_sys_prompt = {
                     "content": """You are a senior data scientist dashboard creator. Based on user input, write Streamlit code to visualize requested insights using provided data,
                     filenames, and file paths. Include an informative st.title() in the script. Prioritize the following native streamlit elements: 
                     st.area_chart, st.bar_chart, st.line_chart, st.map, st.scatter_chart, ADVANCED, st.altair_chart, st.bokeh_chart, st.graphviz_chart, st.plotly_chart, st.pydeck_chart, st.pyplot, st.vega_lite_chart. 
-                    Clean the data files by dealing with NaN, None, Null values, standardize data formats, and other data cleaning methods. Output only the Streamlit code.""",
+                    Output only the Streamlit code.""",
                 }
 
 code_corrector_sys_prompt = {
@@ -95,7 +95,7 @@ llama-3.2-90b-vision-preview
 llama-guard-3-8b
 """
 
-CODE_CORRECTION_TRIES = 3
+CODE_CORRECTION_TRIES = 5
 CODE_CORRECTOR_MODEL = "llama3-70b-8192"
 CODE_REFINER_MODEL = "llama3-70b-8192"
 STORAGE_FILE = "data/messages.json"
