@@ -21,15 +21,15 @@ def correct_code(code_snippet: str, extra_context: str):
             with contextlib.redirect_stdout(output_stream), contextlib.redirect_stderr(error_stream):
                 # Isolated execution environment
                 exec_environment = {}
-                exec(corrected, exec_environment)
+                with contextlib.redirect_stdout(None):
+                    exec(corrected)
             
             return corrected  # If execution succeeds, return corrected code
         
         except Exception as e:
             # Log the error and the captured output
-            detailed_error = str(traceback.format_exc())[-10000:]
             print(f"ERROR at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} in helpers.code_editor.22 - {e}")
-            formatted=f"This is the code: {corrected}\nThis is the error: {detailed_error}\nThis is the context: {extra_context}\nPlease output the corrected code"
+            formatted=f"This is the code: {corrected}\nThis is the error: {e}\nThis is the context: {extra_context}\nPlease output the corrected code"
             if current_try == 1:
                 msg = st.toast(first_try)
             msg.toast(f"Error correction {current_try}/{CODE_CORRECTION_TRIES} running...")
@@ -50,6 +50,6 @@ def code_refiner(code_snippet: str, extra_context: str):
         str: The refined code snippet.
     """
     whole_prompt = f"Original code: {code_snippet}\n' User request: {extra_context}"
-    refined_code = call_model(CODE_REFINER_MODEL, whole_prompt, code_refiner_sys_prompt)
+    refined_code = extract_message(call_model(CODE_REFINER_MODEL, whole_prompt, code_refiner_sys_prompt))
     
     return refined_code

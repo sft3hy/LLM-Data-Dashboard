@@ -10,4 +10,4 @@ numpy==2.2.0
 streamlit-chat==0.1.1
 streamlit-extras==0.5.0
 kaggle==1.6.17
-streamlit-auth0==1.0.5
+streamlit-auth0-component==0.1.5

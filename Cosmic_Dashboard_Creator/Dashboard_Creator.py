@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-import time
+from datetime import datetime
 from helpers.model_caller import call_model
 from helpers.parse_file import extract_file_snippet, preview_file
 from helpers.dependency_ensurer import ensure_library_installed
@@ -9,14 +9,13 @@ from helpers.code_editor import correct_code
 from refiner_bar import output_refined_dashboard
 from config import GROQ_MODELS, streamlit_sys_prompt
 
-
 # Title
 st.title("Dashboard Creator")
 save_dir = "user_uploaded_files"
 
 
 # Create a container at the top of the page
-top_container = st.container()
+top_container = st.container(height=100)
 
 
 # Use columns to position the selectbox
@@ -30,7 +29,7 @@ with top_container:
         )
     with col2:
         file_preview = st.checkbox(
-            "Show file previews"
+            "Show file information"
         )
 
 
@@ -55,7 +54,7 @@ if not is_directory_empty(save_dir):
             type=["kml", "geojson", "json", "csv", "zip"],  # Shapefiles are usually uploaded as zipped archives
             accept_multiple_files=True,
             label_visibility="collapsed",  # Completely hide the label
-
+            key="main-file-uploader",
         )
         if uploaded_files:
             for uploaded_file in uploaded_files:
@@ -75,26 +74,23 @@ if not is_directory_empty(save_dir):
             for count, file in enumerate(files):
                 file_path = os.path.join(save_dir, file)
                 file_paths.append(file_path)
-                file_snippet = preview_file(file_path)
-                all_file_snippets[file_path] = file_snippet
+                preview_snip = preview_file(file_path)
+                file_snippet = extract_file_snippet(file_path)
                 
                 if os.path.isfile(file_path):
                     # Add a checkbox for each file
                     is_selected = st.checkbox(f"📄 {file}", key=f"file_{count}")
                     if is_selected:
                         selected_files.append(file_path)
+                        all_file_snippets[file_path] = file_snippet
+                    
                     if file_preview:
-                        st.write(f"Columns: {file_snippet['columns']}")
-                        st.write(f"Number of rows: {file_snippet['num_rows']}")
-                        st.write(' ')
-
-                    
-                    
-                    # # Add a preview button for each file
-                    # with st.container():
-                    #     st.write(f"**File:** {file}")
-                    #     st.write(f"**Columns:** {file_snippet['columns']}")
-                    #     st.write(f"**Number of Rows:** {file_snippet['num_rows']}")
+                        if 'error' in preview_snip.keys():
+                            st.write('Error generating file preview')
+                        else:
+                            st.write(f"Columns: {preview_snip['columns']}")
+                            st.write(f"Number of rows: {preview_snip['num_rows']}")
+                            st.write(' ')
                 
                     
 
@@ -129,6 +125,7 @@ else:
 
 
 if submitted and user_input.strip() and selected_files and selected_model:
+    # print('ALL FILE SNIPS', all_file_snippets)
     formatted = f"Snippet(s) of the user's files: {all_file_snippets}\nThis is their request: {user_input}\nThese are the file path(s): {selected_files}"
     response = call_model(model_name=selected_model, gpt_request=formatted, system_prompt=streamlit_sys_prompt)
     format_response = extract_message(response)
@@ -176,9 +173,16 @@ with st.expander("View {selected_model} streamlit dashboard code"):
         else:
             filename_to_write = filename_info['full_filename']
             pretty_name = filename_info['pretty_name']
-        gimme_more = output_refined_dashboard(maybe_correct)
+        gimme_more = output_refined_dashboard(maybe_correct, f"\nSnippet(s) of the user's files: {str(all_file_snippets).replace('{', '').replace('}', '')}\nThese are the file path(s): {selected_files}")
+        dash_gen_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        optional_creator = ""
+        if 'user_info' in st.session_state and st.session_state.user_info and st.session_state.user_info['name']:
+            optional_creator = f" by {st.session_state.user_info['name']}"
+        dash_info = f"""
+st.caption(f"Dashboard created at {dash_gen_time}{optional_creator}")
+"""
         with open(filename_to_write, "w") as f:
-            f.write(f"{page_config_robot}{commonly_missed_imports}{maybe_correct}{hidden_code_info}{gimme_more}")
+            f.write(f"{page_config_robot}{commonly_missed_imports}{maybe_correct}{hidden_code_info}{dash_info}{gimme_more}")
     except Exception as e:
         st.error(f"Error saving file: {e}")
 

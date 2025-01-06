@@ -1,6 +1,7 @@
 import os
 import re
 import uuid
+import tempfile
 
 def is_directory_empty(directory_path):
     """Check if the directory is empty."""
@@ -142,7 +143,21 @@ def clean_set_page_config(code):
     if selected_line:
         cleaned_lines.insert(1, selected_line)
 
-    print('ayo')
-
     return "\n".join(cleaned_lines)
 
+def add_to_file(new_content, file_path):
+
+    # Read the content of the current file
+    with open(file_path, 'r') as f:
+        content = f.read()
+
+    # Modify the content
+    new_content = f"{content}\n\n{new_content}"
+
+    # Write to a temporary file
+    with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp_file:
+        temp_file.write(new_content)
+        temp_file_name = temp_file.name
+
+    # Replace the original file with the temporary file
+    os.replace(temp_file_name, file_path)

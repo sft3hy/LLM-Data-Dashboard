@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+from auth0_component import login_button
 
 # List all files ending with .py in the directory
 folder_name = "Your_Dashboards"
@@ -33,14 +34,27 @@ kaggle = st.Page(
     "Cosmic_Dashboard_Creator/Kaggle_Downloader.py", title="Kaggle Downloader", icon="🦆"
 )
 
-login = st.Page(
-    "Cosmic_Dashboard_Creator/Login.py", title="Login", icon=":material/login:"
-)
-
 pg = st.navigation(
 {
-    "Cosmic Dashboard Creator": [creator, login, about, model_info, kaggle],
+    "Cosmic Dashboard Creator": [creator, about, model_info, kaggle],
     "Your Dashboards": dashboard_pages,
 }
 )
 pg.run()
+
+# Get the Auth0 client ID and domain from environment variables
+client_id = os.environ.get("AUTH0_CLIENT_ID")
+domain = os.environ.get("AUTH0_DOMAIN")
+
+# Use the login button to get user info
+with st.sidebar:
+    user_info = login_button(client_id, domain=domain)
+
+# Store the user info in session state if it's not None
+if user_info:
+    st.session_state.user_info = user_info
+
+# Check if user info exists in session state and display it
+if "user_info" in st.session_state and user_info:
+    with st.sidebar:
+        st.write(f"Welcome, {user_info['name']}")

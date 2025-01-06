@@ -3,6 +3,7 @@ from openai import OpenAI
 import json
 from groq import Groq
 from config import GROQ_MODELS
+from datetime import datetime
 
 
 groq_client = Groq(

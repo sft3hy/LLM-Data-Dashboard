@@ -1,7 +1,9 @@
 streamlit_sys_prompt = {
                     "role": "system",
-                    "content": """You are a dashboard-creating assistant. Based on user input, write Streamlit code to visualize requested insights using provided data,
-                    filenames, and file paths. Include an informative st.title() in the script. Output only the Streamlit code.""",
+                    "content": """You are a senior data scientist dashboard creator. Based on user input, write Streamlit code to visualize requested insights using provided data,
+                    filenames, and file paths. Include an informative st.title() in the script. Prioritize the following native streamlit elements: 
+                    st.area_chart, st.bar_chart, st.line_chart, st.map, st.scatter_chart, ADVANCED, st.altair_chart, st.bokeh_chart, st.graphviz_chart, st.plotly_chart, st.pydeck_chart, st.pyplot, st.vega_lite_chart. 
+                    Clean the data files by dealing with NaN, None, Null values, standardize data formats, and other data cleaning methods. Output only the Streamlit code.""",
                 }
 
 code_corrector_sys_prompt = {
@@ -45,26 +47,26 @@ DASHBOARD_REFINER_SUGGESTIONS = [
 ]
 
 BOT_RESPONSE_REFINED = [
-    "Here is the refined code based on your request:",
-    "I have refined the code to meet your requirements:",
-    "The code has been updated to reflect your request:",
-    "Here is the updated code tailored to your input:",
-    "The following code has been adjusted as per your request:",
-    "Here's the code modified according to your preferences:",
-    "I've made the requested updates to the code:",
-    "Your requested refinements have been applied to the code:",
-    "Here's the adjusted code that aligns with your input:",
-    "I've implemented changes to the code based on your feedback:",
-    "Here is the refined version of the code:",
-    "The code has been revised as per your specifications:",
-    "Here's the code updated to incorporate your request:",
-    "I've tailored the code to match your requirements:",
-    "Here's the refined and updated code:",
-    "I've customized the code to reflect your input:",
-    "Here's the optimized code based on your feedback:",
-    "The code has been modified to align with your request:",
-    "I've adjusted the code as per your suggestions:",
-    "Here's the code that incorporates your changes:",
+    "Here is the refined dashboard based on your request",
+    "I have refined the dashboard to meet your requirements",
+    "The dashboard has been updated to reflect your request",
+    "Here is the updated dashboard tailored to your input",
+    "The following dashboard has been adjusted as per your request",
+    "Here's the dashboard modified according to your preferences",
+    "I've made the requested updates to the dashboard",
+    "Your requested refinements have been applied to the dashboard",
+    "Here's the adjusted dashboard that aligns with your input",
+    "I've implemented changes to the dashboard based on your feedback",
+    "Here is the refined version of the dashboard",
+    "The dashboard has been revised as per your specifications",
+    "Here's the dashboard updated to incorporate your request",
+    "I've tailored the dashboard to match your requirements",
+    "Here's the refined and updated dashboard",
+    "I've customized the dashboard to reflect your input",
+    "Here's the optimized dashboard based on your feedback",
+    "The dashboard has been modified to align with your request",
+    "I've adjusted the dashboard as per your suggestions",
+    "Here's the dashboard that incorporates your changes",
 ]
 
 
@@ -96,3 +98,26 @@ llama-guard-3-8b
 CODE_CORRECTION_TRIES = 3
 CODE_CORRECTOR_MODEL = "llama3-70b-8192"
 CODE_REFINER_MODEL = "llama3-70b-8192"
+STORAGE_FILE = "data/messages.json"
+GENERATED_FILES_DIR = "Your_Dashboards"
+
+from kaggle.api.kaggle_api_extended import KaggleApi
+
+
+def setup_kaggle_api():
+    """
+    Sets up the Kaggle API using the Kaggle JSON credentials file.
+    
+    Ensure you have the 'kaggle.json' file in your home directory's '.kaggle' folder
+    or in an environment variable.
+    """
+    try:
+        # Initialize and authenticate the Kaggle API
+        api = KaggleApi()
+        api.authenticate()
+        print("Kaggle API setup successful.")
+        return api
+    except Exception as e:
+        raise RuntimeError(f"Error setting up Kaggle API: {e}")
+    
+KAGGLE_API = setup_kaggle_api()
