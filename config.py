@@ -14,7 +14,7 @@ code_corrector_sys_prompt = {
 
 code_refiner_sys_prompt = {
     "role": "system",
-    "content": """You are a code-refining assistant. Given Streamlit code and its intended functionality, refine it as requested.
+    "content": """You are a senior data scientist dashboard refiner. Given Streamlit code and its intended functionality, refine it as requested.
     Output only the updated code, with comments explaining your changes."""
 }
 
