@@ -6,6 +6,7 @@ from config import summarizer_sys_prompt, LIDA_MODEL
 class giveText:
     def __init__(self):
         self.text = []
+        self.usage = ""
     def setText(self, text):
         self.text = [{"content": text}]
     
