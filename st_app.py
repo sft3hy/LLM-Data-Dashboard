@@ -33,10 +33,13 @@ model_info = st.Page(
 kaggle = st.Page(
     "Cosmic_Dashboard_Creator/Kaggle_Downloader.py", title="Kaggle Downloader", icon="🦆"
 )
+lida = st.Page(
+    "Cosmic_Dashboard_Creator/LIDA.py", title="LIDA", icon="📊"
+)
 
 pg = st.navigation(
 {
-    "Cosmic Dashboard Creator": [creator, about, model_info, kaggle],
+    "Cosmic Dashboard Creator": [creator, about, model_info, kaggle, lida],
     "Your Dashboards": dashboard_pages,
 }
 )

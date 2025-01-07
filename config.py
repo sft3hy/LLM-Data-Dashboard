@@ -23,6 +23,17 @@ normal_sys_prompt = {
     "content": """You answer questions concisely"""
 }
 
+summarizer_sys_prompt = {
+    "role": "system",
+     "content": """
+You are an experienced data analyst that can annotate datasets. Your instructions are as follows:
+i) ALWAYS generate the name of the dataset and the dataset_description
+ii) ALWAYS generate a field description.
+iii.) ALWAYS generate a semantic_type (a single word) for each field given its values e.g. company, city, number, supplier, location, gender, longitude, latitude, url, ip address, zip code, email, etc
+You must return an updated JSON dictionary without any preamble or explanation.
+"""
+}
+
 DASHBOARD_REFINER_SUGGESTIONS = [
     "I want a pie chart instead of a bar chart",
     "Zoom out the map to see more data points",
@@ -100,6 +111,7 @@ CODE_CORRECTOR_MODEL = "llama3-70b-8192"
 CODE_REFINER_MODEL = "llama3-70b-8192"
 STORAGE_FILE = "data/messages.json"
 GENERATED_FILES_DIR = "Your_Dashboards"
+LIDA_MODEL="llama3-70b-8192"
 
 from kaggle.api.kaggle_api_extended import KaggleApi
 

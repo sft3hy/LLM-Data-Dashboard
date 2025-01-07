@@ -25,7 +25,7 @@ def decrement(model_name: str):
         counts[model_name] -= 1
         json.dump(counts, open(counter_file, 'w'))
 
-def call_model(model_name: str, gpt_request: str, system_prompt: str):
+def call_model(model_name: str, gpt_request: str, system_prompt: str, role="user"):
     gpt_response = ""
     client = ""
     if model_name in openai_models:
@@ -39,13 +39,13 @@ def call_model(model_name: str, gpt_request: str, system_prompt: str):
         messages=[
             system_prompt,
             {
-                "role": "user",
+                "role": role,
                 "content": gpt_request,
             }
         ],
         temperature=1.0,
         top_p=1.0,
-        max_tokens=1000,
+        max_tokens=3000,
         model=model_name
     )
     gpt_response = response.choices[0].message.content
@@ -53,3 +53,4 @@ def call_model(model_name: str, gpt_request: str, system_prompt: str):
     with open('data/prompt_history.log', 'a') as f:
         f.write(f"User request: {gpt_request}\nUsing model: {model_name}\n")
     return gpt_response
+
