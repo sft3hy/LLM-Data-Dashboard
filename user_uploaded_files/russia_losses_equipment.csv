@@ -1,4 +1,4 @@
-date,day,aircraft,helicopter,tank,APC,field artillery,MRL,military auto,fuel tank,drone,naval ship,anti-aircraft warfare,special equipment,mobile SRBM system,greatest losses direction,vehicles and fuel tanks,cruise missiles,submarines
+date,day,aircraft,helicopter,tank,APC,field_artillery,MRL,military_auto,fuel_tank,drone,naval_ship,anti_aircraft_warfare,special_equipment,mobile_SRBM_system,greatest_losses_direction,vehicles_and_fuel_tanks,cruise_missiles,submarines
 2024-12-22,1033,369,329,9609,19870,21284,1256,,,20735,28,1030,3662.0,,,31972.0,2947.0,1.0
 2024-12-21,1032,369,329,9594,19841,21252,1256,,,20685,28,1027,3662.0,,,31891.0,2947.0,1.0
 2024-12-20,1031,369,329,9584,19823,21220,1256,,,20600,28,1027,3662.0,,,31793.0,2943.0,1.0

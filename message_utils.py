@@ -1,7 +1,7 @@
 import os
 import json
 from datetime import datetime
-from config import STORAGE_FILE
+from config import STORAGE_FILE, get_now
 
 # File to store messages (can be replaced with a database)
 
@@ -37,7 +37,7 @@ def add_user_message(file_path, message_contents, user_id):
     messages[file_path].append({
             "role": "user",
             "message_contents": message_contents,
-            "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            "timestamp": get_now(),
             "user_id": user_id,
         })
     save_messages(messages)
@@ -54,7 +54,7 @@ def add_assistant_message(file_path, message_contents, assistant_code_expander, 
         "assistant_code": assistant_code,
         "assistant_code_expander": assistant_code_expander,
         "assistant_code_top": assistant_code_top,
-        "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        "timestamp": get_now()
     })
     save_messages(messages)
 

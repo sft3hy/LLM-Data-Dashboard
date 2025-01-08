@@ -2,9 +2,11 @@ import streamlit as st
 from lida import Manager, TextGenerationConfig, llm
 from lida.datamodel import Goal
 import os
+import json
 import pandas as pd
-from lida_utils import custom_gen
+from lida_utils import groq_generator, azure_generator
 from config import GROQ_MODELS
+from helpers.misc import fix_json
 
 # make data dir if it doesn't exist
 os.makedirs("data", exist_ok=True)
@@ -35,7 +37,7 @@ selected_dataset = None
 
 # select model from model selection
 st.sidebar.write("## Text Generation Model")
-models = ["gpt-4o", "gpt-40-mini"] + GROQ_MODELS
+models = ["gpt-4o", "gpt-4o-mini"] + GROQ_MODELS
 selected_model = st.sidebar.selectbox(
     'Choose a model',
     options=models,
@@ -50,8 +52,6 @@ temperature = st.sidebar.slider(
     max_value=1.0,
     value=0.5)
 
-# set use_cache in sidebar
-use_cache = st.sidebar.checkbox("Use cache", value=True)
 
 # Handle dataset selection and upload
 st.sidebar.write("## Data Summarization")
@@ -59,6 +59,8 @@ st.sidebar.write("### Choose a dataset")
 
 datasets = [
     {"label": "Select a dataset", "url": None},
+    {"label": "Cars", "url": "https://raw.githubusercontent.com/uwdata/draco/master/data/cars.csv"},
+    {"label": "Weather", "url": "https://raw.githubusercontent.com/uwdata/draco/master/data/weather.json"},
 ]
 
 files_path = "user_uploaded_files"
@@ -119,7 +121,7 @@ summarization_methods = [
 selected_method_label = st.sidebar.selectbox(
     'Choose a method',
     options=[method["label"] for method in summarization_methods],
-    index=0
+    index=2
 )
 
 selected_method = summarization_methods[[
@@ -136,20 +138,25 @@ if selected_method:
 
 # Step 3 - Generate data summary
 if selected_dataset and selected_method:
-    lida = Manager(text_gen=custom_gen)
+    groq_lida = Manager(text_gen=groq_generator)
+    azure_lida = Manager(text_gen=azure_generator)
     textgen_config = TextGenerationConfig(
         n=1,
         temperature=temperature,
-        model=selected_model,
-        use_cache=use_cache)
+        model=selected_model,)
 
     st.write("## Summary")
     # **** lida.summarize *****
+    lida = ""
+    if selected_model in GROQ_MODELS:
+        lida = groq_lida
+    else:
+        lida = azure_lida
     summary = lida.summarize(
         selected_dataset,
         summary_method=selected_method,
         textgen_config=textgen_config)
-
+    summary = json.loads(fix_json(str(summary)))
     if "dataset_description" in summary:
         st.write(summary["dataset_description"])
 
@@ -171,37 +178,47 @@ if selected_dataset and selected_method:
         st.write(nfields_df)
     else:
         st.write(str(summary))
+    # Cache the goal generation function
+    @st.cache_data(show_spinner=True)
+    def generate_goals(summary, num_goals, textgen_config):
+        return lida.goals(summary, n=num_goals, textgen_config=textgen_config)
 
-    # Step 4 - Generate goals
+    # Goal selection section
     if summary:
         st.sidebar.write("### Goal Selection")
 
+        # Slider for number of goals to generate
         num_goals = st.sidebar.slider(
             "Number of goals to generate",
             min_value=1,
             max_value=10,
-            value=4)
+            value=4
+        )
+
+        # Checkbox to add a custom goal
         own_goal = st.sidebar.checkbox("Add Your Own Goal")
 
-        # **** lida.goals *****
-        goals = lida.goals(summary, n=num_goals, textgen_config=textgen_config)
-        st.write(f"## Goals ({len(goals)})")
-
-        default_goal = goals[0].question
+        # Generate goals using the cached function
+        goals = generate_goals(summary, num_goals, textgen_config)
         goal_questions = [goal.question for goal in goals]
 
+        # Allow user to add a custom goal
         if own_goal:
             user_goal = st.sidebar.text_input("Describe Your Goal")
-
             if user_goal:
-
                 new_goal = Goal(question=user_goal, visualization=user_goal, rationale="")
                 goals.append(new_goal)
                 goal_questions.append(new_goal.question)
 
-        selected_goal = st.selectbox('Choose a generated goal', options=goal_questions, index=0)
+        # Select a goal without regenerating goals
+        selected_goal = st.selectbox(
+            'Choose a visualization goal',
+            options=goal_questions,
+            index=0,
+            key="selected_goal"  # Use a unique key to maintain state
+        )
 
-        # st.markdown("### Selected Goal")
+        # Display the selected goal details
         selected_goal_index = goal_questions.index(selected_goal)
         st.write(goals[selected_goal_index])
 
@@ -209,15 +226,7 @@ if selected_dataset and selected_method:
 
         # Step 5 - Generate visualizations
         if selected_goal_object:
-            st.sidebar.write("## Visualization Library")
-            visualization_libraries = ["seaborn", "matplotlib", "plotly"]
-
-            selected_library = st.sidebar.selectbox(
-                'Choose a visualization library',
-                options=visualization_libraries,
-                index=0
-            )
-
+            
             # Update the visualization generation call to use the selected library.
             st.write("## Visualizations")
 
@@ -227,11 +236,20 @@ if selected_dataset and selected_method:
                 min_value=1,
                 max_value=10,
                 value=2)
+            
+            st.sidebar.write("## Visualization Library")
+            visualization_libraries = ["seaborn", "matplotlib", "plotly"]
+
+            selected_library = st.sidebar.selectbox(
+                'Choose a visualization library',
+                options=visualization_libraries,
+                index=0,
+                label_visibility="collapsed"
+            )
 
             textgen_config = TextGenerationConfig(
                 n=num_visualizations, temperature=temperature,
-                model=selected_model,
-                use_cache=use_cache)
+                model=selected_model,)
 
             # **** lida.visualize *****
             visualizations = lida.visualize(
@@ -241,19 +259,22 @@ if selected_dataset and selected_method:
                 library=selected_library)
 
             viz_titles = [f'Visualization {i+1}' for i in range(len(visualizations))]
+            print('VIZ_TITLES', viz_titles)
+            if viz_titles != []:
+                selected_viz_title = st.selectbox('Choose a visualization', options=viz_titles, index=0)
 
-            selected_viz_title = st.selectbox('Choose a visualization', options=viz_titles, index=0)
+                selected_viz = visualizations[viz_titles.index(selected_viz_title)]
 
-            selected_viz = visualizations[viz_titles.index(selected_viz_title)]
+                if selected_viz.raster:
+                    from PIL import Image
+                    import io
+                    import base64
 
-            if selected_viz.raster:
-                from PIL import Image
-                import io
-                import base64
+                    imgdata = base64.b64decode(selected_viz.raster)
+                    img = Image.open(io.BytesIO(imgdata))
+                    st.image(img, caption=selected_viz_title, use_column_width=True)
 
-                imgdata = base64.b64decode(selected_viz.raster)
-                img = Image.open(io.BytesIO(imgdata))
-                st.image(img, caption=selected_viz_title, use_column_width=True)
-
-            st.write("### Visualization Code")
-            st.code(selected_viz.code)
+                st.write("### Visualization Code")
+                st.code(selected_viz.code)
+            else:
+                st.error("Error creating visualization, try a different goal.")

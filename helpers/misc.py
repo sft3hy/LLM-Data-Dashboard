@@ -161,3 +161,29 @@ def add_to_file(new_content, file_path):
 
     # Replace the original file with the temporary file
     os.replace(temp_file_name, file_path)
+
+import json
+import ast
+
+def fix_json(json_str):
+    """
+    Fixes a JSON string that uses single quotes instead of double quotes.
+
+    Args:
+        json_str (str): The JSON string to validate and fix.
+
+    Returns:
+        str: A corrected JSON string with double quotes.
+    """
+    try:
+        # Try to load the string as valid JSON
+        json_obj = json.loads(json_str)
+        return str(json.dumps(json_obj, indent=4))  # Return pretty-printed JSON
+    except json.JSONDecodeError:
+        try:
+            # Attempt to parse using ast.literal_eval
+            json_obj = ast.literal_eval(json_str)
+            return str(json.dumps(json_obj, indent=4))
+        except (ValueError, SyntaxError):
+            raise ValueError("Invalid JSON format. Unable to fix.")
+

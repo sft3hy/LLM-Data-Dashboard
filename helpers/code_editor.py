@@ -1,5 +1,5 @@
 from helpers.model_caller import call_model
-from config import code_corrector_sys_prompt, CODE_CORRECTION_TRIES, CODE_CORRECTOR_MODEL, code_refiner_sys_prompt, CODE_REFINER_MODEL
+from config import code_corrector_sys_prompt, CODE_CORRECTION_TRIES, CODE_CORRECTOR_MODEL, code_refiner_sys_prompt, CODE_REFINER_MODEL, get_now
 import streamlit as st
 from helpers.misc import extract_message, clean_set_page_config
 import contextlib
@@ -28,7 +28,7 @@ def correct_code(code_snippet: str, extra_context: str):
         
         except Exception as e:
             # Log the error and the captured output
-            print(f"ERROR at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} in helpers.code_editor.22 - {e}")
+            print(f"ERROR at {get_now()} in helpers.code_editor.22 - {e}")
             formatted=f"This is the code: {corrected}\nThis is the error: {e}\nThis is the context: {extra_context}\nPlease output the corrected code"
             if current_try == 1:
                 msg = st.toast(first_try)

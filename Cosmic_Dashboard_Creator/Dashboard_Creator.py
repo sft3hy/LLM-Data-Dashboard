@@ -7,7 +7,7 @@ from helpers.dependency_ensurer import ensure_library_installed
 from helpers.misc import is_directory_empty, generate_safe_filename, extract_message, get_new_filename
 from helpers.code_editor import correct_code
 from refiner_bar import output_refined_dashboard
-from config import GROQ_MODELS, streamlit_sys_prompt
+from config import GROQ_MODELS, streamlit_sys_prompt, get_now
 
 # st.set_page_config("Dashboard Creator", layout="centered")
 
@@ -152,7 +152,7 @@ with st.expander("View {selected_model} streamlit dashboard code"):
             filename_to_write = filename_info['full_filename']
             pretty_name = filename_info['pretty_name']
         gimme_more = output_refined_dashboard(maybe_correct, f"\nSnippet(s) of the user's files: {str(all_file_snippets).replace('{', '').replace('}', '')}\nThese are the file path(s): {selected_files}")
-        dash_gen_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        dash_gen_time = get_now()
         optional_creator = ""
         if 'user_info' in st.session_state and st.session_state.user_info and st.session_state.user_info['name']:
             optional_creator = f" by {st.session_state.user_info['name']}"

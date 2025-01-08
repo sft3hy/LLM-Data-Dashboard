@@ -1,3 +1,6 @@
+from datetime import datetime
+import os
+
 streamlit_sys_prompt = {
                     "role": "system",
                     "content": """You are a senior data scientist dashboard creator. Based on user input, write Streamlit code to visualize requested insights using provided data,
@@ -111,7 +114,10 @@ CODE_CORRECTOR_MODEL = "llama3-70b-8192"
 CODE_REFINER_MODEL = "llama3-70b-8192"
 STORAGE_FILE = "data/messages.json"
 GENERATED_FILES_DIR = "Your_Dashboards"
-LIDA_MODEL="llama3-70b-8192"
+GROQ_LIDA_MODEL="llama3-70b-8192"
+AZURE_LIDA_MODEL="gpt-4o-mini"
+AZURE_API_KEY=os.environ["GH_ACCESS_TOKEN"]
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", None)
 
 from kaggle.api.kaggle_api_extended import KaggleApi
 
@@ -131,5 +137,8 @@ def setup_kaggle_api():
         return api
     except Exception as e:
         raise RuntimeError(f"Error setting up Kaggle API: {e}")
+    
+def get_now():
+    return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
 KAGGLE_API = setup_kaggle_api()

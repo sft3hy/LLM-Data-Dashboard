@@ -1,8 +1,9 @@
 import os
 from openai import OpenAI
 import json
+import re
 from groq import Groq
-from config import GROQ_MODELS
+from config import GROQ_MODELS, get_now
 from datetime import datetime
 
 
@@ -51,6 +52,7 @@ def call_model(model_name: str, gpt_request: str, system_prompt: str, role="user
     gpt_response = response.choices[0].message.content
 
     with open('data/prompt_history.log', 'a') as f:
-        f.write(f"User request: {gpt_request}\nUsing model: {model_name}\n")
+        cleaned = re.sub(r'\s+', ' ', gpt_request).strip()
+        f.write(f"\nUSER REQUEST:\n{cleaned}\nUsing model: {model_name}\nAt {get_now()}\nMODEL RESPONSE: {gpt_response}\n")
     return gpt_response
 
