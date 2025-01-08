@@ -1,17 +1,11 @@
 from helpers.model_caller import call_model
-from config import summarizer_sys_prompt, GROQ_LIDA_MODEL, AZURE_LIDA_MODEL, get_now, AZURE_API_KEY, GROQ_API_KEY
+from config import GROQ_LIDA_MODEL, AZURE_LIDA_MODEL, get_now, AZURE_API_KEY, GROQ_API_KEY
 import os
 from typing import Union, List, Dict
 from llmx import TextGenerationConfig, TextGenerationResponse, Message
 from openai import AzureOpenAI
 from groq import Groq
 
-class giveText:
-    def __init__(self):
-        self.text = []
-        self.usage = ""
-    def addText(self, text):
-        self.text.append({"content": text})
 
 def get_models_maxtoken_dict(models_list):
     if not models_list:
