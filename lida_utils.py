@@ -2,6 +2,7 @@ from helpers.model_caller import call_model
 from config import GROQ_LIDA_MODEL, AZURE_LIDA_MODEL, get_now, AZURE_API_KEY, GROQ_API_KEY
 import os
 from typing import Union, List, Dict
+from lida import Manager
 from llmx import TextGenerationConfig, TextGenerationResponse, Message
 from openai import AzureOpenAI
 from groq import Groq
@@ -108,7 +109,7 @@ azure_generator = CustomTextGenerator(model=AZURE_LIDA_MODEL,
 # azure_lida = Manager(text_gen=azure_generator)
 # textgen_config = TextGenerationConfig(
 #     n=1,
-#     temperature=temperature,
+#     temperature=0.5, # choose a value between 0 and 1
 #     model="llama3-70b-8192",)
 
 # # **** lida.summarize *****
