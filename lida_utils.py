@@ -103,3 +103,16 @@ azure_generator = CustomTextGenerator(model=AZURE_LIDA_MODEL,
                                     api_key=AZURE_API_KEY,
                                     )
 
+# To use, ininitialize lida like the following:
+# groq_lida = Manager(text_gen=groq_generator)
+# azure_lida = Manager(text_gen=azure_generator)
+# textgen_config = TextGenerationConfig(
+#     n=1,
+#     temperature=temperature,
+#     model="llama3-70b-8192",)
+
+# # **** lida.summarize *****
+# summary = groq_lida.summarize(
+#     "path/to/dataset.csv", # csv or json
+#     summary_method="llm", # choose from ["llm","columns","default"]
+#     textgen_config=textgen_config)
