@@ -1,13 +1,10 @@
 from datetime import datetime
 import os
 
-streamlit_sys_prompt = {
-                    "role": "system",
-                    "content": """You are a senior data scientist dashboard creator. Based on user input, write Streamlit code to visualize requested insights using provided data,
+streamlit_sys_prompt = """You are a senior data scientist dashboard creator. Based on user input, write Streamlit code to visualize requested insights using provided data,
                     filenames, and file paths. Include an informative st.title() in the script. Prioritize the following native streamlit elements: 
                     st.area_chart, st.bar_chart, st.line_chart, st.map, st.scatter_chart, ADVANCED, st.altair_chart, st.bokeh_chart, st.graphviz_chart, st.plotly_chart, st.pydeck_chart, st.pyplot, st.vega_lite_chart. 
-                    Output only the Streamlit code.""",
-                }
+                    Output only the Streamlit code."""
 
 code_corrector_sys_prompt = {
     "role": "system",
@@ -87,6 +84,9 @@ BOT_RESPONSE_REFINED = [
 MODEL_LIMITS = [
     {"Model": "gpt-4o", "Daily Calls": 50},
     {"Model": "gpt-4o-mini", "Daily Calls": 150},
+    {"Model": "gemini-2.0-flash-exp", "Daily Calls": 1500},
+    {"Model": "gemini-exp-1206", "Daily Calls": 1500},
+    {"Model": "gemini-1.5-flash", "Daily Calls": 1500},
     {"Model": "llama-3.3-70b-versatile", "Daily Calls": 1000},
     {"Model": "llama-3.3-70b-specdec", "Daily Calls": 1000},
     {"Model": "llama-3.1-70b-versatile", "Daily Calls": 1000},
@@ -95,13 +95,25 @@ MODEL_LIMITS = [
     {"Model": "mixtral-8x7b-32768", "Daily Calls": 14400},
 ]
 
-GROQ_MODELS = ["llama-3.3-70b-versatile",
-               "llama-3.3-70b-specdec",
-               "llama-3.1-70b-versatile",
-               "llama3-70b-8192",
-               "gemma2-9b-it",
-               "mixtral-8x7b-32768"
-               ]
+GROQ_MODELS = [
+    "llama-3.3-70b-versatile",
+    "llama-3.3-70b-specdec",
+    "llama-3.1-70b-versatile",
+    "llama3-70b-8192",
+    "gemma2-9b-it",
+    "mixtral-8x7b-32768"
+]
+
+GOOGLE_MODELS = [
+    "gemini-2.0-flash-exp",
+    "gemini-exp-1206",
+    "gemini-1.5-flash",
+]
+
+OPENAI_MODELS = [
+    "gpt-4o",
+    "gpt-4o-mini"
+]
 
 
 """
@@ -109,15 +121,15 @@ llama-3.2-90b-vision-preview
 llama-guard-3-8b
 """
 
-CODE_CORRECTION_TRIES = 5
+CODE_CORRECTION_TRIES = 3
 CODE_CORRECTOR_MODEL = "llama3-70b-8192"
 CODE_REFINER_MODEL = "llama3-70b-8192"
 STORAGE_FILE = "data/messages.json"
 GENERATED_FILES_DIR = "Your_Dashboards"
-GROQ_LIDA_MODEL="llama3-70b-8192"
-AZURE_LIDA_MODEL="gpt-4o-mini"
-AZURE_API_KEY=os.environ["GH_ACCESS_TOKEN"]
+
+AZURE_API_KEY=os.environ.get("GH_ACCESS_TOKEN", None)
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", None)
+GOOGLE_API_KEY = os.environ.get("GEMINI_API_KEY", None)
 
 from kaggle.api.kaggle_api_extended import KaggleApi
 

@@ -10,4 +10,4 @@ st.markdown("[**OpenAI**](https://openai.com/index/hello-gpt-4o/)", unsafe_allow
 st.title("Current model usage limits")
 limits_data = MODEL_LIMITS
 
-st.dataframe(limits_data, use_container_width=False)
+st.dataframe(limits_data)#, use_container_width=False)

@@ -1,10 +1,10 @@
 from helpers.model_caller import call_model
-from config import GROQ_LIDA_MODEL, AZURE_LIDA_MODEL, get_now, AZURE_API_KEY, GROQ_API_KEY
+from config import get_now, AZURE_API_KEY, GROQ_API_KEY, GOOGLE_API_KEY, GOOGLE_MODELS
 import os
 from typing import Union, List, Dict
 from lida import Manager
 from llmx import TextGenerationConfig, TextGenerationResponse, Message
-from openai import AzureOpenAI
+from openai import AzureOpenAI, OpenAI
 from groq import Groq
 
 
@@ -23,15 +23,15 @@ class CustomTextGenerator():
     def __init__(
         self,
         api_key: str = GROQ_API_KEY,
-        provider: str = "groq",
+        provider: str = None,
         organization: str = None,
         api_type: str = None,
         api_version: str = None,
-        azure_endpoint: str = "https://models.inference.ai.azure.com",
+        api_endpoint: str = "https://models.inference.ai.azure.com",
         model: str = None,
         models: Dict = None,
     ):
-        self.api_key = api_key or os.environ.get("GROQ_API_KEY", None)
+        self.api_key = api_key or GROQ_API_KEY
 
         if self.api_key is None:
             raise ValueError(
@@ -39,24 +39,30 @@ class CustomTextGenerator():
             )
 
         self.client_args = {
-            "api_key": self.api_key,
+            "api_key": AZURE_API_KEY,
             "organization": organization,
             "api_version": "2024-10-21",
-            "azure_endpoint": azure_endpoint,
+            "azure_endpoint": "https://models.inference.ai.azure.com",
         }
         # remove keys with None values
         self.client_args = {k: v for k,
                             v in self.client_args.items() if v is not None}
 
-        if api_type:
-            if api_type == "azure":
-                self.client = AzureOpenAI(**self.client_args)
-            else:
-                raise ValueError(f"Unknown api_type: {api_type}")
+        # must pick an api type
+        if api_type == "groq":
+            self.client = Groq(api_key=GROQ_API_KEY,)
+        elif api_type == "azure":
+            self.client = AzureOpenAI(**self.client_args)
+        elif api_type == "google":
+            self.client = OpenAI(
+                api_key=GOOGLE_API_KEY,
+                base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+            )
         else:
-            self.client = Groq(api_key=os.environ.get("GROQ_API_KEY"),)
+            raise ValueError(f"Unknown api_type: {api_type}")
+            
 
-        self.model = model or "llama3-70b-8192"
+        self.model = model
         self.model_max_token_dict = get_models_maxtoken_dict(models)
         self.provider = provider
 
@@ -68,26 +74,27 @@ class CustomTextGenerator():
     ) -> TextGenerationResponse:
         model = config.model or self.model
 
-        groq_config = {
+        model_config = {
             "model": model,
             "temperature": config.temperature,
             "top_p": config.top_p,
-            "frequency_penalty": config.frequency_penalty,
-            "presence_penalty": config.presence_penalty,
-            "n": 1,
+            "n": config.n,
             "messages": messages,
         }
+        if model not in GOOGLE_MODELS:
+            model_config['frequency_penalty'] = config.frequency_penalty
+            model_config['presence_penalty'] = config.presence_penalty
 
         self.model = model
 
-        groq_response = self.client.chat.completions.create(**groq_config)
+        model_response = self.client.chat.completions.create(**model_config)
 
         response = TextGenerationResponse(
             text=[Message(**x.message.model_dump())
-                  for x in groq_response.choices],
+                  for x in model_response.choices],
             logprobs=[],
-            usage=str(groq_response.usage),
-            config=groq_config,
+            usage=str(model_response.usage),
+            config=model_config,
         )
         with open('data/prompt_history.log', 'a') as f:
             f.write(f"\nUSER REQUEST:\n{messages}\nUsing model: {model}\nAt {get_now()}\nMODEL RESPONSE: {response}\n")
@@ -96,15 +103,15 @@ class CustomTextGenerator():
     def count_tokens():
         return 0
 
-
-# Instantiate your custom generator
-groq_generator = CustomTextGenerator(model=GROQ_LIDA_MODEL,)
-azure_generator = CustomTextGenerator(model=AZURE_LIDA_MODEL,
-                                    api_type="azure",
-                                    api_key=AZURE_API_KEY,
-                                    )
-
 # To use, ininitialize lida like the following:
+# Instantiate your custom generator
+# groq_generator = CustomTextGenerator(model="llama3-70b-8192",)
+# azure_generator = CustomTextGenerator(model="gpt-4o-mini",
+#                                     api_type="azure",
+#                                     )
+# google_generator = CustomTextGenerator(model="gemini-",
+#                                     api_type="google-2.0-flash-exp",
+#                                     )
 # groq_lida = Manager(text_gen=groq_generator)
 # azure_lida = Manager(text_gen=azure_generator)
 # textgen_config = TextGenerationConfig(

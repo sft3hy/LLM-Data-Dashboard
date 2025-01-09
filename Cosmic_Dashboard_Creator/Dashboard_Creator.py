@@ -4,10 +4,11 @@ from datetime import datetime
 from helpers.model_caller import call_model
 from helpers.parse_file import extract_file_snippet, preview_file
 from helpers.dependency_ensurer import ensure_library_installed
-from helpers.misc import is_directory_empty, generate_safe_filename, extract_message, get_new_filename
+from helpers.misc import is_directory_empty, generate_safe_filename, clean_set_page_config, get_new_filename, choose_text_generator, parse_model_response
 from helpers.code_editor import correct_code
 from refiner_bar import output_refined_dashboard
-from config import GROQ_MODELS, streamlit_sys_prompt, get_now
+from config import GROQ_MODELS, OPENAI_MODELS, GOOGLE_MODELS, streamlit_sys_prompt, get_now
+from lida_utils import CustomTextGenerator, TextGenerationConfig
 
 # st.set_page_config("Dashboard Creator", layout="centered")
 
@@ -24,7 +25,7 @@ top_container = st.container(border=True)
 with top_container:
     selected_model = st.selectbox(
         "Select an LLM for code generation:",
-        options=['gpt-4o', 'gpt-4o-mini'] + GROQ_MODELS,
+        options = OPENAI_MODELS + GOOGLE_MODELS + GROQ_MODELS,
         # label_visibility='collapsed'
     )
         
@@ -101,13 +102,34 @@ else:
     pass
     # st.info("No files have been uploaded yet.")
 
+# select temperature on a scale of 0.0 to 1.0
+temperature = st.sidebar.slider(
+    "Model Temperature",
+    min_value=0.0,
+    max_value=0.4,
+    value=0.2)
+
 
 if selected_files and user_input and user_input.strip() and selected_files and selected_model:
-    # print('ALL FILE SNIPS', all_file_snippets)
+    textgen_config = TextGenerationConfig(
+        n=1,
+        temperature=temperature,
+        model=selected_model,)
     formatted = f"Snippet(s) of the user's files: {all_file_snippets}\nThis is their request: {user_input}\nThese are the file path(s): {selected_files}"
-    response = call_model(model_name=selected_model, gpt_request=formatted, system_prompt=streamlit_sys_prompt)
-    format_response = extract_message(response)
 
+    text_gen = choose_text_generator(selected_model)
+    original_streamlit_try_messages = [
+            {"role": "system", "content": streamlit_sys_prompt},
+            {"role": "user",
+             "content":
+             f"{formatted}"}]
+
+    result = text_gen.generate(messages=original_streamlit_try_messages, config=textgen_config)
+
+    # response = call_model(model_name=selected_model, gpt_request=formatted, system_prompt=streamlit_sys_prompt)
+    response = parse_model_response(result)
+    # format_response = extract_message(response[0])
+    print(response)
     # Create the "pages" directory if it doesn't exist
     pages_dir = "Your_Dashboards"
     os.makedirs(pages_dir, exist_ok=True)
@@ -117,7 +139,7 @@ if selected_files and user_input and user_input.strip() and selected_files and s
 
     # Extract dependencies from the generated code (basic regex for import statements)
     dependencies = set()
-    for line in response.splitlines():
+    for line in response[0].splitlines():
         if line.startswith("import ") or line.startswith("from "):
             dep = line.split()[1].split(".")[0]  # Extract the root module
             dependencies.add(dep)
@@ -132,9 +154,11 @@ if selected_files and user_input and user_input.strip() and selected_files and s
         files = ', '.join([os.path.basename(f) for f in selected_files])
         commonly_missed_imports = "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\n"
 
-        page_config_robot = f"""import streamlit as st\nst.set_page_config(page_icon="🤖", layout="centered")\n"""
-
-        maybe_correct = correct_code(code_snippet=f"{page_config_robot}{commonly_missed_imports}{response}", extra_context=formatted)
+        page_config_robot = "import streamlit as st\n"
+        if "st.set_page_config" not in response:
+            page_config_robot = f"""import streamlit as st\nst.set_page_config(page_icon="🤖", layout="centered")\n"""
+        maybe_correct = correct_code(code_snippet=response, extra_context=formatted)
+        whole_code = clean_set_page_config(f"{page_config_robot}{commonly_missed_imports}{maybe_correct}")
 
         user_requests = f"""
 # Dashboard generated for your request: \"{user_input}\"
@@ -160,7 +184,7 @@ with st.expander("View {selected_model} streamlit dashboard code"):
 st.caption(f"Dashboard created at {dash_gen_time}{optional_creator}")
 """
         with open(filename_to_write, "w") as f:
-            f.write(f"{page_config_robot}{commonly_missed_imports}{maybe_correct}{hidden_code_info}{dash_info}{gimme_more}")
+            f.write(f"{whole_code}{hidden_code_info}{dash_info}{gimme_more}")
     except Exception as e:
         st.error(f"Error saving file: {e}")
 

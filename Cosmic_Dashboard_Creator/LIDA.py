@@ -4,9 +4,9 @@ from lida.datamodel import Goal
 import os
 import json
 import pandas as pd
-from lida_utils import groq_generator, azure_generator
-from config import GROQ_MODELS
-from helpers.misc import fix_json
+from lida_utils import CustomTextGenerator
+from config import GROQ_MODELS, GOOGLE_MODELS, OPENAI_MODELS, AZURE_API_KEY, AZURE_LIDA_MODEL
+from helpers.misc import fix_json, choose_text_generator
 
 # make data dir if it doesn't exist
 os.makedirs("data", exist_ok=True)
@@ -37,7 +37,7 @@ selected_dataset = None
 
 # select model from model selection
 st.sidebar.write("## Text Generation Model")
-models = ["gpt-4o", "gpt-4o-mini"] + GROQ_MODELS
+models = OPENAI_MODELS + GROQ_MODELS + GOOGLE_MODELS
 selected_model = st.sidebar.selectbox(
     'Choose a model',
     options=models,
@@ -47,10 +47,10 @@ selected_model = st.sidebar.selectbox(
 # select temperature on a scale of 0.0 to 1.0
 # st.sidebar.write("## Text Generation Temperature")
 temperature = st.sidebar.slider(
-    "Temperature",
+    "Model Temperature",
     min_value=0.0,
-    max_value=1.0,
-    value=0.5)
+    max_value=0.4,
+    value=0.2)
 
 
 # Handle dataset selection and upload
@@ -137,9 +137,7 @@ if selected_method:
         unsafe_allow_html=True)
 
 # Step 3 - Generate data summary
-if selected_dataset and selected_method:
-    groq_lida = Manager(text_gen=groq_generator)
-    azure_lida = Manager(text_gen=azure_generator)
+if selected_dataset and selected_method and selected_model:
     textgen_config = TextGenerationConfig(
         n=1,
         temperature=temperature,
@@ -148,10 +146,10 @@ if selected_dataset and selected_method:
     st.write("## Summary")
     # **** lida.summarize *****
     lida = ""
-    if selected_model in GROQ_MODELS:
-        lida = groq_lida
-    else:
-        lida = azure_lida
+    
+    lida = choose_text_generator(selected_model)
+     
+        
     summary = lida.summarize(
         selected_dataset,
         summary_method=selected_method,
@@ -238,7 +236,7 @@ if selected_dataset and selected_method:
                 value=2)
             
             st.sidebar.write("## Visualization Library")
-            visualization_libraries = ["seaborn", "matplotlib", "plotly"]
+            visualization_libraries = ["altair", "seaborn", "matplotlib", "plotly"]
 
             selected_library = st.sidebar.selectbox(
                 'Choose a visualization library',
@@ -256,25 +254,48 @@ if selected_dataset and selected_method:
                 summary=summary,
                 goal=selected_goal_object,
                 textgen_config=textgen_config,
-                library=selected_library)
+                # library=selected_library
+            )
 
             viz_titles = [f'Visualization {i+1}' for i in range(len(visualizations))]
             print('VIZ_TITLES', viz_titles)
-            if viz_titles != []:
-                selected_viz_title = st.selectbox('Choose a visualization', options=viz_titles, index=0)
-
-                selected_viz = visualizations[viz_titles.index(selected_viz_title)]
-
-                if selected_viz.raster:
+            def display_chart(selected_visualization):
+                if selected_visualization.raster:
                     from PIL import Image
                     import io
                     import base64
 
-                    imgdata = base64.b64decode(selected_viz.raster)
+                    imgdata = base64.b64decode(selected_visualization.raster)
                     img = Image.open(io.BytesIO(imgdata))
                     st.image(img, caption=selected_viz_title, use_column_width=True)
 
-                st.write("### Visualization Code")
-                st.code(selected_viz.code)
+            if viz_titles != []:
+                selected_viz_title = st.selectbox('Choose a visualization', options=viz_titles, index=0)
+
+                selected_viz = visualizations[viz_titles.index(selected_viz_title)]
+                
+                display_chart(selected_viz)
+
+                with st.expander("Visualization Code"):
+                    st.code(selected_viz.code)
             else:
                 st.error("Error creating visualization, try a different goal.")
+            
+            # modify chart using natural language
+            chart_edit = st.chat_input("Modify your chart")
+            if chart_edit:
+                st.chat_message("user").write(chart_edit)
+                instructions = [chart_edit]
+                edited_charts = lida.edit(code=selected_viz.code,
+                                          summary=summary, instructions=instructions,
+                                          library=selected_library,
+                                          textgen_config=textgen_config)
+                edited_viz_titles = [f'Visualization {i+1}' for i in range(len(edited_charts))]
+
+                selected_viz_title = st.selectbox('Choose an edited visualization', options=edited_viz_titles, index=0)
+
+                selected_edited_viz = edited_charts[edited_viz_titles.index(selected_viz_title)]
+                st.chat_message.write(
+                display_chart(selected_edited_viz),
+                st.expander("Edited Visualization Code").code(selected_edited_viz.code)
+                )

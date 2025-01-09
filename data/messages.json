@@ -173,5 +173,21 @@
             "assistant_code_top": "# Dashboard generated for your request: \"get rid of the if name main and just write it like a modern streamlit script\"\n",
             "timestamp": "2025-01-06 12:29:16"
         }
+    ],
+    "Vehicle_Losses_Map.py": [
+        {
+            "role": "user",
+            "message_contents": "it seems the map does not show a base layer",
+            "timestamp": "2025-01-09 10:09:34",
+            "user_id": "no_email"
+        },
+        {
+            "role": "assistant",
+            "message_contents": "Here's the adjusted dashboard that aligns with your input",
+            "assistant_code": "\nst.set_page_config(page_icon=\"\", layout=\"centered\")\nimport streamlit as st\nimport pandas as pd\nimport altair as alt\nfrom streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport folium\n\n\nst.title(\"Vehicle Losses Map\")\n\nfile_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2022_Vehicle_Losses.csv'\ndf = pd.read_csv(file_path)\n\n# Convert lat and lon to numeric, handling errors by coercing to NaN\ndf['lat'] = pd.to_numeric(df['lat'].str.replace('N', ''), errors='coerce')\ndf['lon'] = pd.to_numeric(df['lon'].str.replace('E', ''), errors='coerce')\n\n# Drop rows where either lat or lon is NaN\ndf = df.dropna(subset=['lat', 'lon'])\n\n# Create a folium map with a base layer\nm = folium.Map(location=[df['lat'].mean(), df['lon'].mean()], zoom_start=6)\n\n# Add markers to the map\nfor index, row in df.iterrows():\n    folium.Marker([row['lat'], row['lon']], tooltip=f\"Nearest Location: {row['nearest_location_placename']}<br>Vechile Type: {row['vehicle_type']}<br>Model: {row['model']}<br>Status: {row['status']}\").add_to(m)\n\n# Display the map\nfolium_static(m)",
+            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"it seems the map does not show a base layer\"\n",
+            "timestamp": "2025-01-09 10:09:34"
+        }
     ]
 }

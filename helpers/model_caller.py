@@ -3,16 +3,16 @@ from openai import OpenAI
 import json
 import re
 from groq import Groq
-from config import GROQ_MODELS, get_now
+from config import GROQ_MODELS, get_now, GROQ_API_KEY, AZURE_API_KEY
 from datetime import datetime
 
 
 groq_client = Groq(
-    api_key=os.environ.get("GROQ_API_KEY"),
+    api_key=GROQ_API_KEY,
 )
 
 openai_models = ['gpt-4o', 'gpt-4o-mini']
-openai_token = os.environ["GH_ACCESS_TOKEN"]
+openai_token = AZURE_API_KEY
 openai_endpoint = "https://models.inference.ai.azure.com"
 openai_client = OpenAI(
     base_url=openai_endpoint,

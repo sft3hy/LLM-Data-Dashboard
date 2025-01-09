@@ -22,7 +22,7 @@ def correct_code(code_snippet: str, extra_context: str):
                 # Isolated execution environment
                 exec_environment = {}
                 with contextlib.redirect_stdout(None):
-                    exec(corrected)
+                    exec(corrected, exec_environment)
             
             return corrected  # If execution succeeds, return corrected code
         

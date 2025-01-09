@@ -2,6 +2,8 @@ import os
 import re
 import uuid
 import tempfile
+from lida_utils import CustomTextGenerator, TextGenerationResponse
+from config import GOOGLE_MODELS, GROQ_MODELS, OPENAI_MODELS
 
 def is_directory_empty(directory_path):
     """Check if the directory is empty."""
@@ -187,3 +189,27 @@ def fix_json(json_str):
         except (ValueError, SyntaxError):
             raise ValueError("Invalid JSON format. Unable to fix.")
 
+def choose_text_generator(model: str):
+    if model in GROQ_MODELS:
+        groq_generator = CustomTextGenerator(
+            model=model,
+            api_type="groq",
+            )
+        return groq_generator
+    elif model in GOOGLE_MODELS:
+        google_generator = CustomTextGenerator(
+            model=model,
+            api_type="google",
+            )
+        return google_generator
+    elif model in OPENAI_MODELS:
+        azure_generator = CustomTextGenerator(
+            model=model,
+            api_type="azure",
+            )
+        return azure_generator
+    else:
+        raise ValueError(f"Unknown model name: {model}")
+    
+def parse_model_response(response: TextGenerationResponse):
+    return clean_set_page_config(extract_message(response.text[0]['content']))
