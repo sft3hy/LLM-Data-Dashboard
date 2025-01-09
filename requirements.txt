@@ -12,3 +12,5 @@ streamlit-extras==0.5.0
 kaggle==1.6.17
 streamlit-auth0-component==0.1.5
 lida==0.0.14
+basemap==1.4.1
+st-copy-to-clipboard==0.1.6

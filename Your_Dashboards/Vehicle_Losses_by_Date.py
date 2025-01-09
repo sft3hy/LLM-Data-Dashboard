@@ -1,54 +1,139 @@
 import streamlit as st
+import streamlit as st
 st.set_page_config(page_icon="🤖", layout="centered")
 from streamlit_folium import folium_static
 from streamlit_folium import st_folium
 import streamlit as st
 import pandas as pd
-
-# Set the title of the Streamlit app
-st.title("Map of Vehicle Losses")
+import matplotlib.pyplot as plt
 
 # Load the data
 file_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'
 data = pd.read_csv(file_path)
 
-# Data preprocessing
-# Extract latitude and longitude from the 'lat' and 'lon' columns
-data['latitude'] = data['lat'].str.extract(r'([0-9.]+)').astype(float)
-data['longitude'] = data['lon'].str.extract(r'([0-9.]+)').astype(float)
+# Convert date column to datetime
+data['date'] = pd.to_datetime(data['date'])
 
-# Filter out rows with missing or invalid coordinates
-map_data = data.dropna(subset=['latitude', 'longitude'])
+# Group by date and count the number of vehicle losses
+vehicle_losses_by_date = data.groupby('date').size().reset_index(name='count')
 
-# Display the map
-st.map(map_data[['latitude', 'longitude']])
-with st.expander("View gpt-4o streamlit dashboard code"):
+# Create a line chart to visualize the data
+st.title('Vehicle Losses by Date')
+st.line_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create a bar chart to visualize the data
+st.write('Bar Chart of Vehicle Losses by Date')
+st.bar_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create an area chart to visualize the data
+st.write('Area Chart of Vehicle Losses by Date')
+st.area_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create a scatter chart to visualize the data
+st.write('Scatter Chart of Vehicle Losses by Date')
+st.scatter_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create a plotly chart to visualize the data
+import plotly.express as px
+fig = px.line(vehicle_losses_by_date, x='date', y='count', title='Vehicle Losses by Date')
+st.plotly_chart(fig)
+
+# Create a pydeck chart to visualize the data
+import pydeck as pdk
+layer = pdk.Layer(
+    'ScatterplotLayer',
+    vehicle_losses_by_date,
+    pickable=True,
+    opacity=0.8,
+    stroked=True,
+    filled=True,
+    radius_scale=6,
+    radius_min_pixels=1,
+    radius_max_pixels=100,
+    line_width_min_pixels=1,
+    get_position='date',
+    get_radius='count',
+    get_fill_color=[255, 140, 0],
+    get_line_color=[0, 0, 0]
+)
+view_state = pdk.ViewState(
+    latitude=0,
+    longitude=0,
+    zoom=0,
+    pitch=0,
+    bearing=0
+)
+r = pdk.Deck(layers=[layer], initial_view_state=view_state)
+st.pydeck_chart(r)
+with st.expander("View llama-3.3-70b-specdec streamlit dashboard code"):
     st.code("""
-# Dashboard generated for your request: "map of losses"
+# Dashboard generated for your request: "How do vehicle losses vary by date?"
 # On data: "02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv"
 
 import streamlit as st
 import pandas as pd
-
-# Set the title of the Streamlit app
-st.title("Map of Vehicle Losses")
+import matplotlib.pyplot as plt
 
 # Load the data
 file_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'
 data = pd.read_csv(file_path)
 
-# Data preprocessing
-# Extract latitude and longitude from the 'lat' and 'lon' columns
-data['latitude'] = data['lat'].str.extract(r'([0-9.]+)').astype(float)
-data['longitude'] = data['lon'].str.extract(r'([0-9.]+)').astype(float)
+# Convert date column to datetime
+data['date'] = pd.to_datetime(data['date'])
 
-# Filter out rows with missing or invalid coordinates
-map_data = data.dropna(subset=['latitude', 'longitude'])
+# Group by date and count the number of vehicle losses
+vehicle_losses_by_date = data.groupby('date').size().reset_index(name='count')
 
-# Display the map
-st.map(map_data[['latitude', 'longitude']])""", language="python")
+# Create a line chart to visualize the data
+st.title('Vehicle Losses by Date')
+st.line_chart(vehicle_losses_by_date, x='date', y='count')
 
-st.caption(f"Dashboard created at 2025-01-09 10:17:21")
+# Create a bar chart to visualize the data
+st.write('Bar Chart of Vehicle Losses by Date')
+st.bar_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create an area chart to visualize the data
+st.write('Area Chart of Vehicle Losses by Date')
+st.area_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create a scatter chart to visualize the data
+st.write('Scatter Chart of Vehicle Losses by Date')
+st.scatter_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create a plotly chart to visualize the data
+import plotly.express as px
+fig = px.line(vehicle_losses_by_date, x='date', y='count', title='Vehicle Losses by Date')
+st.plotly_chart(fig)
+
+# Create a pydeck chart to visualize the data
+import pydeck as pdk
+layer = pdk.Layer(
+    'ScatterplotLayer',
+    vehicle_losses_by_date,
+    pickable=True,
+    opacity=0.8,
+    stroked=True,
+    filled=True,
+    radius_scale=6,
+    radius_min_pixels=1,
+    radius_max_pixels=100,
+    line_width_min_pixels=1,
+    get_position='date',
+    get_radius='count',
+    get_fill_color=[255, 140, 0],
+    get_line_color=[0, 0, 0]
+)
+view_state = pdk.ViewState(
+    latitude=0,
+    longitude=0,
+    zoom=0,
+    pitch=0,
+    bearing=0
+)
+r = pdk.Deck(layers=[layer], initial_view_state=view_state)
+st.pydeck_chart(r)""", language="python")
+
+st.caption(f"Dashboard created at 2025-01-09 15:35:03")
 
 
 
@@ -102,24 +187,66 @@ def add_message(input_message, user_email):
         # Existing code for the dashboard
         existing_code = """import streamlit as st
 import pandas as pd
-
-# Set the title of the Streamlit app
-st.title("Map of Vehicle Losses")
+import matplotlib.pyplot as plt
 
 # Load the data
 file_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'
 data = pd.read_csv(file_path)
 
-# Data preprocessing
-# Extract latitude and longitude from the 'lat' and 'lon' columns
-data['latitude'] = data['lat'].str.extract(r'([0-9.]+)').astype(float)
-data['longitude'] = data['lon'].str.extract(r'([0-9.]+)').astype(float)
+# Convert date column to datetime
+data['date'] = pd.to_datetime(data['date'])
 
-# Filter out rows with missing or invalid coordinates
-map_data = data.dropna(subset=['latitude', 'longitude'])
+# Group by date and count the number of vehicle losses
+vehicle_losses_by_date = data.groupby('date').size().reset_index(name='count')
 
-# Display the map
-st.map(map_data[['latitude', 'longitude']])"""
+# Create a line chart to visualize the data
+st.title('Vehicle Losses by Date')
+st.line_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create a bar chart to visualize the data
+st.write('Bar Chart of Vehicle Losses by Date')
+st.bar_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create an area chart to visualize the data
+st.write('Area Chart of Vehicle Losses by Date')
+st.area_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create a scatter chart to visualize the data
+st.write('Scatter Chart of Vehicle Losses by Date')
+st.scatter_chart(vehicle_losses_by_date, x='date', y='count')
+
+# Create a plotly chart to visualize the data
+import plotly.express as px
+fig = px.line(vehicle_losses_by_date, x='date', y='count', title='Vehicle Losses by Date')
+st.plotly_chart(fig)
+
+# Create a pydeck chart to visualize the data
+import pydeck as pdk
+layer = pdk.Layer(
+    'ScatterplotLayer',
+    vehicle_losses_by_date,
+    pickable=True,
+    opacity=0.8,
+    stroked=True,
+    filled=True,
+    radius_scale=6,
+    radius_min_pixels=1,
+    radius_max_pixels=100,
+    line_width_min_pixels=1,
+    get_position='date',
+    get_radius='count',
+    get_fill_color=[255, 140, 0],
+    get_line_color=[0, 0, 0]
+)
+view_state = pdk.ViewState(
+    latitude=0,
+    longitude=0,
+    zoom=0,
+    pitch=0,
+    bearing=0
+)
+r = pdk.Deck(layers=[layer], initial_view_state=view_state)
+st.pydeck_chart(r)"""
 
         # Refine code based on input
 
@@ -167,7 +294,7 @@ These are the file path(s): ['user_uploaded_files/02-24-2022_THROUGH_09-04-2024_
         )
 
 # Add the chat input field
-input_message = st.chat_input(placeholder=f"Include a comparison against last year's data")
+input_message = st.chat_input(placeholder=f"Add a trend line to the chart")
 
 if 'user_info' in st.session_state and st.session_state.user_info and st.session_state.user_info['email']:
     user_email = st.session_state.user_info['email']

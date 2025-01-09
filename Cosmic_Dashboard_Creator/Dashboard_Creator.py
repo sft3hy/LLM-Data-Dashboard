@@ -1,14 +1,16 @@
 import streamlit as st
 import os
 from datetime import datetime
-from helpers.model_caller import call_model
-from helpers.parse_file import extract_file_snippet, preview_file
-from helpers.dependency_ensurer import ensure_library_installed
-from helpers.misc import is_directory_empty, generate_safe_filename, clean_set_page_config, get_new_filename, choose_text_generator, parse_model_response
-from helpers.code_editor import correct_code
-from refiner_bar import output_refined_dashboard
+from utils.model_caller import call_model
+from utils.parse_file import extract_file_snippet, preview_file
+from utils.dependency_ensurer import ensure_library_installed
+from utils.misc import is_directory_empty, generate_safe_filename, clean_set_page_config, get_new_filename, choose_text_generator, parse_model_response
+from utils.code_editor import correct_code
+from utils.refiner_bar import output_refined_dashboard
 from config import GROQ_MODELS, OPENAI_MODELS, GOOGLE_MODELS, streamlit_sys_prompt, get_now
-from lida_utils import CustomTextGenerator, TextGenerationConfig
+from lida import TextGenerationConfig, Manager
+from st_copy_to_clipboard import st_copy_to_clipboard
+
 
 # st.set_page_config("Dashboard Creator", layout="centered")
 
@@ -109,25 +111,58 @@ temperature = st.sidebar.slider(
     max_value=0.4,
     value=0.2)
 
+if selected_model:
+    textgen_config = TextGenerationConfig(
+            n=1,
+            temperature=temperature,
+            model=selected_model,)
+    lida_generator = choose_text_generator(selected_model)
+    lida = Manager(text_gen=lida_generator)
+
+if selected_files:
+    print(selected_files)
+    st.write("Not sure what to ask for? Try the goal generation button to have your selected llm review your data and give you some ideas.")
+    goal_generation = st.button("Generate goals")
+    
+    if goal_generation:
+        with st.spinner(text="Generating goals..."):
+        # Generate goals using the cached function
+            for selected_file in selected_files:
+                summary = lida.summarize(
+                    selected_file,
+                    summary_method="columns",
+                    textgen_config=textgen_config,
+                    )
+                goals = lida.goals(summary, n=6, textgen_config=textgen_config)
+                goal_questions = [goal.question for goal in goals]
+                st.write(f"{selected_file.split('/')[-1]} Goal Recommendations:")
+                
+                # Adjust number of columns as needed
+                num_columns = 3
+                columns = st.columns(num_columns)
+
+                # Rotate through columns and add questions with bordered containers
+                for idx, question in enumerate(goal_questions):
+                    col = columns[idx % num_columns]  # Rotate through columns
+                    with col.container(height=150, border=True):
+                        # Display the question
+                        st.write(question)
+                        st_copy_to_clipboard(question,
+                                            key=str(idx),
+                                            after_copy_label="Copied!"
+                                            )
+           
 
 if selected_files and user_input and user_input.strip() and selected_files and selected_model:
-    textgen_config = TextGenerationConfig(
-        n=1,
-        temperature=temperature,
-        model=selected_model,)
+
     formatted = f"Snippet(s) of the user's files: {all_file_snippets}\nThis is their request: {user_input}\nThese are the file path(s): {selected_files}"
-
-    text_gen = choose_text_generator(selected_model)
-    original_streamlit_try_messages = [
-            {"role": "system", "content": streamlit_sys_prompt},
-            {"role": "user",
-             "content":
-             f"{formatted}"}]
-
-    result = text_gen.generate(messages=original_streamlit_try_messages, config=textgen_config)
-
-    # response = call_model(model_name=selected_model, gpt_request=formatted, system_prompt=streamlit_sys_prompt)
-    response = parse_model_response(result)
+    response = call_model(
+        model_name=selected_model,
+        gpt_request=formatted,
+        system_prompt=streamlit_sys_prompt,
+        temperature=temperature
+        )
+   
     # format_response = extract_message(response[0])
     print(response)
     # Create the "pages" directory if it doesn't exist
@@ -184,7 +219,7 @@ with st.expander("View {selected_model} streamlit dashboard code"):
 st.caption(f"Dashboard created at {dash_gen_time}{optional_creator}")
 """
         with open(filename_to_write, "w") as f:
-            f.write(f"{whole_code}{hidden_code_info}{dash_info}{gimme_more}")
+            f.write(f"import streamlit as st\n{whole_code}{hidden_code_info}{dash_info}{gimme_more}")
     except Exception as e:
         st.error(f"Error saving file: {e}")
 

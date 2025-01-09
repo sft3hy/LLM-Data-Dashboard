@@ -2,8 +2,8 @@ import os
 import re
 import uuid
 import tempfile
-from lida_utils import CustomTextGenerator, TextGenerationResponse
-from config import GOOGLE_MODELS, GROQ_MODELS, OPENAI_MODELS
+from utils.lida_utils import CustomTextGenerator, TextGenerationResponse
+from config import GOOGLE_MODELS, GROQ_MODELS, OPENAI_MODELS, GROQ_API_KEY, AZURE_API_KEY, GOOGLE_API_KEY
 
 def is_directory_empty(directory_path):
     """Check if the directory is empty."""
@@ -194,18 +194,21 @@ def choose_text_generator(model: str):
         groq_generator = CustomTextGenerator(
             model=model,
             api_type="groq",
+            api_key=GROQ_API_KEY,
             )
         return groq_generator
     elif model in GOOGLE_MODELS:
         google_generator = CustomTextGenerator(
             model=model,
             api_type="google",
+            api_key=GOOGLE_API_KEY,
             )
         return google_generator
     elif model in OPENAI_MODELS:
         azure_generator = CustomTextGenerator(
             model=model,
             api_type="azure",
+            api_key=AZURE_API_KEY,
             )
         return azure_generator
     else:

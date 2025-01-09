@@ -1,54 +1,49 @@
 import streamlit as st
+import streamlit as st
 st.set_page_config(page_icon="🤖", layout="centered")
 from streamlit_folium import folium_static
 from streamlit_folium import st_folium
-import streamlit as st
 import pandas as pd
+import streamlit as st
 
-# Set the title of the Streamlit app
-st.title("Map of Vehicle Losses")
+st.title("Vehicle Losses Visualization")
 
 # Load the data
-file_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'
-data = pd.read_csv(file_path)
+df = pd.read_csv('user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv')
 
-# Data preprocessing
-# Extract latitude and longitude from the 'lat' and 'lon' columns
-data['latitude'] = data['lat'].str.extract(r'([0-9.]+)').astype(float)
-data['longitude'] = data['lon'].str.extract(r'([0-9.]+)').astype(float)
+# Bar chart 1: Vehicle Type Distribution
+st.header("Vehicle Type Distribution")
+vehicle_type_counts = df['vehicle_type'].value_counts()
+st.bar_chart(vehicle_type_counts)
 
-# Filter out rows with missing or invalid coordinates
-map_data = data.dropna(subset=['latitude', 'longitude'])
-
-# Display the map
-st.map(map_data[['latitude', 'longitude']])
-with st.expander("View gpt-4o streamlit dashboard code"):
+# Bar chart 2: Status Distribution
+st.header("Status Distribution")
+status_counts = df['status'].value_counts()
+st.bar_chart(status_counts) 
+with st.expander("View gemma2-9b-it streamlit dashboard code"):
     st.code("""
-# Dashboard generated for your request: "map of losses"
+# Dashboard generated for your request: "2 bar charts"
 # On data: "02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv"
 
-import streamlit as st
 import pandas as pd
+import streamlit as st
 
-# Set the title of the Streamlit app
-st.title("Map of Vehicle Losses")
+st.title("Vehicle Losses Visualization")
 
 # Load the data
-file_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'
-data = pd.read_csv(file_path)
+df = pd.read_csv('user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv')
 
-# Data preprocessing
-# Extract latitude and longitude from the 'lat' and 'lon' columns
-data['latitude'] = data['lat'].str.extract(r'([0-9.]+)').astype(float)
-data['longitude'] = data['lon'].str.extract(r'([0-9.]+)').astype(float)
+# Bar chart 1: Vehicle Type Distribution
+st.header("Vehicle Type Distribution")
+vehicle_type_counts = df['vehicle_type'].value_counts()
+st.bar_chart(vehicle_type_counts)
 
-# Filter out rows with missing or invalid coordinates
-map_data = data.dropna(subset=['latitude', 'longitude'])
+# Bar chart 2: Status Distribution
+st.header("Status Distribution")
+status_counts = df['status'].value_counts()
+st.bar_chart(status_counts) """, language="python")
 
-# Display the map
-st.map(map_data[['latitude', 'longitude']])""", language="python")
-
-st.caption(f"Dashboard created at 2025-01-09 10:17:21")
+st.caption(f"Dashboard created at 2025-01-09 13:06:44")
 
 
 
@@ -100,26 +95,23 @@ def add_message(input_message, user_email):
     if input_message.strip():
 
         # Existing code for the dashboard
-        existing_code = """import streamlit as st
-import pandas as pd
+        existing_code = """import pandas as pd
+import streamlit as st
 
-# Set the title of the Streamlit app
-st.title("Map of Vehicle Losses")
+st.title("Vehicle Losses Visualization")
 
 # Load the data
-file_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'
-data = pd.read_csv(file_path)
+df = pd.read_csv('user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv')
 
-# Data preprocessing
-# Extract latitude and longitude from the 'lat' and 'lon' columns
-data['latitude'] = data['lat'].str.extract(r'([0-9.]+)').astype(float)
-data['longitude'] = data['lon'].str.extract(r'([0-9.]+)').astype(float)
+# Bar chart 1: Vehicle Type Distribution
+st.header("Vehicle Type Distribution")
+vehicle_type_counts = df['vehicle_type'].value_counts()
+st.bar_chart(vehicle_type_counts)
 
-# Filter out rows with missing or invalid coordinates
-map_data = data.dropna(subset=['latitude', 'longitude'])
-
-# Display the map
-st.map(map_data[['latitude', 'longitude']])"""
+# Bar chart 2: Status Distribution
+st.header("Status Distribution")
+status_counts = df['status'].value_counts()
+st.bar_chart(status_counts) """
 
         # Refine code based on input
 
@@ -167,7 +159,7 @@ These are the file path(s): ['user_uploaded_files/02-24-2022_THROUGH_09-04-2024_
         )
 
 # Add the chat input field
-input_message = st.chat_input(placeholder=f"Include a comparison against last year's data")
+input_message = st.chat_input(placeholder=f"Provide export options for the dashboard data")
 
 if 'user_info' in st.session_state and st.session_state.user_info and st.session_state.user_info['email']:
     user_email = st.session_state.user_info['email']

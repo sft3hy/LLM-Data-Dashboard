@@ -1,6 +1,4 @@
-from helpers.model_caller import call_model
-from config import get_now, AZURE_API_KEY, GROQ_API_KEY, GOOGLE_API_KEY, GOOGLE_MODELS
-import os
+from config import get_now, GROQ_MODELS, GROQ_API_KEY, GOOGLE_API_KEY, GOOGLE_MODELS
 from typing import Union, List, Dict
 from lida import Manager
 from llmx import TextGenerationConfig, TextGenerationResponse, Message
@@ -23,7 +21,7 @@ class CustomTextGenerator():
     def __init__(
         self,
         api_key: str = GROQ_API_KEY,
-        provider: str = None,
+        provider: str = "groq",
         organization: str = None,
         api_type: str = None,
         api_version: str = None,
@@ -39,7 +37,7 @@ class CustomTextGenerator():
             )
 
         self.client_args = {
-            "api_key": AZURE_API_KEY,
+            "api_key": self.api_key,
             "organization": organization,
             "api_version": "2024-10-21",
             "azure_endpoint": "https://models.inference.ai.azure.com",
@@ -84,6 +82,8 @@ class CustomTextGenerator():
         if model not in GOOGLE_MODELS:
             model_config['frequency_penalty'] = config.frequency_penalty
             model_config['presence_penalty'] = config.presence_penalty
+        if model in GROQ_MODELS:
+            model_config['n'] = 1
 
         self.model = model
 
@@ -109,8 +109,8 @@ class CustomTextGenerator():
 # azure_generator = CustomTextGenerator(model="gpt-4o-mini",
 #                                     api_type="azure",
 #                                     )
-# google_generator = CustomTextGenerator(model="gemini-",
-#                                     api_type="google-2.0-flash-exp",
+# google_generator = CustomTextGenerator(model="gemini-2.0-flash-exp",
+#                                     api_type="google",
 #                                     )
 # groq_lida = Manager(text_gen=groq_generator)
 # azure_lida = Manager(text_gen=azure_generator)

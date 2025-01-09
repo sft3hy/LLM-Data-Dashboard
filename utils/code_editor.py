@@ -1,7 +1,7 @@
-from helpers.model_caller import call_model
+from utils.model_caller import call_model
 from config import code_corrector_sys_prompt, CODE_CORRECTION_TRIES, CODE_CORRECTOR_MODEL, code_refiner_sys_prompt, CODE_REFINER_MODEL, get_now
 import streamlit as st
-from helpers.misc import extract_message, clean_set_page_config
+from utils.misc import extract_message, clean_set_page_config
 import contextlib
 import io
 import traceback

@@ -9,11 +9,11 @@ def output_refined_dashboard(existing_code: str, file_context: str):
 
 
 import streamlit as st
-from helpers.code_editor import code_refiner, correct_code
+from utils.code_editor import code_refiner, correct_code
 from config import BOT_RESPONSE_REFINED, CODE_REFINER_MODEL
 from random import randint
 import os
-from message_utils import get_file_messages, add_user_message, add_assistant_message
+from utils.message_utils import get_file_messages, add_user_message, add_assistant_message
 
 FILENAME = os.path.basename(__file__)
 

@@ -189,5 +189,51 @@
             "assistant_code_top": "# Dashboard generated for your request: \"it seems the map does not show a base layer\"\n",
             "timestamp": "2025-01-09 10:09:34"
         }
+    ],
+    "Vehicle_Losses_Visualization.py": [
+        {
+            "role": "user",
+            "message_contents": "make the bars red",
+            "timestamp": "2025-01-09 13:08:50",
+            "user_id": "no_email"
+        },
+        {
+            "role": "assistant",
+            "message_contents": "Your requested refinements have been applied to the dashboard",
+            "assistant_code": "import pandas as pd\nimport streamlit as st\nimport plotly.express as px\n\nst.title(\"Vehicle Losses Visualization\")\n\n# Load the data\ndf = pd.read_csv('user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv')\n\n# Bar chart 1: Vehicle Type Distribution\nst.header(\"Vehicle Type Distribution\")\nvehicle_type_counts = df['vehicle_type'].value_counts()\nfig = px.bar(x=vehicle_type_counts.index, y=vehicle_type_counts.values, color_discrete_sequence=['red'])\nst.plotly_chart(fig, use_container_width=True)\n\n# Bar chart 2: Status Distribution\nst.header(\"Status Distribution\")\nstatus_counts = df['status'].value_counts()\nfig = px.bar(x=status_counts.index, y=status_counts.values, color_discrete_sequence=['red'])\nst.plotly_chart(fig, use_container_width=True)",
+            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"make the bars red\"\n",
+            "timestamp": "2025-01-09 13:08:50"
+        },
+        {
+            "role": "user",
+            "message_contents": "now I want a pie chart ",
+            "timestamp": "2025-01-09 13:09:11",
+            "user_id": "no_email"
+        },
+        {
+            "role": "assistant",
+            "message_contents": "I've implemented changes to the dashboard based on your feedback",
+            "assistant_code": "import pandas as pd\nimport streamlit as st\nimport plotly.express as px\n\nst.title(\"Vehicle Losses Visualization\")\n\n# Load the data\nuploaded_file = st.file_uploader(\"Select a CSV file\", type=[\"csv\"])\nif uploaded_file is not None:\n    df = pd.read_csv(uploaded_file)\n\n    # Bar chart 1: Vehicle Type Distribution\n    st.header(\"Vehicle Type Distribution\")\n    vehicle_type_counts = df['vehicle_type'].value_counts()\n    st.bar_chart(vehicle_type_counts)\n\n    # Bar chart 2: Status Distribution\n    st.header(\"Status Distribution\")\n    status_counts = df['status'].value_counts()\n    st.bar_chart(status_counts)\n\n    # Pie chart: Status Distribution\n    st.header(\"Status Distribution (Pie Chart)\")\n    fig = px.pie(values=status_counts.values, names=status_counts.index, title='Status Distribution')\n    st.plotly_chart(fig, use_container_width=True)\nelse:\n    st.write(\"Please upload a CSV file.\")",
+            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"now I want a pie chart \"\n",
+            "timestamp": "2025-01-09 13:09:11"
+        }
+    ],
+    "Vehicle_Losses_by_Date.py": [
+        {
+            "role": "user",
+            "message_contents": "can you fix the map? there's no data on it. only output the map",
+            "timestamp": "2025-01-09 15:36:21",
+            "user_id": "no_email"
+        },
+        {
+            "role": "assistant",
+            "message_contents": "I've made the requested updates to the dashboard",
+            "assistant_code": "import streamlit as st\nimport pandas as pd\nimport pydeck as pdk\n\n# Load the data\nfile_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\ndata = pd.read_csv(file_path)\n\n# Convert lat and lon columns to float\ndata['lat'] = data['lat'].str.replace('N', '').astype(float)\ndata['lon'] = data['lon'].str.replace('E', '').astype(float)\n\n# Create a pydeck chart to visualize the data\nlayer = pdk.Layer(\n    'ScatterplotLayer',\n    data,\n    pickable=True,\n    opacity=0.8,\n    stroked=True,\n    filled=True,\n    radius_scale=6,\n    radius_min_pixels=1,\n    radius_max_pixels=100,\n    line_width_min_pixels=1,\n    get_position=['lon', 'lat'],\n    get_radius=10,\n    get_fill_color=[255, 140, 0],\n    get_line_color=[0, 0, 0]\n)\nview_state = pdk.ViewState(\n    latitude=data['lat'].mean(),\n    longitude=data['lon'].mean(),\n    zoom=6,\n    pitch=0,\n    bearing=0\n)\nr = pdk.Deck(layers=[layer], initial_view_state=view_state)\nst.pydeck_chart(r)",
+            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"can you fix the map? there's no data on it. only output the map\"\n",
+            "timestamp": "2025-01-09 15:36:21"
+        }
     ]
 }

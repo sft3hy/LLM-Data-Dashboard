@@ -3,25 +3,16 @@ import os
 
 streamlit_sys_prompt = """You are a senior data scientist dashboard creator. Based on user input, write Streamlit code to visualize requested insights using provided data,
                     filenames, and file paths. Include an informative st.title() in the script. Prioritize the following native streamlit elements: 
-                    st.area_chart, st.bar_chart, st.line_chart, st.map, st.scatter_chart, ADVANCED, st.altair_chart, st.bokeh_chart, st.graphviz_chart, st.plotly_chart, st.pydeck_chart, st.pyplot, st.vega_lite_chart. 
+                    st.area_chart, st.bar_chart, st.line_chart, st.map, st.scatter_chart, st.altair_chart, st.bokeh_chart, st.graphviz_chart, st.plotly_chart, st.pydeck_chart, st.pyplot, st.vega_lite_chart. 
                     Output only the Streamlit code."""
 
-code_corrector_sys_prompt = {
-    "role": "system",
-    "content": """You are a code-correcting assistant. Given Streamlit code and its error, fix the code to resolve the issue,
+code_corrector_sys_prompt = """You are a code-correcting assistant. Given Streamlit code and its error, fix the code to resolve the issue,
     considering its intended functionality. Output only the corrected code."""
-}
 
-code_refiner_sys_prompt = {
-    "role": "system",
-    "content": """You are a senior data scientist dashboard refiner. Given Streamlit code and its intended functionality, refine it as requested.
+code_refiner_sys_prompt = """You are a senior data scientist dashboard refiner. Given Streamlit code and its intended functionality, refine it as requested.
     Output only the updated code, with comments explaining your changes."""
-}
 
-normal_sys_prompt = {
-    "role": "system",
-    "content": """You answer questions concisely"""
-}
+normal_sys_prompt = """You answer questions concisely"""
 
 summarizer_sys_prompt = {
     "role": "system",

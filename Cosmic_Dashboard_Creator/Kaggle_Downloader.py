@@ -1,4 +1,4 @@
-from kaggle_utils import download_dataset, search_datasets
+from utils.kaggle_utils import download_dataset, search_datasets
 import streamlit as st
 from uuid import uuid4
 from config import KAGGLE_API
