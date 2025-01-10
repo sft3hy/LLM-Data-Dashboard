@@ -76,7 +76,6 @@ MODEL_LIMITS = [
     {"Model": "gpt-4o", "Daily Calls": 50},
     {"Model": "gpt-4o-mini", "Daily Calls": 150},
     {"Model": "gemini-2.0-flash-exp", "Daily Calls": 1500},
-    {"Model": "gemini-exp-1206", "Daily Calls": 1500},
     {"Model": "gemini-1.5-flash", "Daily Calls": 1500},
     {"Model": "llama-3.3-70b-versatile", "Daily Calls": 1000},
     {"Model": "llama-3.3-70b-specdec", "Daily Calls": 1000},
@@ -97,7 +96,6 @@ GROQ_MODELS = [
 
 GOOGLE_MODELS = [
     "gemini-2.0-flash-exp",
-    "gemini-exp-1206",
     "gemini-1.5-flash",
 ]
 
@@ -105,6 +103,8 @@ OPENAI_MODELS = [
     "gpt-4o",
     "gpt-4o-mini"
 ]
+
+ALL_MODELS = OPENAI_MODELS + GOOGLE_MODELS + GROQ_MODELS
 
 
 """
