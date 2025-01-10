@@ -42,4 +42,5 @@ streamlit run st_app.py
 - [Streamlit](https://streamlit.io/)
 - [LIDA](https://microsoft.github.io/lida/)
 - [Groq](https://groq.com/)
+- [Google AI Studio](https://aistudio.google.com/prompts/new_chat)
 - [Github Marketplace](https://github.com/marketplace)
