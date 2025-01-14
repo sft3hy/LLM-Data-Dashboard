@@ -1,23 +1,9 @@
 import streamlit as st
 import os
 from auth0_component import login_button
+from utils.misc import build_markup_for_logo, generate_pages
 
-# List all files ending with .py in the directory
-folder_name = "Your_Dashboards"
-python_files = [f for f in os.listdir(folder_name) if f.endswith('.py')]
-
-# Sort the files alphabetically
-python_files.sort()
-
-dashboard_pages = []
-for file in python_files:
-    cleaned = file.replace('_', ' ').replace('.py', '')
-    dashboard_pages.append(st.Page(
-        f"{folder_name}/{file}",
-        title=cleaned,
-        icon=":material/smart_toy:",
-        )
-    )
+dashboard_pages = generate_pages()
 
 
 # Page configuration
@@ -61,3 +47,9 @@ if user_info:
 if "user_info" in st.session_state and user_info:
     with st.sidebar:
         st.write(f"Welcome, {user_info['name']}")
+
+
+st.markdown(
+    build_markup_for_logo("data/resources/logo.png"),
+    unsafe_allow_html=True,
+)

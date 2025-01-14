@@ -1,6 +1,6 @@
 [theme]
-primaryColor="#32CD32"  # Light green accents
-backgroundColor="#001F3F"  # Dark blue background
-secondaryBackgroundColor="#003366"  # Slightly lighter dark blue for secondary elements
-textColor="#FFFFFF"  # White text
+primaryColor="#60f3ab"
+backgroundColor="#011529"
+secondaryBackgroundColor="#001f3f"
+textColor="#e8f6fb"
 font="sans serif"

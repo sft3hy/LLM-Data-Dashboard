@@ -136,7 +136,7 @@ def setup_kaggle_api():
         # Initialize and authenticate the Kaggle API
         api = KaggleApi()
         api.authenticate()
-        print("Kaggle API setup successful.")
+        # print("Kaggle API setup successful.")
         return api
     except Exception as e:
         raise RuntimeError(f"Error setting up Kaggle API: {e}")

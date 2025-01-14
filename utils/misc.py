@@ -4,6 +4,12 @@ import uuid
 import tempfile
 from utils.lida_utils import CustomTextGenerator, TextGenerationResponse
 from config import GOOGLE_MODELS, GROQ_MODELS, OPENAI_MODELS, GROQ_API_KEY, AZURE_API_KEY, GOOGLE_API_KEY
+import streamlit as st
+import base64
+from utils.message_utils import get_file_messages
+import requests
+import time
+
 
 def is_directory_empty(directory_path):
     """Check if the directory is empty."""
@@ -77,17 +83,15 @@ def get_new_filename(file_contents):
                 new_file_name = f"{base_name}_{unique_id}.py"
                 new_file_path = os.path.join("Your_Dashboards", new_file_name)
             
-            # print(f"New filename: {new_file_path}")
             return_dict = {
                 "full_filename": new_file_path,
                 "pretty_name": title
             }
             return return_dict
         
-        print("No st.title(...) line found in the file.")
         return None
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"An error occurred in get_new_filename: {e}")
         return None
 
 # Example usage
@@ -181,8 +185,9 @@ def fix_json(json_str):
         # Try to load the string as valid JSON
         json_obj = json.loads(json_str)
         return str(json.dumps(json_obj, indent=4))  # Return pretty-printed JSON
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
         try:
+            print(e)
             # Attempt to parse using ast.literal_eval
             json_obj = ast.literal_eval(json_str)
             return str(json.dumps(json_obj, indent=4))
@@ -216,3 +221,97 @@ def choose_text_generator(model: str):
     
 def parse_model_response(response: TextGenerationResponse):
     return clean_set_page_config(extract_message(response.text[0]['content']))
+
+def get_base64_of_bin_file(png_file: str) -> str:
+    with open(png_file, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+
+@st.cache_resource
+def build_markup_for_logo(png_file: str) -> str:
+    binary_string = get_base64_of_bin_file(png_file)
+    return f"""
+            <style>
+                [data-testid="stSidebarHeader"] {{
+                    background-image: url("data:image/png;base64,{binary_string}");
+                    background-repeat: no-repeat;
+                    background-size: 200px;
+                    padding-bottom: 5rem;
+                    background-position: top center;
+                }}
+            </style>
+            """
+
+
+def get_last_dashboard(file_name):
+    messages = get_file_messages(file_name)
+    last_messages = messages[-2:]
+    return last_messages
+
+# Function to execute newly generated code and update the display
+def execute_new_code(new_code, placeholder):
+    # Create a local dictionary to execute user code safely
+    local_context = {}
+    exec(new_code, {}, local_context)
+
+# Function to call the error correction service
+def correct_code_remotely(code_snippet, extra_context, file_name):
+    url = "http://127.0.0.1:8000/correct_code/"  # Replace with the service URL
+    payload = {
+        "code": code_snippet,
+        "extra_context": extra_context,
+        "file_name": file_name,
+    }
+    try:
+        response = requests.post(url, json=payload)
+        if response.status_code == 200:
+            return response.json().get("corrected_code", code_snippet)
+        else:
+            st.error(f"Error during code correction: {response.text}")
+            return code_snippet
+    except Exception as e:
+        st.error("The code corrector microservice is not up and running right now. Please try again later.")
+        print(e)
+ 
+def wait_for_file(file_path, check_interval=1):
+    """
+    Waits for a file to be created at the specified path. 
+    Checks for the file's existence every `check_interval` seconds.
+    
+    Parameters:
+    - file_path (str): The path of the file to check for.
+    - check_interval (int): Time in seconds between existence checks.
+    
+    Returns:
+    - bool: True if the file is found, False if interrupted.
+    """
+    tries = 6
+    trie = 0
+    try:
+        while not os.path.exists(file_path):
+            time.sleep(check_interval)
+            if trie > tries:
+                return False
+            trie += 1
+        return True
+    except KeyboardInterrupt:
+        return False
+
+def generate_pages():
+    # List all files ending with .py in the directory
+    folder_name = "Your_Dashboards"
+    python_files = [f for f in os.listdir(folder_name) if f.endswith('.py')]
+
+    # Sort the files alphabetically
+    python_files.sort()
+
+    dashboard_pages = []
+    for file in python_files:
+        cleaned = file.replace('_', ' ').replace('.py', '')
+        dashboard_pages.append(st.Page(
+            f"{folder_name}/{file}",
+            title=cleaned,
+            icon=":material/smart_toy:",
+            )
+        )
+    return dashboard_pages

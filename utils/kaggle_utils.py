@@ -42,25 +42,3 @@ def download_dataset(dataset_slug, download_path='datasets', unzip=True):
         print(f"Dataset '{dataset_slug}' downloaded to {download_path}.")
     except Exception as e:
         raise RuntimeError(f"Error downloading dataset: {e}")
-
-# # Example usage
-# if __name__ == "__main__":
-#     try:
-#         # Set up the API
-
-#         # Search for datasets
-#         query = "russian equipment losses"
-#         datasets = search_datasets(query, size=5)
-#         print(f"Top 5 datasets for '{query}':")
-#         for dataset in datasets:
-#             print(dataset)
-#             print(f" - {dataset.ref} | {dataset.title} | {dataset.size} | {dataset.description[:200]}")
-
-#         # Example: Download the first dataset in the search result
-#         if datasets:
-#             first_dataset_slug = datasets[0].ref
-#             # download_dataset(KAGGLE_API, first_dataset_slug)
-#         else:
-#             print("No datasets found for the query.")
-#     except Exception as e:
-#         print(str(e))

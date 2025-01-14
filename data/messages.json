@@ -1,239 +1,114 @@
 {
-    "Vehicle_Losses_Bar_Chart.py": [
+    "Russia_Personnel_Losses_Over_Time.py": [
         {
             "role": "user",
-            "message_contents": "add a pie chart",
-            "timestamp": "2025-01-04 15:21:30"
+            "message_contents": "simple graph",
+            "timestamp": "2025-01-13 20:14:20",
+            "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "Here's the refined and updated dashboard:",
-            "assistant_code": "import streamlit as st\nimport pandas as pd\nimport plotly.express as px  # added import for plotly express\n\n# Load the data\nfile_path = \"user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\ndata = pd.read_csv(file_path)\n\n# Prepare the data for the bar chart\ndata_counts = data['status'].value_counts()\n\n# Display the bar chart\nst.title(\"Vehicle Losses Bar Chart\")\nst.bar_chart(data_counts)\n\n# Prepare the data for the pie chart\nfig = px.pie(data, names='status', values='status', title='Vehicle Losses Pie Chart')\n\n# Display the pie chart\nst.title(\"Vehicle Losses Pie Chart\")\nst.plotly_chart(fig, use_container_width=True)",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"add a pie chart\"\n",
-            "timestamp": "2025-01-04 15:21:30"
-        },
-        {
-            "role": "user",
-            "message_contents": "I don't see any chart, try again",
-            "timestamp": "2025-01-04 15:26:27"
-        },
-        {
-            "role": "assistant",
-            "message_contents": "Here's the optimized dashboard based on your feedback:",
-            "assistant_code": "import streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load the data\nfile_path = \"user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\ndata = pd.read_csv(file_path)\n\n# Prepare the data for the bar chart\ndata_counts = data['status'].value_counts()\n\n# Display the bar chart\nst.title(\"Vehicle Losses Bar Chart\")\nfig, ax = plt.subplots()  # Create a figure and axis\nax.bar(data_counts.index, data_counts.values)  # Create the bar chart\nst.pyplot(fig)  # Display the chart",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"I don't see any chart, try again\"\n",
-            "timestamp": "2025-01-04 15:26:27"
-        },
-        {
-            "role": "user",
-            "message_contents": "I still need a pie chart",
-            "timestamp": "2025-01-04 15:30:40"
-        },
-        {
-            "role": "assistant",
-            "message_contents": "Here's the dashboard that incorporates your changes:",
-            "assistant_code": "import streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load the data\nfile_path = \"user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\ndata = pd.read_csv(file_path)\n\n# Prepare the data for the bar chart\ndata_counts = data['status'].value_counts()\n\n# Display the bar chart\nst.title(\"Vehicle Losses Bar Chart\")\nst.bar_chart(data_counts)\n\n# Prepare the data for the pie chart\nfig, ax = plt.subplots()\nax.pie(data_counts, labels = data_counts.index, autopct='%1.1f%%')\nax.set_title(\"Vehicle Losses Pie Chart\")\n\n# Display the pie chart\nst.pyplot(fig)",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"I still need a pie chart\"\n",
-            "timestamp": "2025-01-04 15:30:40"
-        },
-        {
-            "role": "user",
-            "message_contents": "now a pie chart for only those with the tag 'cope cage'",
-            "timestamp": "2025-01-04 15:32:03"
-        },
-        {
-            "role": "assistant",
-            "message_contents": "Here's the optimized dashboard based on your feedback:",
-            "assistant_code": "import streamlit as st\nimport pandas as pd\nimport plotly.express as px\n\n# Load the data\nfile_path = \"user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\ndata = pd.read_csv(file_path)\n\n# Prepare the data for the bar chart\ndata_counts = data['status'].value_counts()\n\n# Display the bar chart\nst.title(\"Vehicle Losses Bar Chart\")\nst.bar_chart(data_counts)\n\n# Filter data for 'cope cage' tag\ncope_cage_data = data[data['status'].str.contains('cope cage', case=False)]\n\n# Prepare the data for the pie chart\ncope_cage_counts = cope_cage_data['status'].value_counts()\n\n# Display the pie chart\nst.title(\"Cope Cage Vehicle Losses Pie Chart\")\nfig = px.pie(values=cope_cage_counts, names=cope_cage_counts.index)\nst.plotly_chart(fig)",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"now a pie chart for only those with the tag 'cope cage'\"\n",
-            "timestamp": "2025-01-04 15:32:03"
+            "message_contents": "mixtral-8x7b-32768 dashboard created at 2025-01-13 20:14:20",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\n\n# Load the data\nfile_path = 'user_uploaded_files/russia_losses_personnel.csv'\ndata = pd.read_csv(file_path)\n\n# Display the title\nst.title('Russia Personnel Losses Over Time')\n\n# Display the simple graph (line chart)\nst.line_chart(data, x='date', y='personnel')",
+            "assistant_code_expander": "View mixtral-8x7b-32768 streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"simple graph\"\n# On data: \"russia_losses_personnel.csv\"\n",
+            "timestamp": "2025-01-13 20:14:20"
         }
     ],
-    "Weekly_Vehicle_Losses_Analysis.py": [
+    "Simple_Graph.py": [
         {
             "role": "user",
-            "message_contents": "now plot it by month",
-            "timestamp": "2025-01-04 16:04:48"
+            "message_contents": "simple graph",
+            "timestamp": "2025-01-13 20:16:10",
+            "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "I've made the requested updates to the dashboard:",
-            "assistant_code": "import streamlit as st\nimport pandas as pd\n\n# Load the data\nfile_path = \"user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\ndata = pd.read_csv(file_path)\n\n# Convert the 'date' column to datetime format\ndata['date'] = pd.to_datetime(data['date'])\n\n# Extract the month from the 'date' column\ndata['month'] = data['date'].dt.strftime('%Y-%m')\n\n# Prepare the data for the bar chart\ndata_counts = data['status'].value_counts()\ndata_monthly_counts = data.groupby('month')['status'].value_counts().unstack().fillna(0)\n\n# Display the bar chart\nst.title(\"Vehicle Losses Bar Chart by Month\")\nst.bar_chart(data_monthly_counts)",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"now plot it by month\"\n",
-            "timestamp": "2025-01-04 16:04:48"
+            "message_contents": "llama-3.3-70b-specdec dashboard created at 2025-01-13 20:16:10",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nNone",
+            "assistant_code_expander": "View llama-3.3-70b-specdec streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"simple graph\"\n# On data: \"russia_losses_equipment.csv\"\n",
+            "timestamp": "2025-01-13 20:16:10"
         }
     ],
-    "Heatmap_of_Vehicle_Losses.py": [
+    "Easy_Graph.py": [
         {
             "role": "user",
-            "message_contents": "the map is blank, please fix",
-            "timestamp": "2025-01-04 16:07:26"
+            "message_contents": "easy graph",
+            "timestamp": "2025-01-13 20:20:40",
+            "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "The dashboard has been modified to align with your request",
-            "assistant_code": "import streamlit as st\nimport pandas as pd\nimport folium\nfrom streamlit_folium import folium_static\n\n# Load the data\nfile_path = \"user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\ndata = pd.read_csv(file_path)\n\n# Convert lat and lon columns to numeric values\ndata['lat'] = data['lat'].str.extract('(\\d+(\\.\\d+)?)', expand=False).astype(float)\ndata['lon'] = data['lon'].str.extract('(\\d+(\\.\\d+)?)', expand=False).astype(float)\n\n# Create a map\nm = folium.Map(location=[data['lat'].mean(), data['lon'].mean()], zoom_start=6)\n\n# Add markers to the map\nfor index, row in data.iterrows():\n    folium.Marker(location=[row['lat'], row['lon']], popup=str(row['nearest_location_placename'])).add_to(m)\n\n# Display the map\nst.title(\"Vehicle Losses Map\")\nfolium_static(m)\n\n# Prepare the data for the bar chart\ndata_counts = data['status'].value_counts()\n\n# Display the bar chart\nst.title(\"Vehicle Losses Bar Chart\")\nst.bar_chart(data_counts)",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"the map is blank, please fix\"\n",
-            "timestamp": "2025-01-04 16:07:26"
-        }
-    ],
-    "Heat_Map_of_Vehicle_Losses_from_February_2022_to_September_2024.py": [
-        {
-            "role": "user",
-            "message_contents": "map smaller",
-            "timestamp": "2025-01-06 12:00:41",
-            "user_id": "no_email"
-        },
-        {
-            "role": "assistant",
-            "message_contents": "I have refined the dashboard to meet your requirements",
-            "assistant_code": "# Dashboard generated for your request: \"heat map all losses\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n\nimport streamlit as st\nimport pandas as pd\nimport folium\nfrom folium.plugins import HeatMap\nfrom streamlit_folium import folium_static\n\n# Title for the dashboard\nst.title(\"Heat Map of Vehicle Losses from February 2022 to September 2024\")\n\n# Load the data\nfile_path = st.text_input('Enter the file path:', 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv')\ndata = pd.read_csv(file_path)\n\n# Data preprocessing: Convert lat and lon to numeric and drop rows with missing values\ndata['lat'] = pd.to_numeric(data['lat'].str.replace('N', '').str.replace('S', '-'), errors='coerce')\ndata['lon'] = pd.to_numeric(data['lon'].str.replace('E', '').str.replace('W', '-'), errors='coerce')\nheat_data = data[['lat', 'lon']].dropna()\n\n# Create a map centered around the mean latitude and longitude\nm = folium.Map(location=[heat_data['lat'].mean(), heat_data['lon'].mean()], zoom_start=6)\n\n# Create a heat map\nHeatMap(data=heat_data[['lat', 'lon']].values, radius=15).add_to(m)\n\n# Display the map\nmap_width, map_height = 600, 600  # Reduced map size as per user request\nfolium_static(m, width=map_width, height=map_height)",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"map smaller\"\n",
-            "timestamp": "2025-01-06 12:00:41"
-        },
-        {
-            "role": "user",
-            "message_contents": "map a lil bigger",
-            "timestamp": "2025-01-06 12:01:20",
-            "user_id": "smaueltown@gmail.com"
-        },
-        {
-            "role": "assistant",
-            "message_contents": "Here is the refined version of the dashboard",
-            "assistant_code": "# Dashboard generated for your request: \"heat map all losses\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n\nimport streamlit as st\nimport pandas as pd\nimport folium\nfrom folium.plugins import HeatMap\nfrom streamlit_folium import folium_static\n\n# Title for the dashboard\nst.title(\"Heat Map of Vehicle Losses from February 2022 to September 2024\")\n\n# Load the data\nfile_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\ndata = pd.read_csv(file_path)\n\n# Data preprocessing: Convert lat and lon to numeric and drop rows with missing values\ndata['lat'] = pd.to_numeric(data['lat'].str.replace('N', '').str.replace('S', '-'), errors='coerce')\ndata['lon'] = pd.to_numeric(data['lon'].str.replace('E', '').str.replace('W', '-'), errors='coerce')\nheat_data = data[['lat', 'lon']].dropna()\n\n# Create a map centered around the mean latitude and longitude\nm = folium.Map(location=[heat_data['lat'].mean(), heat_data['lon'].mean()], zoom_start=6)\n\n# Create a heat map\nHeatMap(data=heat_data[['lat', 'lon']].values, radius=15).add_to(m)\n\n# Display the map with a larger size\nfolium_static(m, width=1200, height=1200)  # Changed from 1000 to 1200 to make the map bigger",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"map a lil bigger\"\n",
-            "timestamp": "2025-01-06 12:01:20"
-        }
-    ],
-    "Analysis_of_Fatalities_in_the_Israeli-Palestinian_Conflict_(2000-2023).py": [
-        {
-            "role": "user",
-            "message_contents": "only output the map, but fix it. it looks weird",
-            "timestamp": "2025-01-05 09:15:52"
-        },
-        {
-            "role": "assistant",
-            "message_contents": "The following dashboard has been adjusted as per your request",
-            "assistant_code": "import streamlit as st\nimport pandas as pd  # Define pandas as pd\n\n# Title\nst.title(\"Analysis of Fatalities in the Israeli-Palestinian Conflict (2000-2023)\")\n\n# Load data\nfile_path = 'user_uploaded_files/fatalities_isr_pse_conflict_2000_to_2023.csv'\ndata = pd.read_csv(file_path, parse_dates=['date_of_event', 'date_of_death'])\n\n# Define the get_lat_lon function\ndef get_lat_lon(location):\n    # You can use a geocoding API like OpenCage Geocoder or Nominatim to get lat/lon coordinates\n    # Replace this with your actual geocoding function\n    return 31.0461, 34.8516  # Example coordinates for Jerusalem\n\n# Assuming 'event_location' column has geographic information\ndata[['latitude', 'longitude']] = data['event_location'].apply(lambda x: pd.Series(get_lat_lon(x), index=['latitude', 'longitude']))\n\nst.subheader(\"Map of Fatalities\")\nst.map(data)\n\nst.write(\"Data source: Israeli-Palestinian Conflict Dataset (2000-2023)\")",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"only output the map, but fix it. it looks weird\"\n",
-            "timestamp": "2025-01-05 09:15:52"
-        }
-    ],
-    "Russia's_Military_Equipment_Losses_Over_Time.py": [
-        {
-            "role": "user",
-            "message_contents": "isolate out just the Area Chart for Military Auto and Fuel Tank Losses and make it make more sense",
-            "timestamp": "2025-01-06 12:26:34",
-            "user_id": "no_email"
-        },
-        {
-            "role": "assistant",
-            "message_contents": "I've tailored the dashboard to match your requirements",
-            "assistant_code": "import streamlit as st\nimport pandas as pd\n\n# Load the dataset\ndata = pd.read_csv('user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv')\ndata['date'] = pd.to_datetime(data['date'])\n\n# Filter data for 'Military Auto' and 'Fuel Tank' losses\nauto_and_fuel_tank_losses = data[data['vehicle_type'].str.contains('Military Auto|Fuel Tank', na=False)]\n\n# Group by date and count the losses\nlosses_by_date = auto_and_fuel_tank_losses.groupby('date')['vehicle_type'].count().reset_index()\nlosses_by_date.columns = ['Date', 'Losses']\n\n# Area chart for Military Auto and Fuel Tank losses\nst.write(\"### Area Chart for Military Auto and Fuel Tank Losses\")\nst.area_chart(losses_by_date.set_index('Date'))",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"isolate out just the Area Chart for Military Auto and Fuel Tank Losses and make it make more sense\"\n",
-            "timestamp": "2025-01-06 12:26:34"
+            "message_contents": "llama-3.3-70b-specdec dashboard created at 2025-01-13 20:20:40",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nNone",
+            "assistant_code_expander": "View llama-3.3-70b-specdec streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"easy graph\"\n# On data: \"russia_losses_equipment.csv\"\n",
+            "timestamp": "2025-01-13 20:20:40"
         }
     ],
     "Vehicle_Losses_Dashboard.py": [
         {
             "role": "user",
-            "message_contents": "st.cache is deprecated and will be removed soon. Please use one of Streamlit's new caching commands, st.cache_data or st.cache_resource. More information in our docs.\n\nNote: The behavior of st.cache was updated in Streamlit 1.36 to the new caching logic used by st.cache_data and st.cache_resource. This might lead to some problems or unexpected behavior in certain edge cases.",
-            "timestamp": "2025-01-06 12:28:50",
-            "user_id": "no_email"
+            "message_contents": "simple dashboard",
+            "timestamp": "2025-01-13 20:21:48",
+            "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "Here's the dashboard updated to incorporate your request",
-            "assistant_code": "import streamlit as st\nimport pandas as pd\n\n# Load the data\n@st.cache_data(ttl=3600)  # ttl is in seconds\ndef load_data(file_path):\n    return pd.read_csv(file_path)\n\n# Main function\ndef main():\n    # Set the title of the dashboard\n    st.title(\"Vehicle Losses Dashboard\")\n\n    # Load the data\n    file_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\n    data = load_data(file_path)\n\n    # Convert latitude and longitude to numeric values\n    data['lat'] = pd.to_numeric(data['lat'].str.replace('N', '', regex=False))\n    data['lon'] = pd.to_numeric(data['lon'].str.replace('E', '', regex=False))\n\n    # Chart 1: Vehicle losses by vehicle type\n    st.subheader(\"Vehicle Losses by Vehicle Type\")\n    vehicle_losses_by_type = data['vehicle_type'].value_counts()\n    st.bar_chart(vehicle_losses_by_type)\n\n    # Chart 2: Vehicle losses by status\n    st.subheader(\"Vehicle Losses by Status\")\n    vehicle_losses_by_status = data['status'].value_counts()\n    st.area_chart(vehicle_losses_by_status)\n\n    # Chart 3: Vehicle losses on a map\n    st.subheader(\"Vehicle Losses on a Map\")\n    st.map(data[['lat', 'lon']].dropna())\n\nif __name__ == \"__main__\":\n    main()",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"st.cache is deprecated and will be removed soon. Please use one of Streamlit's new caching commands, st.cache_data or st.cache_resource. More information in our docs.\n\nNote: The behavior of st.cache was updated in Streamlit 1.36 to the new caching logic used by st.cache_data and st.cache_resource. This might lead to some problems or unexpected behavior in certain edge cases.\"\n",
-            "timestamp": "2025-01-06 12:28:50"
-        },
-        {
-            "role": "user",
-            "message_contents": "get rid of the if name main and just write it like a modern streamlit script",
-            "timestamp": "2025-01-06 12:29:16",
-            "user_id": "no_email"
-        },
-        {
-            "role": "assistant",
-            "message_contents": "I've customized the dashboard to reflect your input",
-            "assistant_code": "import streamlit as st\nimport pandas as pd  # pd is now defined\n\n# Load the data\n@st.cache\ndef load_data(file_path):\n    return pd.read_csv(file_path)\n\n# Set the title of the dashboard\nst.title(\"Vehicle Losses Dashboard\")\n\n# Load the data\nfile_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\ndata = load_data(file_path)\n\n# Convert latitude and longitude to numeric values\ndata['lat'] = pd.to_numeric(data['lat'].str.replace('N', '', regex=False))\ndata['lon'] = pd.to_numeric(data['lon'].str.replace('E', '', regex=False))\n\n# Chart 1: Vehicle losses by vehicle type\nst.subheader(\"Vehicle Losses by Vehicle Type\")\nvehicle_losses_by_type = data['vehicle_type'].value_counts()\nst.bar_chart(vehicle_losses_by_type)\n\n# Chart 2: Vehicle losses by status\nst.subheader(\"Vehicle Losses by Status\")\nvehicle_losses_by_status = data['status'].value_counts()\nst.area_chart(vehicle_losses_by_status)\n\n# Chart 3: Vehicle losses on a map\nst.subheader(\"Vehicle Losses on a Map\")\nst.map(data)",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"get rid of the if name main and just write it like a modern streamlit script\"\n",
-            "timestamp": "2025-01-06 12:29:16"
+            "message_contents": "gpt-4o dashboard created at 2025-01-13 20:21:48",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\n\n# Set the title of the dashboard\nst.title(\"Vehicle Losses Dashboard\")\n\n# Load the data\nfile_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\ndata = pd.read_csv(file_path)\n\n# Data preprocessing\n# Convert 'date' column to datetime\ndata['date'] = pd.to_datetime(data['date'], errors='coerce')\n\n# Extract latitude and longitude for mapping\ndata['lat'] = data['lat'].str.extract(r'([\\d.]+)').astype(float)\ndata['lon'] = data['lon'].str.extract(r'([\\d.]+)').astype(float)\n\n# Sidebar for user interaction\nst.sidebar.header(\"Filter Options\")\nvehicle_types = st.sidebar.multiselect(\"Select Vehicle Types\", options=data['vehicle_type'].dropna().unique(), default=data['vehicle_type'].dropna().unique())\nstatuses = st.sidebar.multiselect(\"Select Status\", options=data['status'].dropna().unique(), default=data['status'].dropna().unique())\n\n# Filter data based on user input\nfiltered_data = data[(data['vehicle_type'].isin(vehicle_types)) & (data['status'].isin(statuses))]\n\n# Display filtered data\nst.subheader(\"Filtered Data\")\nst.dataframe(filtered_data)\n\n# Visualization 1: Bar chart of vehicle losses by type\nst.subheader(\"Vehicle Losses by Type\")\nvehicle_type_counts = filtered_data['vehicle_type'].value_counts()\nst.bar_chart(vehicle_type_counts)\n\n# Visualization 2: Line chart of vehicle losses over time\nst.subheader(\"Vehicle Losses Over Time\")\nlosses_over_time = filtered_data.groupby('date').size()\nst.line_chart(losses_over_time)\n\n# Visualization 3: Map of vehicle loss locations\nst.subheader(\"Map of Vehicle Loss Locations\")\nst.map(filtered_data[['lat', 'lon']].dropna())",
+            "assistant_code_expander": "View gpt-4o streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"simple dashboard\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n",
+            "timestamp": "2025-01-13 20:21:48"
         }
     ],
-    "Vehicle_Losses_Map.py": [
+    "One_Histogram.py": [
         {
             "role": "user",
-            "message_contents": "it seems the map does not show a base layer",
-            "timestamp": "2025-01-09 10:09:34",
-            "user_id": "no_email"
+            "message_contents": "one histogram",
+            "timestamp": "2025-01-13 20:25:29",
+            "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "Here's the adjusted dashboard that aligns with your input",
-            "assistant_code": "\nst.set_page_config(page_icon=\"\", layout=\"centered\")\nimport streamlit as st\nimport pandas as pd\nimport altair as alt\nfrom streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport folium\n\n\nst.title(\"Vehicle Losses Map\")\n\nfile_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2022_Vehicle_Losses.csv'\ndf = pd.read_csv(file_path)\n\n# Convert lat and lon to numeric, handling errors by coercing to NaN\ndf['lat'] = pd.to_numeric(df['lat'].str.replace('N', ''), errors='coerce')\ndf['lon'] = pd.to_numeric(df['lon'].str.replace('E', ''), errors='coerce')\n\n# Drop rows where either lat or lon is NaN\ndf = df.dropna(subset=['lat', 'lon'])\n\n# Create a folium map with a base layer\nm = folium.Map(location=[df['lat'].mean(), df['lon'].mean()], zoom_start=6)\n\n# Add markers to the map\nfor index, row in df.iterrows():\n    folium.Marker([row['lat'], row['lon']], tooltip=f\"Nearest Location: {row['nearest_location_placename']}<br>Vechile Type: {row['vehicle_type']}<br>Model: {row['model']}<br>Status: {row['status']}\").add_to(m)\n\n# Display the map\nfolium_static(m)",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"it seems the map does not show a base layer\"\n",
-            "timestamp": "2025-01-09 10:09:34"
+            "message_contents": "llama-3.3-70b-specdec dashboard created at 2025-01-13 20:25:29",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nNone",
+            "assistant_code_expander": "View llama-3.3-70b-specdec streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"one histogram\"\n# On data: \"fatalities_isr_pse_conflict_2000_to_2023.csv\"\n",
+            "timestamp": "2025-01-13 20:25:29"
         }
     ],
-    "Vehicle_Losses_Visualization.py": [
+    "A_Histogram.py": [
         {
             "role": "user",
-            "message_contents": "make the bars red",
-            "timestamp": "2025-01-09 13:08:50",
-            "user_id": "no_email"
+            "message_contents": "a histogram",
+            "timestamp": "2025-01-13 20:27:07",
+            "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "Your requested refinements have been applied to the dashboard",
-            "assistant_code": "import pandas as pd\nimport streamlit as st\nimport plotly.express as px\n\nst.title(\"Vehicle Losses Visualization\")\n\n# Load the data\ndf = pd.read_csv('user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv')\n\n# Bar chart 1: Vehicle Type Distribution\nst.header(\"Vehicle Type Distribution\")\nvehicle_type_counts = df['vehicle_type'].value_counts()\nfig = px.bar(x=vehicle_type_counts.index, y=vehicle_type_counts.values, color_discrete_sequence=['red'])\nst.plotly_chart(fig, use_container_width=True)\n\n# Bar chart 2: Status Distribution\nst.header(\"Status Distribution\")\nstatus_counts = df['status'].value_counts()\nfig = px.bar(x=status_counts.index, y=status_counts.values, color_discrete_sequence=['red'])\nst.plotly_chart(fig, use_container_width=True)",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"make the bars red\"\n",
-            "timestamp": "2025-01-09 13:08:50"
-        },
-        {
-            "role": "user",
-            "message_contents": "now I want a pie chart ",
-            "timestamp": "2025-01-09 13:09:11",
-            "user_id": "no_email"
-        },
-        {
-            "role": "assistant",
-            "message_contents": "I've implemented changes to the dashboard based on your feedback",
-            "assistant_code": "import pandas as pd\nimport streamlit as st\nimport plotly.express as px\n\nst.title(\"Vehicle Losses Visualization\")\n\n# Load the data\nuploaded_file = st.file_uploader(\"Select a CSV file\", type=[\"csv\"])\nif uploaded_file is not None:\n    df = pd.read_csv(uploaded_file)\n\n    # Bar chart 1: Vehicle Type Distribution\n    st.header(\"Vehicle Type Distribution\")\n    vehicle_type_counts = df['vehicle_type'].value_counts()\n    st.bar_chart(vehicle_type_counts)\n\n    # Bar chart 2: Status Distribution\n    st.header(\"Status Distribution\")\n    status_counts = df['status'].value_counts()\n    st.bar_chart(status_counts)\n\n    # Pie chart: Status Distribution\n    st.header(\"Status Distribution (Pie Chart)\")\n    fig = px.pie(values=status_counts.values, names=status_counts.index, title='Status Distribution')\n    st.plotly_chart(fig, use_container_width=True)\nelse:\n    st.write(\"Please upload a CSV file.\")",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"now I want a pie chart \"\n",
-            "timestamp": "2025-01-09 13:09:11"
+            "message_contents": "llama-3.3-70b-specdec dashboard created at 2025-01-13 20:27:07",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nNone",
+            "assistant_code_expander": "View llama-3.3-70b-specdec streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"a histogram\"\n# On data: \"fatalities_isr_pse_conflict_2000_to_2023.csv\"\n",
+            "timestamp": "2025-01-13 20:27:07"
         }
     ],
-    "Vehicle_Losses_by_Date.py": [
+    "Fatalities_in_Israeli-Palestinian_Conflict_(2000-2023)_-_Histogram.py": [
         {
             "role": "user",
-            "message_contents": "can you fix the map? there's no data on it. only output the map",
-            "timestamp": "2025-01-09 15:36:21",
-            "user_id": "no_email"
+            "message_contents": "a histogram",
+            "timestamp": "2025-01-13 20:29:28",
+            "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "I've made the requested updates to the dashboard",
-            "assistant_code": "import streamlit as st\nimport pandas as pd\nimport pydeck as pdk\n\n# Load the data\nfile_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\ndata = pd.read_csv(file_path)\n\n# Convert lat and lon columns to float\ndata['lat'] = data['lat'].str.replace('N', '').astype(float)\ndata['lon'] = data['lon'].str.replace('E', '').astype(float)\n\n# Create a pydeck chart to visualize the data\nlayer = pdk.Layer(\n    'ScatterplotLayer',\n    data,\n    pickable=True,\n    opacity=0.8,\n    stroked=True,\n    filled=True,\n    radius_scale=6,\n    radius_min_pixels=1,\n    radius_max_pixels=100,\n    line_width_min_pixels=1,\n    get_position=['lon', 'lat'],\n    get_radius=10,\n    get_fill_color=[255, 140, 0],\n    get_line_color=[0, 0, 0]\n)\nview_state = pdk.ViewState(\n    latitude=data['lat'].mean(),\n    longitude=data['lon'].mean(),\n    zoom=6,\n    pitch=0,\n    bearing=0\n)\nr = pdk.Deck(layers=[layer], initial_view_state=view_state)\nst.pydeck_chart(r)",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"can you fix the map? there's no data on it. only output the map\"\n",
-            "timestamp": "2025-01-09 15:36:21"
+            "message_contents": "llama-3.3-70b-versatile dashboard created at 2025-01-13 20:29:28",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Title of the dashboard\nst.title(\"Fatalities in Israeli-Palestinian Conflict (2000-2023) - Histogram\")\n\n# Load the data\nfile_path = 'user_uploaded_files/fatalities_isr_pse_conflict_2000_to_2023.csv'\ndata = pd.read_csv(file_path)\n\n# Create a histogram\nst.subheader(\"Histogram of Ages of Fatalities\")\nfig, ax = plt.subplots()\nax.hist(data['age'], bins=10, edgecolor='black')\nax.set_xlabel('Age')\nax.set_ylabel('Frequency')\nax.set_title('Histogram of Ages of Fatalities')\nst.pyplot(fig)\n\n# Create a histogram for each event location region\nst.subheader(\"Histogram of Ages of Fatalities by Event Location Region\")\nfor region in data['event_location_region'].unique():\n    region_data = data[data['event_location_region'] == region]\n    fig, ax = plt.subplots()\n    ax.hist(region_data['age'], bins=10, edgecolor='black')\n    ax.set_xlabel('Age')\n    ax.set_ylabel('Frequency')\n    ax.set_title(f'Histogram of Ages of Fatalities in {region}')\n    st.pyplot(fig)",
+            "assistant_code_expander": "View llama-3.3-70b-versatile streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"a histogram\"\n# On data: \"fatalities_isr_pse_conflict_2000_to_2023.csv\"\n",
+            "timestamp": "2025-01-13 20:29:28"
         }
     ]
 }

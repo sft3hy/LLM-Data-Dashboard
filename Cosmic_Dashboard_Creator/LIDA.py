@@ -5,7 +5,7 @@ import os
 import json
 import pandas as pd
 from utils.lida_utils import CustomTextGenerator
-from config import GROQ_MODELS, GOOGLE_MODELS, OPENAI_MODELS
+from config import ALL_MODELS
 from utils.misc import fix_json, choose_text_generator
 
 # make data dir if it doesn't exist
@@ -37,7 +37,7 @@ selected_dataset = None
 
 # select model from model selection
 st.sidebar.write("## Text Generation Model")
-models = OPENAI_MODELS + GROQ_MODELS + GOOGLE_MODELS
+models = ALL_MODELS
 selected_model = st.sidebar.selectbox(
     'Choose a model',
     options=models,

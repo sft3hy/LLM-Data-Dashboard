@@ -2,6 +2,7 @@ import streamlit as st
 
 # About Page
 st.set_page_config(page_title="About", page_icon="👋", layout="centered")
+st.page_link("Cosmic_Dashboard_Creator/Kaggle_Downloader.py")
 st.markdown("""
 # About Cosmic Dashboards 📊
 

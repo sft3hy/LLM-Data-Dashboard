@@ -2,6 +2,7 @@ from utils.kaggle_utils import download_dataset, search_datasets
 import streamlit as st
 from uuid import uuid4
 from config import KAGGLE_API
+from streamlit_extras.tags import tagger_component
 
 # Initialize session state for search term and selected datasets
 if "search_term" not in st.session_state:
@@ -19,6 +20,12 @@ if search_term and search_term != st.session_state.search_term:
     st.session_state.search_term = search_term
     st.session_state.selected_datasets.clear()  # Clear selections for new search
 
+color_names = ['lightblue', 'orange', 'bluegreen', 'blue', 'violet', 'red', 'green', 'yellow']
+# tagger_component(
+#         "Here are colored tags",
+#         ["turtle", "rabbit", "lion"],
+#         color_name=["blue", "orange", "lightblue"],
+#     )
 # User searched
 if st.session_state.search_term:
     with st.spinner(text=f"Searching for datasets matching: **{st.session_state.search_term}**"):
@@ -47,6 +54,12 @@ if st.session_state.search_term:
                     else:
                         st.session_state.selected_datasets.discard(dataset.ref)
                     st.caption(f"{dataset.subtitle} ({dataset.size})")
+                    data_tags = dataset.tags
+                    tagger_component("",
+                                     data_tags,
+                                     color_names[:len(data_tags)],
+                                     )
+
                     
                     
 
