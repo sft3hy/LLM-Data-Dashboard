@@ -1,5 +1,8 @@
 from datetime import datetime
 import os
+import socket
+import uvicorn
+import threading
 
 streamlit_sys_prompt = """You are a senior data scientist dashboard creator. Based on user input, write Streamlit code to visualize requested insights using provided data,
                     filenames, and file paths. Include an informative st.title() in the script. Prioritize the following native streamlit elements: 
@@ -145,3 +148,18 @@ def get_now():
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
 KAGGLE_API = setup_kaggle_api()
+
+
+def is_port_in_use(host, port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex((host, port)) == 0
+
+def run_uvicorn():
+    if not is_port_in_use("127.0.0.1", 8000):
+        uvicorn.run("error_correction_service:app", host="127.0.0.1", port=8000, reload=False)
+    else:
+        print("Server already running on port 8000. Skipping start.")
+
+uvicorn_thread = threading.Thread(target=run_uvicorn, daemon=True)
+uvicorn_thread.start()
+print('Uvicorn started running microservice')

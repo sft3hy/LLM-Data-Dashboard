@@ -142,5 +142,21 @@
             "assistant_code_top": "# Dashboard generated for your request: \"1 bar chart\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n",
             "timestamp": "2025-01-14 10:35:31"
         }
+    ],
+    "Vehicle_Losses_Insights.py": [
+        {
+            "role": "user",
+            "message_contents": "2 graphs",
+            "timestamp": "2025-01-14 12:47:40",
+            "user_id": ""
+        },
+        {
+            "role": "assistant",
+            "message_contents": "llama-3.3-70b-versatile dashboard created at 2025-01-14 12:47:40",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport plotly.express as px\n\n# Load the data\nfile_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\ndata = pd.read_csv(file_path)\n\n# Convert latitude and longitude to numeric values\ndata['lat'] = pd.to_numeric(data['lat'].str.replace('N', ''))\ndata['lon'] = pd.to_numeric(data['lon'].str.replace('E', ''))\n\n# Create a title for the dashboard\nst.title('Vehicle Losses Insights')\n\n# Create a bar chart for vehicle types\nvehicle_types = data['vehicle_type'].value_counts()\nst.bar_chart(vehicle_types)\n\n# Create a scatter plot for vehicle locations\nst.subheader('Vehicle Locations')\nfig = px.scatter_mapbox(data, lat='lat', lon='lon', hover_name='nearest_location_placename', hover_data=['vehicle_type', 'model'])\nfig.update_layout(mapbox_style='open-street-map')\nst.plotly_chart(fig)",
+            "assistant_code_expander": "View llama-3.3-70b-versatile streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"2 graphs\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n",
+            "timestamp": "2025-01-14 12:47:40"
+        }
     ]
 }
