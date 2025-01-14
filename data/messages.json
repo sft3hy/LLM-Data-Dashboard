@@ -110,5 +110,37 @@
             "assistant_code_top": "# Dashboard generated for your request: \"a histogram\"\n# On data: \"fatalities_isr_pse_conflict_2000_to_2023.csv\"\n",
             "timestamp": "2025-01-13 20:29:28"
         }
+    ],
+    "1_Bar_Chart.py": [
+        {
+            "role": "user",
+            "message_contents": "1 bar chart",
+            "timestamp": "2025-01-14 10:33:12",
+            "user_id": ""
+        },
+        {
+            "role": "assistant",
+            "message_contents": "mixtral-8x7b-32768 dashboard created at 2025-01-14 10:33:12",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nNone",
+            "assistant_code_expander": "View mixtral-8x7b-32768 streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"1 bar chart\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n",
+            "timestamp": "2025-01-14 10:33:12"
+        }
+    ],
+    "Vehicle_Losses_Bar_Chart.py": [
+        {
+            "role": "user",
+            "message_contents": "1 bar chart",
+            "timestamp": "2025-01-14 10:35:31",
+            "user_id": ""
+        },
+        {
+            "role": "assistant",
+            "message_contents": "llama-3.1-70b-versatile dashboard created at 2025-01-14 10:35:31",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\n\n# Load the data\ndef load_data(file_path):\n    try:\n        data = pd.read_csv(file_path)\n        return data\n    except Exception as e:\n        st.error(f\"Error loading data: {e}\")\n\n# Create the app\ndef main():\n    st.title(\"Vehicle Losses Bar Chart\")\n\n    # Load the data\n    file_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\n    data = load_data(file_path)\n\n    # Check if data is loaded\n    if data is not None:\n        # Convert categorical columns to string\n        data['vehicle_type'] = data['vehicle_type'].astype(str)\n        data['status'] = data['status'].astype(str)\n\n        # Create a bar chart\n        st.subheader(\"Vehicle Losses by Vehicle Type\")\n        vehicle_type_counts = data['vehicle_type'].value_counts()\n        st.bar_chart(vehicle_type_counts)\n\n        # Create another bar chart\n        st.subheader(\"Vehicle Losses by Status\")\n        status_counts = data['status'].value_counts()\n        st.bar_chart(status_counts)\n\nif __name__ == \"__main__\":\n    main()",
+            "assistant_code_expander": "View llama-3.1-70b-versatile streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"1 bar chart\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n",
+            "timestamp": "2025-01-14 10:35:31"
+        }
     ]
 }

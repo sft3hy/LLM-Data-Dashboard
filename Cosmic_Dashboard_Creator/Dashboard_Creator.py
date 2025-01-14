@@ -14,6 +14,18 @@ import streamlit as st
 import streamlit.components.v1 as components
 from utils.message_utils import add_user_message, add_assistant_message
 import time
+import threading
+import uvicorn
+
+# start error corrector microservice
+
+# Define a function to run the uvicorn server
+def run_uvicorn():
+    uvicorn.run("error_correction_service:app", host="127.0.0.1", port=8069, reload=False)
+
+# Start the uvicorn server in a separate thread
+uvicorn_thread = threading.Thread(target=run_uvicorn, daemon=True)
+uvicorn_thread.start()
 
 
 # Title

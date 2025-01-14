@@ -3,13 +3,6 @@ from utils.misc import choose_text_generator, parse_model_response
 from utils.lida_utils import TextGenerationConfig
 
 
-def decrement(model_name: str):
-    counter_file = 'helpers/gpt_counter.json'
-    counts = json.load(open(counter_file, 'r'))
-    if model_name in counts.keys():
-        counts[model_name] -= 1
-        json.dump(counts, open(counter_file, 'w'))
-
 def call_model(model_name: str, gpt_request: str, system_prompt: str, role="user", temperature=0.2):
 
     textgen_config = TextGenerationConfig(
