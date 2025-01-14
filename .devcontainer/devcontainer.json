@@ -17,7 +17,7 @@
   },
   "updateContentCommand": "[ -f packages.txt ] && sudo apt update && sudo apt upgrade -y && sudo xargs apt install -y <packages.txt; [ -f requirements.txt ] && pip3 install --user -r requirements.txt; pip3 install --user streamlit; echo '✅ Packages installed and Requirements met'",
   "postAttachCommand": {
-    "server": "tmux new-session -d -s app 'streamlit run st_app.py --server.enableCORS false --server.enableXsrfProtection false' && tmux new-session -d -s microservice 'python microservice.py'"
+    "server": "tmux new-session -d -s app 'streamlit run st_app.py --server.enableCORS true --server.enableXsrfProtection false' && tmux new-session -d -s microservice 'python microservice.py'"
   },
   "portsAttributes": {
     "8501": {

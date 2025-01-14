@@ -13,3 +13,4 @@ kaggle==1.6.17
 streamlit-auth0-component==0.1.5
 lida==0.0.14
 st-copy-to-clipboard==0.1.6
+streamlit-auth0==1.0.5
