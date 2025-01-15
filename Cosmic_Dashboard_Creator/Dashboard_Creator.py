@@ -116,7 +116,7 @@ if user_input:
     elif not selected_model:
         st.error("Please select a model to create your dashboard!")
     else:
-        st.success(f"Creating dashboard: '{user_input}'\n on data: '{', '.join([os.path.basename(f) for f in selected_files])}'")
+        st.toast(f"Creating dashboard: '{user_input}'\n on data: '{', '.join([os.path.basename(f) for f in selected_files])}'")
 
 
 else:
