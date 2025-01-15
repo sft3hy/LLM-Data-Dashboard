@@ -96,7 +96,8 @@ if input_message:
     context = \"\"\"{file_context}\"\"\"
     refined_code = code_refiner(
         previous_code,
-        f"{{input_message}} {{context}}"
+        f"{{input_message}} {{context}}",
+        model=selected_model
     )
     corrected_code = correct_code_remotely(refined_code, "fix any errors", FILENAME)
 
