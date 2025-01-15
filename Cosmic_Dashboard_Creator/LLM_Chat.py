@@ -82,7 +82,6 @@ if temperature and selected_model and user_text is not None:
             stream=True,
         )
     response = ""
-    print(selected_model)
     update_model_count(selected_model, increment=True)
     if selected_model in GROQ_MODELS:
         with st.chat_message("ai"):

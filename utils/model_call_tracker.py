@@ -37,8 +37,6 @@ def update_model_count(model_name, increment=True):
             data = json.load(file)
 
         # Find and update the model count
-        print(model_name)
-        print(data.items())
         for model, count in data.items():  # Unpack each item as model, count
             if model == model_name:
                 if increment:

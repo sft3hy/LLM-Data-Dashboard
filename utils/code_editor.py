@@ -57,7 +57,6 @@ def code_refiner(code_snippet: str, extra_context: str, model: str):
     Returns:
         str: The refined code snippet.
     """
-    print('CODE SNIPPET', code_snippet)
     whole_prompt = f"Original code: {code_snippet}\n' User request: {extra_context}"
     refined_code = extract_message(call_model(model, whole_prompt, code_refiner_sys_prompt))
     
