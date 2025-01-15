@@ -8,7 +8,7 @@ def output_refined_dashboard(file_context: str):
     REFINER_BAR = f"""
 import streamlit as st
 from utils.code_editor import code_refiner, correct_code, get_file_messages
-from config import BOT_RESPONSE_REFINED
+from config import BOT_RESPONSE_REFINED, ALL_MODELS
 from random import randint
 import os
 from utils.message_utils import add_user_message, add_assistant_message
