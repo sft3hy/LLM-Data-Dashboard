@@ -2,7 +2,6 @@ import streamlit as st
 
 # About Page
 st.set_page_config(page_title="About", page_icon="👋", layout="centered")
-st.page_link("Cosmic_Dashboard_Creator/Kaggle_Downloader.py")
 st.markdown("""
 # About Cosmic Dashboards 📊
 
@@ -23,7 +22,7 @@ This app is designed to make dashboard creation easier, faster, and more accessi
 ## Behind the Scenes 🤖
 
 This app was built using [**Streamlit**](https://streamlit.io/), a modern framework for creating data-driven web applications. It integrates powerful libraries like:  
-- **openai** and **groq**: Your selected model generates streamlit code based on your dashboard request
+- **openai**, **groq**, and **gemini**: Your selected model generates streamlit code based on your dashboard request
 - **geopandas**: useful for analyzing geospatial and temporal data
 - **folium**: map displaying library 
 
@@ -49,3 +48,13 @@ If you encounter issues or have suggestions, please reach out at smaueltown@gmai
 
 *Thank you for using Cosmic Dashboards!* 🎉
 """)
+
+st.html("""<div style="text-align: center; font-size: smaller;">
+                <a href="https://groq.com" target="_blank" rel="noopener noreferrer">
+                    <img src="https://groq.com/wp-content/uploads/2024/03/PBG-mark1-color.svg"
+                    style="width: 100px; height: auto; display: block; margin: auto;"
+                    alt="Powered by Groq for fast inference."/>
+                </a>
+            </div>
+"""
+)

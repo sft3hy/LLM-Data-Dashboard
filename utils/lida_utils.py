@@ -4,6 +4,7 @@ from lida import Manager
 from llmx import TextGenerationConfig, TextGenerationResponse, Message
 from openai import AzureOpenAI, OpenAI
 from groq import Groq
+from utils.model_call_tracker import update_model_count
 
 
 def get_models_maxtoken_dict(models_list):
@@ -98,6 +99,7 @@ class CustomTextGenerator():
         )
         with open('data/prompt_history.log', 'a') as f:
             f.write(f"\nUSER REQUEST:\n{messages}\nUsing model: {model}\nAt {get_now()}\nMODEL RESPONSE: {response}\n")
+        update_model_count(model, increment=True)
         return response
     
     def count_tokens():

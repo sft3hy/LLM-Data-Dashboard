@@ -1,9 +1,17 @@
 import streamlit as st
 import os
 from auth0_component import login_button
-from utils.misc import build_markup_for_logo, generate_pages
+from utils.misc import build_markup_for_logo, generate_pages, clean_messages_json
+from utils.model_call_tracker import run_scheduler
+import threading
+
+# Start the scheduler in a separate thread
+scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
+scheduler_thread.start()
 
 dashboard_pages = generate_pages()
+
+# clean_messages_json()
 
 
 # Page configuration
@@ -23,9 +31,13 @@ lida = st.Page(
     "Cosmic_Dashboard_Creator/LIDA.py", title="LIDA", icon="📊"
 )
 
+chat = st.Page(
+    "Cosmic_Dashboard_Creator/LLM_Chat.py", title="LLM Chat", icon=":material/smart_toy:"
+)
+
 pg = st.navigation(
 {
-    "Cosmic Dashboard Creator": [creator, about, model_info, kaggle, lida],
+    "Cosmic Dashboard Creator": [creator, chat, about, model_info, kaggle, lida],
     "Your Dashboards": dashboard_pages,
 }
 )
@@ -37,6 +49,7 @@ domain = os.environ.get("AUTH0_DOMAIN")
 
 # Use the login button to get user info
 with st.sidebar:
+    st.divider()
     user_info = login_button(client_id, domain=domain)
 
 # Store the user info in session state if it's not None

@@ -4,7 +4,7 @@ import json
 from utils.model_caller import call_model
 from utils.parse_file import extract_file_snippet, preview_file
 from utils.dependency_ensurer import ensure_library_installed
-from utils.misc import is_directory_empty, generate_safe_filename, clean_set_page_config, get_new_filename, choose_text_generator, fix_json, correct_code_remotely, wait_for_file, generate_pages
+from utils.misc import is_directory_empty, generate_safe_filename, clean_set_page_config, get_new_filename, choose_text_generator, fix_json, correct_code_remotely, wait_for_file, generate_pages, add_python_comments
 from utils.code_editor import correct_code
 from utils.refiner_bar import output_refined_dashboard
 from config import ALL_MODELS, streamlit_sys_prompt, get_now
@@ -81,7 +81,7 @@ with bottom_container:
     file_preview = st.checkbox(
             "Show file information"
         )
-    with st.expander("Or select previous data sources:", expanded=False):
+    with st.expander("Or select uploaded data sources:", expanded=False):
         files = os.listdir(save_dir)
         for count, file in enumerate(files):
             file_path = os.path.join(save_dir, file)
@@ -257,7 +257,7 @@ if selected_files and user_input and user_input.strip() and selected_files and s
             add_assistant_message(only_filename,
                                   message_contents=f"{selected_model} {dash_info}",
                                   assistant_code_expander=hidden_code_info,
-                                  assistant_code_top=user_requests,
+                                  assistant_code_top=add_python_comments(user_requests),
                                   assistant_code=f"{whole_code}",
                                   )
             with open(filename_to_write, "w") as f:

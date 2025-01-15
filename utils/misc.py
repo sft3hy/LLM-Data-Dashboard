@@ -315,3 +315,47 @@ def generate_pages():
             )
         )
     return dashboard_pages
+
+def clean_messages_json():
+    # Paths to the JSON file and dashboards folder
+    json_file_path = "data/messages.json"
+    dashboards_folder = "Your_Dashboards"
+    # Load the JSON data
+    with open(json_file_path, "r") as json_file:
+        json_data = json.load(json_file)
+
+    # Get the list of files in the dashboards folder
+    existing_files = set(os.listdir(dashboards_folder))
+
+    # Filter out entries from the JSON that don't match files in the dashboards folder
+    updated_json_data = {
+        filename: logs
+        for filename, logs in json_data.items()
+        if filename in existing_files
+    }
+
+    # Write the updated JSON data back to the file
+    with open(json_file_path, "w") as json_file:
+        json.dump(updated_json_data, json_file, indent=4)
+
+    print("JSON file updated. Entries without corresponding files in the dashboards folder have been removed.")
+
+def add_python_comments(input_string):
+    """
+    Takes a string and ensures every line starts with a Python comment (#).
+
+    Parameters:
+        input_string (str): The input string.
+
+    Returns:
+        str: The string with every line commented.
+    """
+    # Split the string into lines
+    lines = input_string.split('\n')
+
+    # Add '#' to each line, if not already commented
+    commented_lines = ['# ' + line if not line.strip().startswith('#') else line for line in lines]
+
+    # Join the lines back together
+    return '\n'.join(commented_lines)
+

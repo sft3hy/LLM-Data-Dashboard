@@ -1,52 +1,4 @@
 {
-    "Russia_Personnel_Losses_Over_Time.py": [
-        {
-            "role": "user",
-            "message_contents": "simple graph",
-            "timestamp": "2025-01-13 20:14:20",
-            "user_id": ""
-        },
-        {
-            "role": "assistant",
-            "message_contents": "mixtral-8x7b-32768 dashboard created at 2025-01-13 20:14:20",
-            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\n\n# Load the data\nfile_path = 'user_uploaded_files/russia_losses_personnel.csv'\ndata = pd.read_csv(file_path)\n\n# Display the title\nst.title('Russia Personnel Losses Over Time')\n\n# Display the simple graph (line chart)\nst.line_chart(data, x='date', y='personnel')",
-            "assistant_code_expander": "View mixtral-8x7b-32768 streamlit dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"simple graph\"\n# On data: \"russia_losses_personnel.csv\"\n",
-            "timestamp": "2025-01-13 20:14:20"
-        }
-    ],
-    "Simple_Graph.py": [
-        {
-            "role": "user",
-            "message_contents": "simple graph",
-            "timestamp": "2025-01-13 20:16:10",
-            "user_id": ""
-        },
-        {
-            "role": "assistant",
-            "message_contents": "llama-3.3-70b-specdec dashboard created at 2025-01-13 20:16:10",
-            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nNone",
-            "assistant_code_expander": "View llama-3.3-70b-specdec streamlit dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"simple graph\"\n# On data: \"russia_losses_equipment.csv\"\n",
-            "timestamp": "2025-01-13 20:16:10"
-        }
-    ],
-    "Easy_Graph.py": [
-        {
-            "role": "user",
-            "message_contents": "easy graph",
-            "timestamp": "2025-01-13 20:20:40",
-            "user_id": ""
-        },
-        {
-            "role": "assistant",
-            "message_contents": "llama-3.3-70b-specdec dashboard created at 2025-01-13 20:20:40",
-            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nNone",
-            "assistant_code_expander": "View llama-3.3-70b-specdec streamlit dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"easy graph\"\n# On data: \"russia_losses_equipment.csv\"\n",
-            "timestamp": "2025-01-13 20:20:40"
-        }
-    ],
     "Vehicle_Losses_Dashboard.py": [
         {
             "role": "user",
@@ -63,100 +15,94 @@
             "timestamp": "2025-01-13 20:21:48"
         }
     ],
-    "One_Histogram.py": [
+    "Exploring_the_Relationship_between_Average_Glucose_Level_and_Stroke.py": [
         {
             "role": "user",
-            "message_contents": "one histogram",
-            "timestamp": "2025-01-13 20:25:29",
+            "message_contents": "Question: What is the relationship between average glucose level and the likelihood of stroke?\nVisualization: scatter plot of avg_glucose_level by stroke\nRationale: This tells about the relationship between glucose levels and stroke, using the avg_glucose_level and stroke fields from the dataset.",
+            "timestamp": "2025-01-14 19:30:07",
             "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "llama-3.3-70b-specdec dashboard created at 2025-01-13 20:25:29",
-            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nNone",
+            "message_contents": "llama-3.3-70b-specdec dashboard created at 2025-01-14 19:30:07",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Title of the application\nst.title(\"Exploring the Relationship between Average Glucose Level and Stroke\")\n\n# Load the dataset\ndf = pd.read_csv('user_uploaded_files/healthcare-dataset-stroke-data.csv')\n\n# Create a scatter plot of avg_glucose_level by stroke\nfig, ax = plt.subplots()\nax.scatter(df['avg_glucose_level'], df['stroke'])\n\n# Set title and labels\nax.set_title('Relationship between Average Glucose Level and Stroke')\nax.set_xlabel('Average Glucose Level')\nax.set_ylabel('Stroke')\n\n# Display the plot\nst.pyplot(fig)\n\n# Alternatively, you can use st.scatter_chart for a more native Streamlit experience\nst.write(\"Native Streamlit Scatter Chart:\")\nst.scatter_chart(data=df[['avg_glucose_level', 'stroke']])\n\n# You can also use other native Streamlit charts like st.altair_chart or st.plotly_chart\n# For example:\n# import altair as alt\n# chart = alt.Chart(df).mark_point().encode(x='avg_glucose_level', y='stroke')\n# st.altair_chart(chart)\n\n# Or\n# import plotly.express as px\n# fig = px.scatter(df, x='avg_glucose_level', y='stroke')\n# st.plotly_chart(fig)",
             "assistant_code_expander": "View llama-3.3-70b-specdec streamlit dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"one histogram\"\n# On data: \"fatalities_isr_pse_conflict_2000_to_2023.csv\"\n",
-            "timestamp": "2025-01-13 20:25:29"
+            "assistant_code_top": "# Dashboard generated for your request: \"Question: What is the relationship between average glucose level and the likelihood of stroke?\nVisualization: scatter plot of avg_glucose_level by stroke\nRationale: This tells about the relationship between glucose levels and stroke, using the avg_glucose_level and stroke fields from the dataset.\"\n# On data: \"healthcare-dataset-stroke-data.csv\"\n",
+            "timestamp": "2025-01-14 19:30:07"
         }
     ],
-    "A_Histogram.py": [
+    "test.py": [
         {
             "role": "user",
-            "message_contents": "a histogram",
-            "timestamp": "2025-01-13 20:27:07",
+            "message_contents": "Question: What is the relationship between average glucose level and the likelihood of stroke?\nVisualization: scatter plot of avg_glucose_level by stroke\nRationale: This tells about the relationship between glucose levels and stroke, using the avg_glucose_level and stroke fields from the dataset.",
+            "timestamp": "2025-01-14 19:30:07",
             "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "llama-3.3-70b-specdec dashboard created at 2025-01-13 20:27:07",
-            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nNone",
+            "message_contents": "llama-3.3-70b-specdec dashboard created at 2025-01-14 19:30:07",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Title of the application\nst.title(\"Exploring the Relationship between Average Glucose Level and Stroke\")\n\n# Load the dataset\ndf = pd.read_csv('user_uploaded_files/healthcare-dataset-stroke-data.csv')\n\n# Create a scatter plot of avg_glucose_level by stroke\nfig, ax = plt.subplots()\nax.scatter(df['avg_glucose_level'], df['stroke'])\n\n# Set title and labels\nax.set_title('Relationship between Average Glucose Level and Stroke')\nax.set_xlabel('Average Glucose Level')\nax.set_ylabel('Stroke')\n\n# Display the plot\nst.pyplot(fig)\n\n# Alternatively, you can use st.scatter_chart for a more native Streamlit experience\nst.write(\"Native Streamlit Scatter Chart:\")\nst.scatter_chart(data=df[['avg_glucose_level', 'stroke']])\n\n# You can also use other native Streamlit charts like st.altair_chart or st.plotly_chart\n# For example:\n# import altair as alt\n# chart = alt.Chart(df).mark_point().encode(x='avg_glucose_level', y='stroke')\n# st.altair_chart(chart)\n\n# Or\n# import plotly.express as px\n# fig = px.scatter(df, x='avg_glucose_level', y='stroke')\n# st.plotly_chart(fig)",
             "assistant_code_expander": "View llama-3.3-70b-specdec streamlit dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"a histogram\"\n# On data: \"fatalities_isr_pse_conflict_2000_to_2023.csv\"\n",
-            "timestamp": "2025-01-13 20:27:07"
-        }
-    ],
-    "Fatalities_in_Israeli-Palestinian_Conflict_(2000-2023)_-_Histogram.py": [
+            "assistant_code_top": "# Dashboard generated for your request: \"Question: What is the relationship between average glucose level and the likelihood of stroke?\nVisualization: scatter plot of avg_glucose_level by stroke\nRationale: This tells about the relationship between glucose levels and stroke, using the avg_glucose_level and stroke fields from the dataset.\"\n# On data: \"healthcare-dataset-stroke-data.csv\"\n",
+            "timestamp": "2025-01-14 19:30:07"
+        },
         {
             "role": "user",
-            "message_contents": "a histogram",
-            "timestamp": "2025-01-13 20:29:28",
+            "message_contents": "simple dashboard",
+            "timestamp": "2025-01-13 20:21:48",
             "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "llama-3.3-70b-versatile dashboard created at 2025-01-13 20:29:28",
-            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Title of the dashboard\nst.title(\"Fatalities in Israeli-Palestinian Conflict (2000-2023) - Histogram\")\n\n# Load the data\nfile_path = 'user_uploaded_files/fatalities_isr_pse_conflict_2000_to_2023.csv'\ndata = pd.read_csv(file_path)\n\n# Create a histogram\nst.subheader(\"Histogram of Ages of Fatalities\")\nfig, ax = plt.subplots()\nax.hist(data['age'], bins=10, edgecolor='black')\nax.set_xlabel('Age')\nax.set_ylabel('Frequency')\nax.set_title('Histogram of Ages of Fatalities')\nst.pyplot(fig)\n\n# Create a histogram for each event location region\nst.subheader(\"Histogram of Ages of Fatalities by Event Location Region\")\nfor region in data['event_location_region'].unique():\n    region_data = data[data['event_location_region'] == region]\n    fig, ax = plt.subplots()\n    ax.hist(region_data['age'], bins=10, edgecolor='black')\n    ax.set_xlabel('Age')\n    ax.set_ylabel('Frequency')\n    ax.set_title(f'Histogram of Ages of Fatalities in {region}')\n    st.pyplot(fig)",
-            "assistant_code_expander": "View llama-3.3-70b-versatile streamlit dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"a histogram\"\n# On data: \"fatalities_isr_pse_conflict_2000_to_2023.csv\"\n",
-            "timestamp": "2025-01-13 20:29:28"
+            "message_contents": "gpt-4o dashboard created at 2025-01-13 20:21:48",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\n\n# Set the title of the dashboard\nst.title(\"Vehicle Losses Dashboard\")\n\n# Load the data\nfile_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\ndata = pd.read_csv(file_path)\n\n# Data preprocessing\n# Convert 'date' column to datetime\ndata['date'] = pd.to_datetime(data['date'], errors='coerce')\n\n# Extract latitude and longitude for mapping\ndata['lat'] = data['lat'].str.extract(r'([\\d.]+)').astype(float)\ndata['lon'] = data['lon'].str.extract(r'([\\d.]+)').astype(float)\n\n# Sidebar for user interaction\nst.sidebar.header(\"Filter Options\")\nvehicle_types = st.sidebar.multiselect(\"Select Vehicle Types\", options=data['vehicle_type'].dropna().unique(), default=data['vehicle_type'].dropna().unique())\nstatuses = st.sidebar.multiselect(\"Select Status\", options=data['status'].dropna().unique(), default=data['status'].dropna().unique())\n\n# Filter data based on user input\nfiltered_data = data[(data['vehicle_type'].isin(vehicle_types)) & (data['status'].isin(statuses))]\n\n# Display filtered data\nst.subheader(\"Filtered Data\")\nst.dataframe(filtered_data)\n\n# Visualization 1: Bar chart of vehicle losses by type\nst.subheader(\"Vehicle Losses by Type\")\nvehicle_type_counts = filtered_data['vehicle_type'].value_counts()\nst.bar_chart(vehicle_type_counts)\n\n# Visualization 2: Line chart of vehicle losses over time\nst.subheader(\"Vehicle Losses Over Time\")\nlosses_over_time = filtered_data.groupby('date').size()\nst.line_chart(losses_over_time)\n\n# Visualization 3: Map of vehicle loss locations\nst.subheader(\"Map of Vehicle Loss Locations\")\nst.map(filtered_data[['lat', 'lon']].dropna())",
+            "assistant_code_expander": "View gpt-4o streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"simple dashboard\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n",
+            "timestamp": "2025-01-13 20:21:48"
         }
     ],
-    "1_Bar_Chart.py": [
+    "Healthcare_Dataset_Stroke_Analysis.py": [
         {
             "role": "user",
-            "message_contents": "1 bar chart",
-            "timestamp": "2025-01-14 10:33:12",
+            "message_contents": "2 informative graphs",
+            "timestamp": "2025-01-15 10:39:48",
             "user_id": ""
         },
         {
             "role": "assistant",
-            "message_contents": "mixtral-8x7b-32768 dashboard created at 2025-01-14 10:33:12",
-            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nNone",
-            "assistant_code_expander": "View mixtral-8x7b-32768 streamlit dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"1 bar chart\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n",
-            "timestamp": "2025-01-14 10:33:12"
-        }
-    ],
-    "Vehicle_Losses_Bar_Chart.py": [
+            "message_contents": "gpt-4o-mini dashboard created at 2025-01-15 10:39:48",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\n\n# Load the dataset\ndata = pd.read_csv('user_uploaded_files/healthcare-dataset-stroke-data.csv')\n\n# Set the title of the dashboard\nst.title('Healthcare Dataset Stroke Analysis')\n\n# Display the first few rows of the dataset\nst.write(\"Dataset Preview:\")\nst.dataframe(data.head())\n\n# Area chart for average glucose level by age\nst.subheader('Average Glucose Level by Age')\nst.area_chart(data[['age', 'avg_glucose_level']].set_index('age'))\n\n# Bar chart for stroke count by gender\nst.subheader('Stroke Count by Gender')\nstroke_count_gender = data.groupby('gender')['stroke'].sum().reset_index()\nst.bar_chart(stroke_count_gender.set_index('gender'))\n\n# Display additional insights if needed\nst.write(\"Insights: The area chart shows the trend of average glucose levels as age increases, while the bar chart illustrates the total number of strokes by gender.\")",
+            "assistant_code_expander": "View gpt-4o-mini streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"2 informative graphs\"\n# On data: \"healthcare-dataset-stroke-data.csv\"\n# ",
+            "timestamp": "2025-01-15 10:39:48"
+        },
         {
             "role": "user",
-            "message_contents": "1 bar chart",
-            "timestamp": "2025-01-14 10:35:31",
-            "user_id": ""
+            "message_contents": "now just a graph that gives insights on if the variable \"is ever married\" plays an impact on stroke risk",
+            "timestamp": "2025-01-15 10:41:14",
+            "user_id": "no_email"
         },
         {
             "role": "assistant",
-            "message_contents": "llama-3.1-70b-versatile dashboard created at 2025-01-14 10:35:31",
-            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\n\n# Load the data\ndef load_data(file_path):\n    try:\n        data = pd.read_csv(file_path)\n        return data\n    except Exception as e:\n        st.error(f\"Error loading data: {e}\")\n\n# Create the app\ndef main():\n    st.title(\"Vehicle Losses Bar Chart\")\n\n    # Load the data\n    file_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\n    data = load_data(file_path)\n\n    # Check if data is loaded\n    if data is not None:\n        # Convert categorical columns to string\n        data['vehicle_type'] = data['vehicle_type'].astype(str)\n        data['status'] = data['status'].astype(str)\n\n        # Create a bar chart\n        st.subheader(\"Vehicle Losses by Vehicle Type\")\n        vehicle_type_counts = data['vehicle_type'].value_counts()\n        st.bar_chart(vehicle_type_counts)\n\n        # Create another bar chart\n        st.subheader(\"Vehicle Losses by Status\")\n        status_counts = data['status'].value_counts()\n        st.bar_chart(status_counts)\n\nif __name__ == \"__main__\":\n    main()",
-            "assistant_code_expander": "View llama-3.1-70b-versatile streamlit dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"1 bar chart\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n",
-            "timestamp": "2025-01-14 10:35:31"
-        }
-    ],
-    "Vehicle_Losses_Insights.py": [
+            "message_contents": "Here is the updated dashboard tailored to your input",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load the dataset\ndata = pd.read_csv('user_uploaded_files/healthcare-dataset-stroke-data.csv')\n\n# Set the title of the dashboard\nst.title('Healthcare Dataset Stroke Analysis')\n\n# Display the first few rows of the dataset\nst.write(\"Dataset Preview:\")\nst.dataframe(data.head())\n\n# Bar chart for stroke count by marital status\nst.subheader('Stroke Count by Marital Status')\nstroke_count_marital = data.groupby('ever_married')['stroke'].sum().reset_index()\nfig, ax = plt.subplots()\nax.bar(stroke_count_marital['ever_married'], stroke_count_marital['stroke'])\nax.set_xlabel('Marital Status')\nax.set_ylabel('Stroke Count')\nax.set_title('Stroke Count by Marital Status')\nst.pyplot(fig)\n\n# Display additional insights if needed\nst.write(\"Insights: The bar chart illustrates the total number of strokes by marital status, showing if being ever married has an impact on stroke risk.\")",
+            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: 'now just a graph that gives insights on if the variable \"is ever married\" plays an impact on stroke risk'",
+            "timestamp": "2025-01-15 10:41:14"
+        },
         {
             "role": "user",
-            "message_contents": "2 graphs",
-            "timestamp": "2025-01-14 12:47:40",
-            "user_id": ""
+            "message_contents": "now just one chart that gives insights to the question \"does hypertension increase stroke risk?\"",
+            "timestamp": "2025-01-15 10:59:03",
+            "user_id": "no_email"
         },
         {
             "role": "assistant",
-            "message_contents": "llama-3.3-70b-versatile dashboard created at 2025-01-14 12:47:40",
-            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport plotly.express as px\n\n# Load the data\nfile_path = 'user_uploaded_files/02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv'\ndata = pd.read_csv(file_path)\n\n# Convert latitude and longitude to numeric values\ndata['lat'] = pd.to_numeric(data['lat'].str.replace('N', ''))\ndata['lon'] = pd.to_numeric(data['lon'].str.replace('E', ''))\n\n# Create a title for the dashboard\nst.title('Vehicle Losses Insights')\n\n# Create a bar chart for vehicle types\nvehicle_types = data['vehicle_type'].value_counts()\nst.bar_chart(vehicle_types)\n\n# Create a scatter plot for vehicle locations\nst.subheader('Vehicle Locations')\nfig = px.scatter_mapbox(data, lat='lat', lon='lon', hover_name='nearest_location_placename', hover_data=['vehicle_type', 'model'])\nfig.update_layout(mapbox_style='open-street-map')\nst.plotly_chart(fig)",
-            "assistant_code_expander": "View llama-3.3-70b-versatile streamlit dashboard code",
-            "assistant_code_top": "# Dashboard generated for your request: \"2 graphs\"\n# On data: \"02-24-2022_THROUGH_09-04-2024_Vehicle_Losses.csv\"\n",
-            "timestamp": "2025-01-14 12:47:40"
+            "message_contents": "Here's the refined and updated dashboard",
+            "assistant_code": "# Refactored code for Streamlit dashboard\nfrom streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load the dataset\ndata = pd.read_csv('user_uploaded_files/healthcare-dataset-stroke-data.csv')\n\n# Set the title of the dashboard\nst.title('Healthcare Dataset Stroke Analysis')\n\n# Display the first few rows of the dataset\nst.write(\"Dataset Preview:\")\nst.dataframe(data.head())\n\n# Bar chart for stroke count by hypertension status\nst.subheader('Stroke Count by Hypertension Status')\nstroke_count_hypertension = data.groupby('hypertension')['stroke'].sum().reset_index()\nfig, ax = plt.subplots()\nax.bar(stroke_count_hypertension['hypertension'], stroke_count_hypertension['stroke'])\nax.set_xlabel('Hypertension Status')\nax.set_ylabel('Stroke Count')\nax.set_title('Stroke Count by Hypertension Status')\nst.pyplot(fig)\n\n# Display additional insights if needed\nst.write(\"Insights: The bar chart illustrates the total number of strokes by hypertension status, showing if hypertension has an impact on stroke risk.\")\n\n# Explanation:\n# I updated the chart to display stroke count by hypertension status, as requested by the user.\n# I used the 'hypertension' column to group the data and calculate the sum of stroke occurrences.\n# The x-axis label, y-axis label, and title were updated accordingly to reflect the new chart.\n# The additional insight text was also updated to match the new chart.",
+            "assistant_code_expander": "View mixtral-8x7b-32768 refined dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: 'now just one chart that gives insights to the question \"does hypertension increase stroke risk?\"'",
+            "timestamp": "2025-01-15 10:59:03"
         }
     ]
 }

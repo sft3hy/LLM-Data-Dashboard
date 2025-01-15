@@ -46,9 +46,9 @@ def correct_code(code_snippet: str, extra_context: str, file_name: str):
         set_file_messages(file_name, new_messages)
     return corrected
 
-def code_refiner(code_snippet: str, extra_context: str):
+def code_refiner(code_snippet: str, extra_context: str, model: str):
     """
-    Refines the code snippet using the llama-3 model for code correction.
+    Refines the code snippet using a user selected model for code refinement.
     
     Args:
         code_snippet (str): The code snippet to refine.
@@ -59,6 +59,6 @@ def code_refiner(code_snippet: str, extra_context: str):
     """
     print('CODE SNIPPET', code_snippet)
     whole_prompt = f"Original code: {code_snippet}\n' User request: {extra_context}"
-    refined_code = extract_message(call_model(CODE_REFINER_MODEL, whole_prompt, code_refiner_sys_prompt))
+    refined_code = extract_message(call_model(model, whole_prompt, code_refiner_sys_prompt))
     
     return refined_code

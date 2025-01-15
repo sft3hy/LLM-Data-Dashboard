@@ -15,7 +15,7 @@ code_corrector_sys_prompt = """You are a code-correcting assistant. Given Stream
 code_refiner_sys_prompt = """You are a senior data scientist dashboard refiner. Given Streamlit code and its intended functionality, refine it as requested.
     Output only the updated code, with comments explaining your changes."""
 
-normal_sys_prompt = """You answer questions concisely"""
+normal_sys_prompt = """You are a helpful AI assistant"""
 
 summarizer_sys_prompt = {
     "role": "system",
