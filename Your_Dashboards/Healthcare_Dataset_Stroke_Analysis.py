@@ -41,7 +41,7 @@ if view_old and not hide_old:
             assistant_message = st.chat_message("assistant", avatar=bot_svg)
             assistant_message.write(message['message_contents'])
             assistant_message.expander(message['assistant_code_expander']).code(message['assistant_code_top']+message['assistant_code'], language="python")
-        st.divider()
+            st.divider()
 
 # Placeholders for dynamic updates
 user_chat_placeholder = st.empty()
