@@ -67,7 +67,7 @@ def stream_groq(stream):
     for chunk in stream:
         text = chunk.choices[0].delta.content
         if text is not None and type(text) != "int":
-            yield int
+            yield text
 
 if temperature and selected_model and user_text is not None:
     st.chat_message("human").write(user_text)
