@@ -87,11 +87,9 @@ def get_file_messages(file_path):
         try:
             # Query messages where the file path matches any of the relevant columns
             results = session.query(Message).filter(
-                (Message.assistant_code == file_path) |
-                (Message.assistant_code_expander == file_path) |
-                (Message.assistant_code_top == file_path)
+                (Message.file_name == file_path)
             ).all()
-
+            # print('RESULTS', results)
             # Convert results to a list of dictionaries
             messages = [
                 {
@@ -106,6 +104,26 @@ def get_file_messages(file_path):
                 for msg in results
             ]
             return messages
+        except NoResultFound:
+            print(f"No messages found for file path: {file_path}")
+            return []
+        
+# Function to list all users
+def show_users():
+    with Session() as session:
+        try:
+            # Query users
+            results = session.query(User).all()
+            users = [
+                {
+                    "user_id": user.user_id,
+                    "user_email": user.user_email,
+                    "created_at": user.created_at
+                }
+                for user in results
+            ]
+            print(users)
+            return users
         except NoResultFound:
             print(f"No messages found for file path: {file_path}")
             return []
@@ -135,14 +153,14 @@ def update_latest_assistant_message(file_path, assistant_code):
 # Example Usage
 if __name__ == "__main__":
     #TODO: COMMENT THIS OUT AFTER FIRST CREATION
-    create_tables()  # Create tables
+    # create_tables()  
 
-    add_user("user@example.com")  # Add a user
-    add_message("assistant", "Hello, how can I help?", "test.py")  # Add a message
-    file_messages = get_file_messages("test.py")
-    print(file_messages)
-    update_latest_assistant_message(file_path="test.py", assistant_code="print('updated this ish')")
-    file_messages = get_file_messages("test.py")
-    print(file_messages)
-
+    # add_user("user@example.com")  # Add a user
+    # add_message("assistant", "Hello, how can I help?", "test.py")  # Add a message
+    # file_messages = get_file_messages("test.py")
+    # print(file_messages)
+    # update_latest_assistant_message(file_path="test.py", assistant_code="print('ABCDEFG')")
+    # file_messages = get_file_messages("test.py")
+    # print(file_messages)
+    show_users()
 

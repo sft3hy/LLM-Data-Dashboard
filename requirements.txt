@@ -15,3 +15,5 @@ lida==0.0.14
 st-copy-to-clipboard==0.1.6
 streamlit-auth0==1.0.5
 schedule==1.2.2
+sqlalchemy==2.0.37
+psycopg2-binary==2.9.10
