@@ -125,7 +125,7 @@ def show_users():
             print(users)
             return users
         except NoResultFound:
-            print(f"No messages found for file path: {file_path}")
+            print(f"No users found")
             return []
 
 # get messages by file path
