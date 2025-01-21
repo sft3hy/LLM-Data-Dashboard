@@ -1,11 +1,6 @@
-from config import DASHBOARD_REFINER_SUGGESTIONS
-from random import randint
+import streamlit as st
+st.set_page_config(page_icon="🤖", layout="centered")
 
-def output_refined_dashboard(file_context: str):
-    empty = {}
-    recommendation = DASHBOARD_REFINER_SUGGESTIONS[randint(0, len(DASHBOARD_REFINER_SUGGESTIONS)-1)]
-
-    REFINER_BAR = f"""
 import streamlit as st
 from utils.code_editor import code_refiner, correct_code, get_file_messages
 from config import BOT_RESPONSE_REFINED, ALL_MODELS
@@ -37,10 +32,11 @@ if view_old and not hide_old:
             st.chat_message("user", avatar=person_svg).write(message['message_contents'])
         else:
             try:
-                exec(message['assistant_code'], {empty})
+                print(message['assistant_code'])
+                exec(message['assistant_code'], {}, {})
             except Exception as e:
                 st.markdown("### Error")
-                st.error(f"An error occurred: {{e}}")
+                st.error(f"An error occurred: {e}")
 
         # Update code explanation section
             assistant_message = st.chat_message("assistant", avatar=bot_svg)
@@ -63,10 +59,10 @@ def update_sections(user_message, generated_code, bot_response, code_expander_te
     # Update code execution section
     with code_execution_placeholder.container():
         try:
-            exec(generated_code, {empty})
+            exec(generated_code, {})
         except Exception as e:
             st.markdown("### Error")
-            st.error(f"An error occurred: {{e}}")
+            st.error(f"An error asdf occurred: {e}")
 
     # Update code explanation section
     with code_explanation_placeholder.container():
@@ -81,7 +77,7 @@ if not view_old:
     update_sections(prev_user_message['message_contents'], prev_bot_message['assistant_code'], prev_bot_message['message_contents'], prev_bot_message['assistant_code_expander'])
 
 # Add the chat input field
-input_message = st.chat_input(placeholder="{recommendation}")
+input_message = st.chat_input(placeholder="Plot the data over a longer time frame")
 
 if 'user_info' in st.session_state and st.session_state.user_info and st.session_state.user_info['email']:
     user_email = st.session_state.user_info['email']
@@ -93,17 +89,19 @@ if input_message:
     previous_code = get_last_dashboard(FILENAME)[-1]['assistant_code']
 
     # Generate refined code
-    context = \"\"\"{file_context}\"\"\"
+    context = """
+Snippet(s) of the user's files: 'user_uploaded_files/star_dataset.csv': "Columns and Data Types:\n  - Name: string\n  - Distance__ly_: float64\n  - Luminosity__L_Lo_: float64\n  - Radius__R_Ro_: float64\n  - Temperature__K_: float64\n  - Spectral_Class: string\n\nPreview of Rows:\n          Name  Distance__ly_  Luminosity__L_Lo_  Radius__R_Ro_  Temperature__K_ Spectral_Class\n        Altair      16.594171           9.979192       1.632650      7509.294247            A7V\n         Deneb    2600.490723      196002.627856     202.970526      8503.284796           A2Ia\nBarnard's Star       6.052616           4.893716       0.222711      3165.959639           M4Ve\n       Polaris     322.601002        2196.241934      37.546813      6048.326915           F7Ib\nBarnard's Star       5.902392          -1.496486       0.192359      3130.602069           M4Ve"
+These are the file path(s): ['user_uploaded_files/star_dataset.csv']"""
     refined_code = code_refiner(
         previous_code,
-        f"{{input_message}} {{context}}",
+        f"{input_message} {context}",
         model=selected_model
     )
     corrected_code = correct_code_remotely(refined_code, "fix any errors", FILENAME)
 
     # Generate bot response
     bot_response = BOT_RESPONSE_REFINED[randint(0, len(BOT_RESPONSE_REFINED) - 1)]
-    code_expander_text = f"View {{selected_model}} refined dashboard code"
+    code_expander_text = f"View {selected_model} refined dashboard code"
 
     # Update UI sections
     update_sections(input_message, corrected_code, bot_response, code_expander_text)
@@ -115,8 +113,7 @@ if input_message:
         message_contents=bot_response,
         assistant_code_expander=code_expander_text,
         assistant_code=corrected_code,
-        assistant_code_top=f"# Dashboard generated for your request: '{{input_message}}'"
+        assistant_code_top=f"# Dashboard generated for your request: '{input_message}'"
     )
 
-    """
-    return REFINER_BAR
+    
