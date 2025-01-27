@@ -1,21 +1,19 @@
-# Start from Python 3.11 Alpine
-FROM python:3.11-slim
+# Start from Python base image
+FROM python:3.10-slim-bullseye
 
 
 # Install system dependencies needed for Python packages
-RUN apk update && apk add --no-cache \
-   gdal \
-   geos \
-   proj \
-   && pip install --upgrade pip
+RUN apt-get update && apt-get install -y --no-install-recommends \
+   build-essential \
+   libpq-dev \
+   gdal-bin \
+   libgdal-dev \
+   libgeos-dev \
+   && rm -rf /var/lib/apt/lists/*
 
+COPY requirements.txt /app/requirements.txt
 # Set the working directory in the container
 WORKDIR /app
-
-
-# Copy your application files into the container
-COPY . /app
-
 
 # Install Python dependencies from requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
