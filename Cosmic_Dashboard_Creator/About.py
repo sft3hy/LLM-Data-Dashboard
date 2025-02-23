@@ -34,6 +34,7 @@ Hi, I'm Sam Townsend! 👋
 I'm passionate about data visualization, web development, and generative AI and have created this app to help others explore their own data and automate dashboard creation.  
 
 Feel free to connect with me on:  
+- [**My Website**](https://sft3hy.github.io/sam-townsend)
 - [**GitHub**](https://github.com/sft3hy)  
 - [**LinkedIn**](https://linkedin.com/in/samuel-townsend1)  
 
