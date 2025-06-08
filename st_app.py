@@ -52,8 +52,10 @@ with st.sidebar:
     st.divider()
     user_info = login_button(client_id, domain=domain)
 
+
 # Store the user info in session state if it's not None
 if user_info:
+    print(user_info)
     st.session_state.user_info = user_info
 
 # Check if user info exists in session state and display it

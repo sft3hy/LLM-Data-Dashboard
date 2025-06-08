@@ -19,13 +19,13 @@ normal_sys_prompt = """You are a helpful AI assistant"""
 
 summarizer_sys_prompt = {
     "role": "system",
-     "content": """
+    "content": """
 You are an experienced data analyst that can annotate datasets. Your instructions are as follows:
 i) ALWAYS generate the name of the dataset and the dataset_description
 ii) ALWAYS generate a field description.
 iii.) ALWAYS generate a semantic_type (a single word) for each field given its values e.g. company, city, number, supplier, location, gender, longitude, latitude, url, ip address, zip code, email, etc
 You must return an updated JSON dictionary without any preamble or explanation.
-"""
+""",
 }
 
 DASHBOARD_REFINER_SUGGESTIONS = [
@@ -78,43 +78,29 @@ BOT_RESPONSE_REFINED = [
 MODEL_LIMITS = [
     {"Model": "gpt-4o", "Daily Calls": 50},
     {"Model": "gpt-4o-mini", "Daily Calls": 150},
-    {"Model": "gemini-2.0-flash-exp", "Daily Calls": 1500},
-    {"Model": "gemini-1.5-flash", "Daily Calls": 1500},
+    {"Model": "gemini-2.5-pro", "Daily Calls": 1500},
+    {"Model": "gemini-2.5-flash", "Daily Calls": 1500},
+    {"Model": "gemma3-12b-it", "Daily Calls": 14400},
     {"Model": "llama-3.3-70b-versatile", "Daily Calls": 1000},
-    {"Model": "llama-3.3-70b-specdec", "Daily Calls": 1000},
-    {"Model": "llama-3.1-70b-versatile", "Daily Calls": 1000},
-    {"Model": "llama3-70b-8192", "Daily Calls": 14400},
-    {"Model": "gemma2-9b-it", "Daily Calls": 14400},
+    {"Model": "deepseek-r1-distill-llama-70b", "Daily Calls": 1000},
+    {"Model": "meta-llama/llama-4-maverick-17b-128e-instruct", "Daily Calls": 1000},
+    {"Model": "meta-llama/llama-4-scout-17b-16e-instruct", "Daily Calls": 1000},
     {"Model": "mixtral-8x7b-32768", "Daily Calls": 14400},
 ]
 
 GROQ_MODELS = [
+    "meta-llama/llama-4-maverick-17b-128e-instruct",
+    "meta-llama/llama-4-scout-17b-16e-instruct",
     "deepseek-r1-distill-llama-70b",
     "llama-3.3-70b-versatile",
-    "llama-3.3-70b-specdec",
-    "llama-3.1-70b-versatile",
-    "llama3-70b-8192",
-    "gemma2-9b-it",
-    "mixtral-8x7b-32768"
 ]
 
-GOOGLE_MODELS = [
-    "gemini-2.0-flash-exp",
-    "gemini-1.5-flash",
-]
+GOOGLE_MODELS = ["gemini-2.5-flash", "gemini-2.5-pro", "gemma-3-12b-it"]
 
-OPENAI_MODELS = [
-    "gpt-4o",
-    "gpt-4o-mini"
-]
+OPENAI_MODELS = ["gpt-4o", "gpt-4o-mini"]
 
 ALL_MODELS = OPENAI_MODELS + GOOGLE_MODELS + GROQ_MODELS
 
-
-"""
-llama-3.2-90b-vision-preview
-llama-guard-3-8b
-"""
 
 CODE_CORRECTION_TRIES = 3
 CODE_CORRECTOR_MODEL = "llama3-70b-8192"
@@ -122,7 +108,7 @@ CODE_REFINER_MODEL = "llama3-70b-8192"
 STORAGE_FILE = "data/messages.json"
 GENERATED_FILES_DIR = "Your_Dashboards"
 
-AZURE_API_KEY=os.environ.get("GH_ACCESS_TOKEN", None)
+AZURE_API_KEY = os.environ.get("GH_ACCESS_TOKEN", None)
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", None)
 GOOGLE_API_KEY = os.environ.get("GEMINI_API_KEY", None)
 
@@ -132,7 +118,7 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 def setup_kaggle_api():
     """
     Sets up the Kaggle API using the Kaggle JSON credentials file.
-    
+
     Ensure you have the 'kaggle.json' file in your home directory's '.kaggle' folder
     or in an environment variable.
     """
@@ -144,10 +130,12 @@ def setup_kaggle_api():
         return api
     except Exception as e:
         raise RuntimeError(f"Error setting up Kaggle API: {e}")
-    
+
+
 def get_now():
-    return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
 KAGGLE_API = setup_kaggle_api()
 
 
@@ -155,12 +143,16 @@ def is_port_in_use(host, port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex((host, port)) == 0
 
+
 def run_uvicorn():
     if not is_port_in_use("127.0.0.1", 8000):
-        uvicorn.run("error_correction_service:app", host="127.0.0.1", port=8000, reload=False)
+        uvicorn.run(
+            "error_correction_service:app", host="127.0.0.1", port=8000, reload=False
+        )
     else:
         print("Server already running on port 8000. Skipping start.")
 
+
 uvicorn_thread = threading.Thread(target=run_uvicorn, daemon=True)
 uvicorn_thread.start()
-print('Uvicorn started running microservice')
+print("Uvicorn started running microservice")
