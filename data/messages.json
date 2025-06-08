@@ -86,7 +86,7 @@
             "role": "assistant",
             "message_contents": "Here is the updated dashboard tailored to your input",
             "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Load the dataset\ndata = pd.read_csv('user_uploaded_files/healthcare-dataset-stroke-data.csv')\n\n# Set the title of the dashboard\nst.title('Healthcare Dataset Stroke Analysis')\n\n# Display the first few rows of the dataset\nst.write(\"Dataset Preview:\")\nst.dataframe(data.head())\n\n# Bar chart for stroke count by marital status\nst.subheader('Stroke Count by Marital Status')\nstroke_count_marital = data.groupby('ever_married')['stroke'].sum().reset_index()\nfig, ax = plt.subplots()\nax.bar(stroke_count_marital['ever_married'], stroke_count_marital['stroke'])\nax.set_xlabel('Marital Status')\nax.set_ylabel('Stroke Count')\nax.set_title('Stroke Count by Marital Status')\nst.pyplot(fig)\n\n# Display additional insights if needed\nst.write(\"Insights: The bar chart illustrates the total number of strokes by marital status, showing if being ever married has an impact on stroke risk.\")",
-            "assistant_code_expander": "View llama3-70b-8192 refined dashboard code",
+            "assistant_code_expander": "View llama-3.3-70b-versatile refined dashboard code",
             "assistant_code_top": "# Dashboard generated for your request: 'now just a graph that gives insights on if the variable \"is ever married\" plays an impact on stroke risk'",
             "timestamp": "2025-01-15 10:41:14"
         },

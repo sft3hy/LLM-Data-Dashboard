@@ -1,9 +1,12 @@
 from config import DASHBOARD_REFINER_SUGGESTIONS
 from random import randint
 
+
 def output_refined_dashboard(file_context: str):
     empty = {}
-    recommendation = DASHBOARD_REFINER_SUGGESTIONS[randint(0, len(DASHBOARD_REFINER_SUGGESTIONS)-1)]
+    recommendation = DASHBOARD_REFINER_SUGGESTIONS[
+        randint(0, len(DASHBOARD_REFINER_SUGGESTIONS) - 1)
+    ]
 
     REFINER_BAR = f"""
 import streamlit as st
@@ -27,7 +30,7 @@ previous_messages = get_file_messages(FILENAME)
 selected_model = st.sidebar.selectbox(
             "LLM for code refining:",
             options = ALL_MODELS,
-            index=ALL_MODELS.index("llama3-70b-8192"),
+            index=ALL_MODELS.index("llama-3.3-70b-versatile"),
         )
 view_old = st.sidebar.button("View dashboard history")
 hide_old = st.sidebar.button("Hide dashboard history")

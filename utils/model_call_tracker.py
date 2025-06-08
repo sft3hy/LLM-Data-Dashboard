@@ -8,7 +8,7 @@ data = {
         "llama-3.3-70b-versatile": 0,
         "llama-3.3-70b-versatile": 0,
         "llama-3.1-70b-versatile": 0,
-        "llama3-70b-8192": 0,
+        "llama-3.3-70b-versatile": 0,
         "gemma2-9b-it": 0,
         "mixtral-8x7b-32768": 0,
     },

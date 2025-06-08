@@ -14,7 +14,7 @@ MODEL_LIMITS = [
     {"Model": "llama-3.3-70b-versatile", "Daily Calls": 1000},
     {"Model": "llama-3.3-70b-versatile", "Daily Calls": 1000},
     {"Model": "llama-3.1-70b-versatile", "Daily Calls": 1000},
-    {"Model": "llama3-70b-8192", "Daily Calls": 14400},
+    {"Model": "llama-3.3-70b-versatile", "Daily Calls": 14400},
     {"Model": "gemma2-9b-it", "Daily Calls": 14400},
     {"Model": "mixtral-8x7b-32768", "Daily Calls": 14400},
 ]
