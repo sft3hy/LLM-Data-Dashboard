@@ -1,12 +1,16 @@
 {
-    "llama-3.3-70b-versatile": 0,
-    "llama-3.3-70b-versatile": 16,
-    "llama-3.1-70b-versatile": 2,
-    "llama-3.3-70b-versatile": 1,
-    "gemma2-9b-it": 0,
-    "mixtral-8x7b-32768": 1,
-    "gemini-2.0-flash-exp": 2,
-    "gemini-1.5-flash": 0,
-    "gpt-4o": 0,
-    "gpt-4o-mini": 4
+    "GROQ_MODELS": {
+        "llama-3.3-70b-versatile": 0,
+        "llama-3.1-70b-versatile": 0,
+        "gemma2-9b-it": 0,
+        "mixtral-8x7b-32768": 0
+    },
+    "GOOGLE_MODELS": {
+        "gemini-2.0-flash-exp": 0,
+        "gemini-1.5-flash": 0
+    },
+    "OPENAI_MODELS": {
+        "gpt-4o": 0,
+        "gpt-4o-mini": 0
+    }
 }

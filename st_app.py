@@ -16,30 +16,41 @@ dashboard_pages = generate_pages()
 
 # Page configuration
 creator = st.Page(
-    "Cosmic_Dashboard_Creator/Dashboard_Creator.py", title="Dashboard Creator", icon=":material/dashboard:", default=True, 
+    "Cosmic_Dashboard_Creator/Dashboard_Creator.py",
+    title="Dashboard Creator",
+    icon=":material/dashboard:",
+    default=True,
 )
 about = st.Page(
-    "Cosmic_Dashboard_Creator/About.py", title="About", icon=":material/waving_hand:",
+    "Cosmic_Dashboard_Creator/About.py",
+    title="About",
+    icon=":material/waving_hand:",
 )
 model_info = st.Page(
-    "Cosmic_Dashboard_Creator/Model_Information.py", title="Model Info", icon=":material/info:"
+    "Cosmic_Dashboard_Creator/Model_Information.py",
+    title="Model Info",
+    icon=":material/info:",
 )
 kaggle = st.Page(
-    "Cosmic_Dashboard_Creator/Kaggle_Downloader.py", title="Kaggle Downloader", icon="🦆"
+    "Cosmic_Dashboard_Creator/Kaggle_Downloader.py",
+    title="Kaggle Downloader",
+    icon="🦆",
 )
 lida = st.Page(
-    "Cosmic_Dashboard_Creator/LIDA.py", title="LIDA", icon="📊"
+    "Cosmic_Dashboard_Creator/LIDA.py", title="LIDA", icon=":material/robot:"
 )
 
 chat = st.Page(
-    "Cosmic_Dashboard_Creator/LLM_Chat.py", title="LLM Chat", icon=":material/smart_toy:"
+    "Cosmic_Dashboard_Creator/LLM_Chat.py",
+    title="LLM Chat",
+    icon=":material/smart_toy:",
 )
 
 pg = st.navigation(
-{
-    "Cosmic Dashboard Creator": [creator, chat, about, model_info, kaggle, lida],
-    "Your Dashboards": dashboard_pages,
-}
+    {
+        "Cosmic Dashboard Creator": [creator, chat, about, model_info, kaggle, lida],
+        "Your Dashboards": dashboard_pages,
+    }
 )
 pg.run()
 

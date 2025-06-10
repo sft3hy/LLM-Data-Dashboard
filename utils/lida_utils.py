@@ -1,8 +1,9 @@
 from config import get_now, GROQ_MODELS, GROQ_API_KEY, GOOGLE_API_KEY, GOOGLE_MODELS
 from typing import Union, List, Dict
-from lida import Manager
+from google import genai
 from llmx import TextGenerationConfig, TextGenerationResponse, Message
-from openai import AzureOpenAI, OpenAI
+from openai import AzureOpenAI
+from google.genai import types
 from groq import Groq
 from utils.model_call_tracker import update_model_count
 
@@ -55,10 +56,7 @@ class CustomTextGenerator:
         elif api_type == "azure":
             self.client = AzureOpenAI(**self.client_args)
         elif api_type == "google":
-            self.client = OpenAI(
-                api_key=GOOGLE_API_KEY,
-                base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-            )
+            self.client = genai.Client(api_key=GOOGLE_API_KEY)
         else:
             raise ValueError(f"Unknown api_type: {api_type}")
 
@@ -89,14 +87,34 @@ class CustomTextGenerator:
 
         self.model = model
 
-        model_response = self.client.chat.completions.create(**model_config)
+        response = ""
 
-        response = TextGenerationResponse(
-            text=[Message(**x.message.model_dump()) for x in model_response.choices],
-            logprobs=[],
-            usage=str(model_response.usage),
-            config=model_config,
-        )
+        if model in GOOGLE_MODELS:
+            print(messages)
+            content = ""
+            if messages[1]["role"] == "assistant":
+                content = messages[1]["content"]
+
+            response = self.client.models.generate_content(
+                model=model,
+                contents=content,
+                config=types.GenerateContentConfig(
+                    temperature=config.temperature,
+                    top_p=config.top_p,
+                    system_instruction=messages[0]["content"],
+                ),
+            )
+        else:
+            model_response = self.client.chat.completions.create(**model_config)
+
+            response = TextGenerationResponse(
+                text=[
+                    Message(**x.message.model_dump()) for x in model_response.choices
+                ],
+                logprobs=[],
+                usage=str(model_response.usage),
+                config=model_config,
+            )
         with open("data/prompt_history.log", "a") as f:
             f.write(
                 f"\nUSER REQUEST:\n{messages}\nUsing model: {model}\nAt {get_now()}\nMODEL RESPONSE: {response}\n"

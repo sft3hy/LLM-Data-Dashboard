@@ -190,5 +190,21 @@
             "assistant_code_top": "# Dashboard generated for your request: 'An error asdf occurred: There are multiple plotly_chart elements with the same auto-generated ID. When this element is created, it is assigned an internal ID based on the element type and provided parameters. Multiple elements with the same type and parameters will cause this error.\n\nTo fix this error, please pass a unique key argument to the plotly_chart element.'",
             "timestamp": "2025-01-16 13:34:48"
         }
+    ],
+    "Stroke_Prevalence_by_Residence_Type.py": [
+        {
+            "role": "user",
+            "message_contents": "Question: How does the prevalence of stroke vary by Residence_type?\nVisualization: bar chart of stroke by Residence_type\nRationale: This tells us about the relationship between stroke and Residence_type, which can help identify trends and patterns in the data, using the stroke and Residence_type fields from the dataset.",
+            "timestamp": "2025-06-08 13:22:15",
+            "user_id": ""
+        },
+        {
+            "role": "assistant",
+            "message_contents": "llama-3.3-70b-versatile dashboard created at 2025-06-08 13:22:15",
+            "assistant_code": "from streamlit_folium import folium_static\nfrom streamlit_folium import st_folium\nimport streamlit as st\nimport pandas as pd\n\n# Load the data\ndef load_data(file_path):\n    data = pd.read_csv(file_path)\n    return data\n\n# Create the main app\ndef main():\n    st.title(\"Stroke Prevalence by Residence Type\")\n\n    # Load the data\n    file_path = 'user_uploaded_files/healthcare-dataset-stroke-data.csv'\n    data = load_data(file_path)\n\n    # Filter the data to include only stroke cases\n    stroke_data = data[data['stroke'] == 1]\n\n    # Group the data by Residence_type and count the number of stroke cases\n    stroke_counts = stroke_data['Residence_type'].value_counts()\n\n    # Create a bar chart of stroke by Residence_type\n    st.bar_chart(stroke_counts)\n\n    # Display the raw data\n    if st.checkbox('Show raw data'):\n        st.write(data)\n\nif __name__ == \"__main__\":\n    main()",
+            "assistant_code_expander": "View llama-3.3-70b-versatile streamlit dashboard code",
+            "assistant_code_top": "# Dashboard generated for your request: \"Question: How does the prevalence of stroke vary by Residence_type?\n# Visualization: bar chart of stroke by Residence_type\n# Rationale: This tells us about the relationship between stroke and Residence_type, which can help identify trends and patterns in the data, using the stroke and Residence_type fields from the dataset.\"\n# On data: \"healthcare-dataset-stroke-data.csv\"\n# ",
+            "timestamp": "2025-06-08 13:22:15"
+        }
     ]
 }
