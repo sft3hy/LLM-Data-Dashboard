@@ -16,3 +16,4 @@ schedule==1.2.2
 sqlalchemy==2.0.40
 psycopg2-binary==2.9.10
 streamlit==1.44.1
+google-genai==1.19.0
