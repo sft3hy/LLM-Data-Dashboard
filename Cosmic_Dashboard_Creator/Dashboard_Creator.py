@@ -18,7 +18,7 @@ from utils.misc import (
 )
 from utils.code_editor import correct_code
 from utils.refiner_bar import output_refined_dashboard
-from config import ALL_MODELS, streamlit_sys_prompt, get_now
+from config import ALL_MODELS, streamlit_sys_prompt, get_now, GOOGLE_MODELS
 from lida import TextGenerationConfig, Manager
 from custom_components.custom import gen_copy_button
 import streamlit as st
@@ -155,13 +155,15 @@ if selected_model:
 
 if selected_files:
     col1, col2 = st.columns(2)
+    goal_generation = False
 
     with col1:
-        st.write(
-            "Not sure what to ask for? Try the goal generation button to have your selected llm review your data and give you some ideas."
-        )
-        goal_generation = st.button("Generate goals")
-        # summarization_methods = ["default", "llm", "columns"]
+        if selected_model not in GOOGLE_MODELS:
+            st.write(
+                "Not sure what to ask for? Try the goal generation button to have your selected llm review your data and give you some ideas."
+            )
+            goal_generation = st.button("Generate goals")
+            # summarization_methods = ["default", "llm", "columns"]
     summarization_methods = [
         {
             "label": "llm",
@@ -178,30 +180,31 @@ if selected_files:
     ]
 
     with col2:
-        selected_method_label = st.selectbox(
-            "Choose a goal generation method",
-            options=[method["label"] for method in summarization_methods],
-            index=1,
-        )
-
-        selected_method = summarization_methods[
-            [method["label"] for method in summarization_methods].index(
-                selected_method_label
+        if selected_model not in GOOGLE_MODELS:
+            selected_method_label = st.selectbox(
+                "Choose a goal generation method",
+                options=[method["label"] for method in summarization_methods],
+                index=1,
             )
-        ]["label"]
 
-        # add description of selected method in very small font to sidebar
-        selected_summary_method_description = summarization_methods[
-            [method["label"] for method in summarization_methods].index(
-                selected_method_label
-            )
-        ]["description"]
+            selected_method = summarization_methods[
+                [method["label"] for method in summarization_methods].index(
+                    selected_method_label
+                )
+            ]["label"]
 
-        if selected_method:
-            st.markdown(
-                f"<span> {selected_summary_method_description} </span>",
-                unsafe_allow_html=True,
-            )
+            # add description of selected method in very small font to sidebar
+            selected_summary_method_description = summarization_methods[
+                [method["label"] for method in summarization_methods].index(
+                    selected_method_label
+                )
+            ]["description"]
+
+            if selected_method:
+                st.markdown(
+                    f"<span> {selected_summary_method_description} </span>",
+                    unsafe_allow_html=True,
+                )
 
     if goal_generation:
         with st.spinner(text="Generating goals..."):
