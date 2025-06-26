@@ -77,5 +77,5 @@ if st.session_state.search_term:
                         st.success(f"{dataset_ref} downloaded successfully! The files are now available in Dashboard Creator -> select previous data sources")
                     else:
                         st.warning("No datasets selected for download.")
-        except Exception as e:More actions
+        except Exception as e:
             st.error(f"An error occurred while searching datasets: {e}")
