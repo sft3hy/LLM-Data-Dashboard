@@ -46,9 +46,7 @@ if st.session_state.search_term:
                 with col.container(height=200):
                     # Display dataset title and other details
                     st.write(dataset)
-                    vote_count = getattr(dataset, 'voteCount', 'Not available')
-                    usability_rating = getattr(dataset, 'usabilityRating', 'Not available')
-                    st.write(f"**[{dataset.title}]({dataset.url})** ^{vote_count} ({usability_rating} user-friendly)" if isinstance(usability_rating, (int, float)) else f"**[{dataset.title}]({dataset.url})** ^{vote_count} ({usability_rating})")
+                    st.write(f"**[{dataset.title}]({dataset.url})** ^{dataset.voteCount} ({int(dataset.usabilityRating*100)}% user-friendly)")
                     # Checkbox for selection
                     # Checkbox for selection
                     checkbox_key = f"select_{dataset.ref}"
