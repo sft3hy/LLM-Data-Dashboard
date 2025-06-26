@@ -46,11 +46,10 @@ if st.session_state.search_term:
                 col = columns[index % num_columns]
                 with col:
                     # Create a container for each dataset with a rounded box and white border
-                    dataset_container = st.container()
-                    with dataset_container:
+                    with st.container():
                         st.markdown(
                             """
-                            <div style="border: 1px solid white; border-radius: 10px; padding: 10px; margin-bottom: 10px;">
+                            <div style="border:1px solid white; border-radius:10px; padding:10px; margin-bottom:10px;">
                             """,
                             unsafe_allow_html=True,
                         )
