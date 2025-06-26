@@ -88,7 +88,6 @@ if st.session_state.search_term:
                     if hasattr(dataset, 'tags'):
                         tagger_component(dataset.tags, color_names[:len(dataset.tags)])
 
-            # Button to download selected datasets
             if st.button("Download selected dataset(s)"):
                 if st.session_state.selected_datasets:
                     for dataset_ref in st.session_state.selected_datasets:
@@ -97,5 +96,3 @@ if st.session_state.search_term:
                     st.success("Datasets downloaded successfully!")
                 else:
                     st.warning("No datasets selected for download.")
-        except Exception as e:
-            st.error(f"An error occurred while searching datasets: {e}")
