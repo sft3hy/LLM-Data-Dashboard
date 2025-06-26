@@ -42,23 +42,51 @@ if st.session_state.search_term:
             for index, dataset in enumerate(datasets):
                 col = columns[index % num_columns]
                 with col:
-                    st.write(f"**[{dataset.title}]({dataset.url})**")
-                    # st.write(f"👍 {dataset.voteCount} | Usability: {int(dataset.usabilityRating * 100)}%")
+                    # Ensure dataset.title and dataset.url exist before trying to display them
+                    if hasattr(dataset, 'title') and hasattr(dataset, 'url'):
+                        st.write(f"**[{dataset.title}]({dataset.url})**")
+                    elif hasattr(dataset, 'title'):
+                        st.write(f"**{dataset.title}**")
+                    else:
+                        st.write("Untitled Dataset")
+
+                    # Display vote count and usability rating if they exist
+                    display_text = []
+                    if hasattr(dataset, 'voteCount'):
+                        display_text.append(f"👍 {dataset.voteCount}")
+                    if hasattr(dataset, 'usabilityRating'):
+                        usability_rating = int(getattr(dataset, 'usabilityRating', 0) * 100)
+                        display_text.append(f"Usability: {usability_rating}%")
+                    if display_text:
+                        st.write(" | ".join(display_text))
 
                     # Checkbox to select datasets
-                    checkbox_key = f"select_{dataset.ref}"
-                    is_selected = dataset.ref in st.session_state.selected_datasets
+                    checkbox_key = f"select_{getattr(dataset, 'ref', 'unknown')}"
+                    is_selected = getattr(dataset, 'ref', None) in st.session_state.get('selected_datasets', set())
                     if st.checkbox(
                         "Select for download",
                         key=checkbox_key,
                         value=is_selected,
                     ):
-                        st.session_state.selected_datasets.add(dataset.ref)
+                        if not hasattr(st.session_state, 'selected_datasets'):
+                            st.session_state.selected_datasets = set()
+                        st.session_state.selected_datasets.add(getattr(dataset, 'ref', 'unknown'))
                     else:
-                        st.session_state.selected_datasets.discard(dataset.ref)
+                        if hasattr(st.session_state, 'selected_datasets'):
+                            st.session_state.selected_datasets.discard(getattr(dataset, 'ref', 'unknown'))
 
-                    st.caption(f"{dataset.subtitle} ({dataset.size})")
-                    tagger_component(dataset.tags, color_names[:len(dataset.tags)])
+                    # Display subtitle and size if available
+                    if hasattr(dataset, 'subtitle') or hasattr(dataset, 'size'):
+                        caption_text = []
+                        if hasattr(dataset, 'subtitle'):
+                            caption_text.append(dataset.subtitle)
+                        if hasattr(dataset, 'size'):
+                            caption_text.append(f"({dataset.size})")
+                        st.caption(" ".join(caption_text))
+
+                    # Display tags if available
+                    if hasattr(dataset, 'tags'):
+                        tagger_component(dataset.tags, color_names[:len(dataset.tags)])
 
             # Button to download selected datasets
             if st.button("Download selected dataset(s)"):
