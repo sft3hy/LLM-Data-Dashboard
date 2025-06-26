@@ -76,6 +76,7 @@ if st.session_state.search_term:
 
                     # Display subtitle and size if available
                     if hasattr(dataset, 'subtitle') or hasattr(dataset, 'size'):
+                        st.write('in here1)
                         caption_text = []
                         if hasattr(dataset, 'subtitle'):
                             caption_text.append(str(dataset.subtitle))  # Convert to string
@@ -87,6 +88,7 @@ if st.session_state.search_term:
 
                     # Display tags if available
                     if hasattr(dataset, 'tags'):
+                        print('here2')
                         tagger_component(dataset.tags, color_names[:len(dataset.tags)])
 
             if st.button("Download selected dataset(s)"):
