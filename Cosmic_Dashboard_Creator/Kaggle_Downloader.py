@@ -45,8 +45,8 @@ if st.session_state.search_term:
                 col = columns[index % num_columns]  # Rotate through columns
                 with col.container(height=200):
                     # Display dataset title and other details
-                    st.write(dataset)
-                    st.write(f"**[{dataset.title}]({dataset.url})** ^{dataset.voteCount} ({int(dataset.usabilityRating*100)}% user-friendly)")
+                    # st.write(dataset)
+                    st.write(f"**[{dataset.title}]({dataset.url})** ^{dataset['voteCount']} ({int(dataset['usabilityRating']*100)}% user-friendly)")
                     # Checkbox for selection
                     checkbox_key = f"select_{dataset.ref}"
                     is_selected = checkbox_key in st.session_state.selected_datasets
