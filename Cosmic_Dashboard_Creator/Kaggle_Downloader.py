@@ -3,6 +3,9 @@ from uuid import uuid4
 from utils.kaggle_utils import download_dataset, search_datasets
 from streamlit_extras.tags import tagger_component
 
+st.set_page_config(page_title="Kaggle", page_icon="🦆", layout="centered")
+
+
 # Initialize session state for search term and selected datasets
 if "search_term" not in st.session_state:
     st.session_state.search_term = ""
