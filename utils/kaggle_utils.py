@@ -39,7 +39,11 @@ def download_dataset(dataset_slug, download_path='datasets', unzip=True):
     """
     try:
         os.makedirs(download_path, exist_ok=True)
+        if not isinstance(download_path, str): 
+            raise TypeError("download_path must be a string")
+
+
         KAGGLE_API.dataset_download_files(dataset_slug, path=download_path, unzip=unzip)
-        print(f"Dataset '{dataset_slug}' downloaded to {download_path}.")
+        # print(f"Dataset '{dataset_slug}' downloaded to {download_path}.")
     except Exception as e:
         raise RuntimeError(f"Error downloading dataset: {e}")
