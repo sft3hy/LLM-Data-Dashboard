@@ -17,8 +17,7 @@ def search_datasets(query, sort_by='relevance', size=6):
     list: A list of datasets matching the query.
     """
     try:
-        # Valid sort_by values are: 'hottest', 'newest', 'updated', 'votes'
-        if sort_by not in ['hottest', 'votes', 'updated', 'active', 'published']:
+        if sort_by not in ["hotness", "downloadCount", "voteCount", "notebookCount", "createTime"]:
             sort_by = 'hottest'
 
         datasets = KAGGLE_API.dataset_list(search=query, sort_by=sort_by)
