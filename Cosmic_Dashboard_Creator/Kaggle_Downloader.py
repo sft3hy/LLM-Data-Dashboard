@@ -49,15 +49,7 @@ if st.session_state.search_term:
                     with st.container():
                         # Use Markdown to create the styled box for the dataset
                         st.markdown(
-                            f"""
-                            <div style="border:1px solid white; border-radius:10px; padding:10px; margin-bottom:10px; background-color:#f7e7e4;">
-                                <h4 style="margin-top:0px;">{getattr(dataset, 'title', 'Untitled Dataset')}</h4>
-{f'<a href="{getattr(dataset, "url", "#")}" target="_blank">View Dataset</a>' if hasattr(dataset, "url") else "No URL available"}
-
-                                    {f"👍 {getattr(dataset, 'voteCount', 0)} votes" if hasattr(dataset, 'voteCount') else ''}
-                                    {f", Usability: {int(getattr(dataset, 'usabilityRating', 0) * 100)}%" if hasattr(dataset, 'usabilityRating') else ''}
-                            </div>
-                            """,
+                            f"""<div style="border:1px solid white; border-radius:10px; padding:10px; margin-bottom:10px; background-color:#f7e7e4;"><h4 style="margin-top:0px;">{getattr(dataset, 'title', 'Untitled Dataset')}</h4>{f'<a href="{getattr(dataset, "url", "#")}" target="_blank">View Dataset</a>' if hasattr(dataset, "url") else "No URL available"}{f"👍 {getattr(dataset, 'voteCount', 0)} votes" if hasattr(dataset, 'voteCount') else ''}{f", Usability: {int(getattr(dataset, 'usabilityRating', 0) * 100)}%" if hasattr(dataset, 'usabilityRating') else ''}</div>""",
                             unsafe_allow_html=True,
                         )
 
