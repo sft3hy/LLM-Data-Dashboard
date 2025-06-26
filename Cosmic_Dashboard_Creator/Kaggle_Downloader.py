@@ -43,7 +43,7 @@ if st.session_state.search_term:
                 col = columns[index % num_columns]
                 with col:
                     st.write(f"**[{dataset.title}]({dataset.url})**")
-                    st.write(f"👍 {dataset.voteCount} | Usability: {int(dataset.usabilityRating * 100)}%")
+                    # st.write(f"👍 {dataset.voteCount} | Usability: {int(dataset.usabilityRating * 100)}%")
 
                     # Checkbox to select datasets
                     checkbox_key = f"select_{dataset.ref}"
