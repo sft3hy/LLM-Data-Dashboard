@@ -60,7 +60,7 @@ if st.session_state.search_term:
                         usability_rating = int(getattr(dataset, 'usabilityRating', 0) * 100)
                         display_text.append(f"Usability: {usability_rating}%")
                     if display_text:
-                        st.write(" | ".join(str(display_text)))
+                        st.write(display_text)
 
                     # Checkbox to select datasets
                     checkbox_key = f"select_{getattr(dataset, 'ref', 'unknown')}"
@@ -81,7 +81,7 @@ if st.session_state.search_term:
                             caption_text.append(str(dataset.subtitle))  # Convert to string
                         if hasattr(dataset, 'size'):
                             caption_text.append(f"({dataset.size})")
-                        st.caption(" ".join(str(caption_text)))  # This line was likely the cause of the error
+                        st.caption(caption_text)  # This line was likely the cause of the error
 
                     # Display tags if available
                     if hasattr(dataset, 'tags'):
