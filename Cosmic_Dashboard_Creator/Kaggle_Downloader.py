@@ -13,11 +13,13 @@ if "selected_datasets" not in st.session_state:
 search_term = st.text_input(
     "Search for Kaggle datasets",
     placeholder="Try something like 'heart health'",
+    value=st.session_state.search_term
 )
 
 # Display initial instructions
 search_info_container = st.empty()
-search_info_container.markdown("**Search for datasets to download from Kaggle**")
+if not search_term:
+    search_info_container.markdown("**Search for datasets to download from Kaggle**")
 
 # Update the search term in session state
 if search_term and search_term != st.session_state.search_term:
@@ -62,18 +64,15 @@ if st.session_state.search_term:
 
                     # Checkbox to select datasets
                     checkbox_key = f"select_{getattr(dataset, 'ref', 'unknown')}"
-                    is_selected = getattr(dataset, 'ref', None) in st.session_state.get('selected_datasets', set())
-                    if st.checkbox(
+                    is_selected = st.checkbox(
                         "Select for download",
                         key=checkbox_key,
-                        value=is_selected,
-                    ):
-                        if not hasattr(st.session_state, 'selected_datasets'):
-                            st.session_state.selected_datasets = set()
+                        value=getattr(dataset, 'ref', None) in st.session_state.selected_datasets
+                    )
+                    if is_selected:
                         st.session_state.selected_datasets.add(getattr(dataset, 'ref', 'unknown'))
                     else:
-                        if hasattr(st.session_state, 'selected_datasets'):
-                            st.session_state.selected_datasets.discard(getattr(dataset, 'ref', 'unknown'))
+                        st.session_state.selected_datasets.discard(getattr(dataset, 'ref', 'unknown'))
 
                     # Display subtitle and size if available
                     if hasattr(dataset, 'subtitle') or hasattr(dataset, 'size'):
@@ -96,3 +95,5 @@ if st.session_state.search_term:
                     st.success("Datasets downloaded successfully!")
                 else:
                     st.warning("No datasets selected for download.")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
