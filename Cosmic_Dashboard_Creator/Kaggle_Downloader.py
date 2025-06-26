@@ -45,32 +45,24 @@ if st.session_state.search_term:
             for index, dataset in enumerate(datasets):
                 col = columns[index % num_columns]
                 with col:
-                    # Create a container for each dataset with a rounded box and white border
+                    # Create a container for each dataset with a styled box
                     with st.container():
+                        # Use Markdown to create the styled box for the dataset
                         st.markdown(
-                            """
-                            <div style="border:1px solid white; border-radius:10px; padding:10px; margin-bottom:10px;">
+                            f"""
+                            <div style="border:1px solid white; border-radius:10px; padding:10px; margin-bottom:10px; background-color:#f9f9f9;">
+                                <h4 style="margin-top:0px;">{getattr(dataset, 'title', 'Untitled Dataset')}</h4>
+                                <p style="font-size:14px; margin-bottom:5px;">
+                                    {f'<a href="{getattr(dataset, "url", "#")}" target="_blank">View Dataset</a>' if hasattr(dataset, "url") else "No URL available"}
+                                </p>
+                                <p style="font-size:12px; color:gray;">
+                                    {f"👍 {getattr(dataset, 'voteCount', 0)} votes" if hasattr(dataset, 'voteCount') else ''}
+                                    {f", Usability: {int(getattr(dataset, 'usabilityRating', 0) * 100)}%" if hasattr(dataset, 'usabilityRating') else ''}
+                                </p>
+                            </div>
                             """,
                             unsafe_allow_html=True,
                         )
-
-                        # Ensure dataset.title and dataset.url exist before trying to display them
-                        if hasattr(dataset, 'title') and hasattr(dataset, 'url'):
-                            st.write(f"**[{dataset.title}]({dataset.url})**")
-                        elif hasattr(dataset, 'title'):
-                            st.write(f"**{dataset.title}**")
-                        else:
-                            st.write("Untitled Dataset")
-
-                        # Display vote count and usability rating if they exist
-                        display_text = []
-                        if hasattr(dataset, 'voteCount'):
-                            display_text.append(f"👍 {dataset.voteCount}")
-                        if hasattr(dataset, 'usabilityRating'):
-                            usability_rating = int(getattr(dataset, 'usabilityRating', 0) * 100)
-                            display_text.append(f"Usability: {usability_rating}%")
-                        if display_text:
-                            st.write(", ".join(display_text))  # Modified to display text in a single line
 
                         # Checkbox to select datasets
                         checkbox_key = f"select_{getattr(dataset, 'ref', 'unknown')}"
@@ -84,8 +76,7 @@ if st.session_state.search_term:
                         else:
                             st.session_state.selected_datasets.discard(getattr(dataset, 'ref', 'unknown'))
 
-                        st.markdown("</div>", unsafe_allow_html=True)
-
+            # Download button for selected datasets
             if st.button("Download selected dataset(s)"):
                 if st.session_state.selected_datasets:
                     for dataset_ref in st.session_state.selected_datasets:
