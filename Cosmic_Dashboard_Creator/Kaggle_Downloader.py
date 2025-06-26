@@ -80,8 +80,10 @@ if st.session_state.search_term:
                         if hasattr(dataset, 'subtitle'):
                             caption_text.append(str(dataset.subtitle))  # Convert to string
                         if hasattr(dataset, 'size'):
-                            caption_text.append(f"({dataset.size})")
-                        st.caption(caption_text)  # This line was likely the cause of the error
+                            caption_text.append(dataset.size)
+                        if caption_text:
+                            st.write(str(' - '.join(caption_text)))
+                            st.caption(' - '.join(caption_text))  # Convert list to string with ' - ' separator
 
                     # Display tags if available
                     if hasattr(dataset, 'tags'):
