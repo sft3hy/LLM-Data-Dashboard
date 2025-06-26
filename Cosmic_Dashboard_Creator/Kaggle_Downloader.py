@@ -9,25 +9,25 @@ if "search_term" not in st.session_state:
 if "selected_datasets" not in st.session_state:
     st.session_state.selected_datasets = set()  # Use a set for unique selections
 
-# Search input
-search_term = st.text_input(
+# **Updated Search Input Logic**
+search_input = st.text_input(
     "Search for Kaggle datasets",
     placeholder="Try something like 'heart health'",
-    value=st.session_state.search_term
+    value=st.session_state.search_term,
+    key="search_input"
 )
+
+# Only update the session state if the text input changes
+if search_input != st.session_state.search_term:
+    st.session_state.search_term = search_input
+    st.session_state.selected_datasets.clear()  # Clear previous selections for new searches
 
 # Display initial instructions
 search_info_container = st.empty()
-if not search_term:
+if not st.session_state.search_term:
     search_info_container.markdown("**Search for datasets to download from Kaggle**")
 
-# Update the search term in session state
-if search_term and search_term != st.session_state.search_term:
-    st.session_state.search_term = search_term
-    st.session_state.selected_datasets.clear()  # Clear selections for new search
-
 color_names = ['lightblue', 'orange', 'bluegreen', 'blue', 'violet', 'red', 'green', 'yellow']
-import streamlit as st
 
 # Process user search
 if st.session_state.search_term:
