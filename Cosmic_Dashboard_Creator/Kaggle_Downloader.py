@@ -1,4 +1,4 @@
-from utils.kaggle_utils import download_dataset, search_datasets
+from utils.kaggle_utils import download_dataset, search_datasetsMore actions
 import streamlit as st
 from uuid import uuid4
 from config import KAGGLE_API
@@ -18,6 +18,7 @@ search_term = st.chat_input(
 # Initialize an empty container with a message
 search_info_container = st.empty()
 search_info_container.container(border=True).text("Search for datasets to download from Kaggle", help="Try something like \"heart health\"", )
+
 
 # Update the search term in session state
 if search_term and search_term != st.session_state.search_term:
@@ -45,23 +46,23 @@ if st.session_state.search_term:
                 with col.container(height=200):
                     # Display dataset title and other details
                     st.write(dataset)
-                    # Check if dataset has 'voteCount' attribute
                     vote_count = getattr(dataset, 'voteCount', 'Not available')
                     usability_rating = getattr(dataset, 'usabilityRating', 'Not available')
                     st.write(f"**[{dataset.title}]({dataset.url})** ^{vote_count} ({usability_rating} user-friendly)" if isinstance(usability_rating, (int, float)) else f"**[{dataset.title}]({dataset.url})** ^{vote_count} ({usability_rating})")
                     # Checkbox for selection
+                    # Checkbox for selection
                     checkbox_key = f"select_{dataset.ref}"
                     is_selected = checkbox_key in st.session_state.selected_datasets
                     if st.checkbox(
-                            "Select for download",
-                            key=checkbox_key,
-                            value=is_selected,
+                        "Select for download",
+                        key=checkbox_key,
+                        value=is_selected,
                     ):
                         st.session_state.selected_datasets.add(dataset.ref)
                     else:
                         st.session_state.selected_datasets.discard(dataset.ref)
                     st.caption(f"{dataset.subtitle} ({dataset.size})")
-                    data_tags = getattr(dataset, 'tags', [])
+                    data_tags = dataset.tags
                     tagger_component("",
                                      data_tags,
                                      color_names[:len(data_tags)],
@@ -75,8 +76,8 @@ if st.session_state.search_term:
                         for dataset_ref in st.session_state.selected_datasets:
                             st.toast(f"Downloading dataset: {dataset_ref}")
                             download_dataset(dataset_ref, download_path="user_uploaded_files")
-                            st.success(f"{dataset_ref} downloaded successfully! The files are now available in Dashboard Creator -> select previous data sources")
+                        st.success(f"{dataset_ref} downloaded successfully! The files are now available in Dashboard Creator -> select previous data sources")
                     else:
                         st.warning("No datasets selected for download.")
-        except Exception as e:
+        except Exception as e:More actions
             st.error(f"An error occurred while searching datasets: {e}")
