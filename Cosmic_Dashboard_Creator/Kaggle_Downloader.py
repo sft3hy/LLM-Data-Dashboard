@@ -52,10 +52,10 @@ if st.session_state.search_term:
                             f"""
                             <div style="border:1px solid white; border-radius:10px; padding:10px; margin-bottom:10px; height=3rem">
                                 <h4 style="margin-top:0px;">{getattr(dataset, 'title', 'Untitled Dataset')}</h4>
-                                <p style="font-size:14px; margin-bottom:5px;">{f'<a href="{getattr(dataset, "url", "#")}" target="_blank">View Dataset</a>' if hasattr(dataset, "url") else "No URL available"} 
+                                <p style="font-size:14px; margin-bottom:5px;">{f'<a href="{getattr(dataset, "url", "#")}" target="_blank">View Dataset</a>' if hasattr(dataset, "url") else "No URL available"}</p>
                                 <p style="font-size:12px; color:gray;">
                                     {f"👍 {getattr(dataset, 'voteCount', 0)} votes" if hasattr(dataset, 'voteCount') else ''}
-                                    {f", Usability: {int(getattr(dataset, 'usabilityRating', 0) * 100)}%" if hasattr(dataset, 'usabilityRating') else ''} 
+                                    {f", Usability: {int(getattr(dataset, 'usabilityRating', 0) * 100)}%" if hasattr(dataset, 'usabilityRating') else ''}</p>
                             </div>
                             """,
                             unsafe_allow_html=True,
