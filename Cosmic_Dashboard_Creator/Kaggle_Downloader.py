@@ -86,9 +86,9 @@ if st.session_state.search_term:
                             st.caption(' - '.join(caption_text))  # Convert list to string with ' - ' separator
 
                     # Display tags if available
-                    st.write(dataset)
-                    if hasattr(dataset, 'tags') and dataset.tags != []:
-                        tagger_component(dataset.tags, color_names[:len(dataset.tags)])
+                    # st.write(dataset)
+                    # if hasattr(dataset, 'tags') and dataset.tags != []:
+                    #     tagger_component(dataset.tags, color_names[:len(dataset.tags)])
                     st.write('3')
 
             if st.button("Download selected dataset(s)"):
