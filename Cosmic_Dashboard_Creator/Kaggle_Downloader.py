@@ -27,6 +27,7 @@ if search_term and search_term != st.session_state.search_term:
     st.session_state.selected_datasets.clear()  # Clear selections for new search
 
 color_names = ['lightblue', 'orange', 'bluegreen', 'blue', 'violet', 'red', 'green', 'yellow']
+import streamlit as st
 
 # Process user search
 if st.session_state.search_term:
@@ -44,52 +45,47 @@ if st.session_state.search_term:
             for index, dataset in enumerate(datasets):
                 col = columns[index % num_columns]
                 with col:
-                    # Ensure dataset.title and dataset.url exist before trying to display them
-                    if hasattr(dataset, 'title') and hasattr(dataset, 'url'):
-                        st.write(f"**[{dataset.title}]({dataset.url})**")
-                    elif hasattr(dataset, 'title'):
-                        st.write(f"**{dataset.title}**")
-                    else:
-                        st.write("Untitled Dataset")
+                    # Create a container for each dataset with a rounded box and white border
+                    dataset_container = st.container()
+                    with dataset_container:
+                        st.markdown(
+                            """
+                            <div style="border: 1px solid white; border-radius: 10px; padding: 10px; margin-bottom: 10px;">
+                            """,
+                            unsafe_allow_html=True,
+                        )
 
-                    # Display vote count and usability rating if they exist
-                    display_text = []
-                    if hasattr(dataset, 'voteCount'):
-                        display_text.append(f"👍 {dataset.voteCount}")
-                    if hasattr(dataset, 'usabilityRating'):
-                        usability_rating = int(getattr(dataset, 'usabilityRating', 0) * 100)
-                        display_text.append(f"Usability: {usability_rating}%")
-                    if display_text:
-                        st.write(display_text)
+                        # Ensure dataset.title and dataset.url exist before trying to display them
+                        if hasattr(dataset, 'title') and hasattr(dataset, 'url'):
+                            st.write(f"**[{dataset.title}]({dataset.url})**")
+                        elif hasattr(dataset, 'title'):
+                            st.write(f"**{dataset.title}**")
+                        else:
+                            st.write("Untitled Dataset")
 
-                    # Checkbox to select datasets
-                    checkbox_key = f"select_{getattr(dataset, 'ref', 'unknown')}"
-                    is_selected = st.checkbox(
-                        "Select for download",
-                        key=checkbox_key,
-                        value=getattr(dataset, 'ref', None) in st.session_state.selected_datasets
-                    )
-                    if is_selected:
-                        st.session_state.selected_datasets.add(getattr(dataset, 'ref', 'unknown'))
-                    else:
-                        st.session_state.selected_datasets.discard(getattr(dataset, 'ref', 'unknown'))
+                        # Display vote count and usability rating if they exist
+                        display_text = []
+                        if hasattr(dataset, 'voteCount'):
+                            display_text.append(f"👍 {dataset.voteCount}")
+                        if hasattr(dataset, 'usabilityRating'):
+                            usability_rating = int(getattr(dataset, 'usabilityRating', 0) * 100)
+                            display_text.append(f"Usability: {usability_rating}%")
+                        if display_text:
+                            st.write(", ".join(display_text))  # Modified to display text in a single line
 
-                    # Display subtitle and size if available
-                    if hasattr(dataset, 'subtitle') or hasattr(dataset, 'size'):
-                        caption_text = []
-                        if hasattr(dataset, 'subtitle'):
-                            caption_text.append(str(dataset.subtitle))  # Convert to string
-                        if hasattr(dataset, 'size'):
-                            caption_text.append(dataset.size)
-                        if caption_text:
-                            st.write(str(' - '.join(caption_text)))
-                            st.caption(' - '.join(caption_text))  # Convert list to string with ' - ' separator
+                        # Checkbox to select datasets
+                        checkbox_key = f"select_{getattr(dataset, 'ref', 'unknown')}"
+                        is_selected = st.checkbox(
+                            "Select for download",
+                            key=checkbox_key,
+                            value=getattr(dataset, 'ref', None) in st.session_state.selected_datasets
+                        )
+                        if is_selected:
+                            st.session_state.selected_datasets.add(getattr(dataset, 'ref', 'unknown'))
+                        else:
+                            st.session_state.selected_datasets.discard(getattr(dataset, 'ref', 'unknown'))
 
-                    # Display tags if available
-                    # st.write(dataset)
-                    # if hasattr(dataset, 'tags') and dataset.tags != []:
-                    #     tagger_component(dataset.tags, color_names[:len(dataset.tags)])
-                    st.write('3')
+                        st.markdown("</div>", unsafe_allow_html=True)
 
             if st.button("Download selected dataset(s)"):
                 if st.session_state.selected_datasets:
