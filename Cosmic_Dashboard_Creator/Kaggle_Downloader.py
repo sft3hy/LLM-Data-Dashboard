@@ -87,6 +87,7 @@ if st.session_state.search_term:
 
                     # Display tags if available
                     if hasattr(dataset, 'tags'):
+                        st.write(dataset)
                         tagger_component(dataset.tags, color_names[:len(dataset.tags)])
                     st.write('3')
 
