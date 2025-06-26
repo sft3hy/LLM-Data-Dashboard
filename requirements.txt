@@ -9,7 +9,7 @@ plotly==6.0.1
 numpy==2.2.5
 streamlit-chat==0.1.1
 streamlit-extras==0.6.0
-kaggle==1.7.5.0.dev0
+kaggle==1.7.4.2
 streamlit-auth0-component==0.1.5
 lida==0.0.14
 schedule==1.2.2
